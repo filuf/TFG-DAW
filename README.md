@@ -6,8 +6,8 @@ Este proyecto es un sistema de gestión de pedidos para una cafetería, desarrol
 
 El desarrollo sigue una metodología **iterativa e incremental**, dividiéndose en **tres iteraciones**. El equipo está compuesto por:
 
-- **Aitor**
-- **Agustín**
+- **Aitor Pascual Jiménez**
+- **Agustín Márquez Piña**
 
 ## 🛠️ Tecnologías Utilizadas
 
@@ -21,7 +21,7 @@ El desarrollo sigue una metodología **iterativa e incremental**, dividiéndose 
 | **Base de Datos**           | MySQL |
 | **Pasarela de Pago**        | API Banco / sumUp API |
 | **Comunicación en tiempo real** | WebSockets |
-| **Despliegue | Docker / Kubernetes |
+| **Despliegue** | Docker / Kubernetes |
 
 ---
 
