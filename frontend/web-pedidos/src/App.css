@@ -1,0 +1,146 @@
+body {
+    background-color: #D1E6F2;
+}
+
+/* Estilos botón conexión*/
+
+.contenedor-conexion {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.estado-websocket {
+    text-align: center;
+    font-size: 30px;
+    border-radius: 25px;
+    padding: 20px;
+    color: white;
+}
+
+.conectado {
+    background-color: #2ecc71;
+    box-shadow: 0 4px 8px rgba(46, 204, 113, 0.3);
+}
+
+.desconectado {
+    background-color: #ff0000;
+    box-shadow: 0 4px 8px rgba(255, 0, 0, 0.3);
+}
+
+/* Estilos boxxes pedidos*/
+
+.comprador {
+    text-align: center;
+    font-weight: bold;
+    font-size: 30px;
+    margin-top: 0px;
+    border-bottom: 1px solid gray;
+}
+
+div.pedido {
+    border: 2px solid #3498db;
+    border-radius: 20px;
+    padding: 25px;
+    margin: 20px auto;
+    width: 80%;
+    background: linear-gradient(145deg, #f5f7fa, #c3cfe2);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    transition: transform 0.3s ease-in-out; 
+}
+
+
+div.productos {
+    border: 2px solid #2ecc71; 
+    border-radius: 15px;
+    padding: 20px;
+    margin: 20px 0;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+}
+
+p {
+    font-family: 'Arial', sans-serif;
+    color: #666;
+    line-height: 1.6;
+}
+
+/* Estilos modal */
+
+button.concluido {
+    color: white;
+    padding: 10px;
+    border: 0;
+    border-radius: 5px;
+    background-color: #6938ef;
+    transition: all 0.2s ease-in;
+}
+
+button.concluido:hover {
+    background-color: #4210CA;
+}
+
+dialog {
+    overflow: hidden;
+    text-align: center;
+    width: 250px;
+    height: 160px;
+    padding-top: 30px;
+    border: 0px;
+    border-radius: 30px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    animation: fadeIn 0.5s ease forwards;
+
+}
+
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-100px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+dialog .pedido-de {
+    font-weight: bold;
+    margin: 0;
+    padding-bottom: 10px;
+    width: 100%;
+    border-bottom: 1px solid gray;
+}
+
+dialog button {
+    margin: 10px;
+}
+
+.concluir {
+    color: white;
+    padding: 10px;
+    border: 0;
+    border-radius: 5px;
+    background-color: #2ecc71;
+    transition: all 0.2s ease-in;
+}
+
+.concluir:hover {
+    background-color: #1d8147;
+}
+
+.cancelar {
+    color: white;
+    padding: 10px;
+    border: 0;
+    border-radius: 5px;
+    background-color: #ff0000;
+    transition: all 0.2s ease-in;
+}
+
+.cancelar:hover {
+    background-color: #9c0101;
+}
