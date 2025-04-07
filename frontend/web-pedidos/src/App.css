@@ -1,14 +1,25 @@
+html, body {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
 body {
     background-color: #D1E6F2;
+
 }
 
 /* Estilos botón conexión*/
 
 .contenedor-conexion {
+    background-color: #D1E6F2;
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+    border-bottom: 2px solid gray;
+    top: 0;
+    position: sticky;
 }
 
 .estado-websocket {
