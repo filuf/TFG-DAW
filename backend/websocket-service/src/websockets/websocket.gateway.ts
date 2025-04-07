@@ -7,7 +7,7 @@ import {
   MessageBody,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { PedidoSchema, Pedido } from 'src/types';
+import { WebSocketService } from './websocket.service';
 
 @WebSocketGateway({
   cors: {
@@ -22,6 +22,12 @@ export class WebsocketGateway
   @WebSocketServer()
   server: Server;
 
+  constructor(private readonly websocketService: WebSocketService) {}
+
+  afterInit(server: Server) {
+    this.websocketService.setServer(server);
+  }
+
   handleConnection(client: Socket) {
     console.log(`Cliente conectado: ${client.id}`);
   }
@@ -32,13 +38,6 @@ export class WebsocketGateway
 
   @SubscribeMessage('mensaje')
   handleMessage(@MessageBody() data: unknown) {
-    console.log('El cliente envía:\n', data);
-
-    try {
-      const message: Pedido = PedidoSchema.parse(data);
-      this.server.emit('mensajeServer', message);
-    } catch (error) {
-      console.error(error);
-    }
+    return this.websocketService.processMessage(data);
   }
 }

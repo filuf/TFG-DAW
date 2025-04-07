@@ -13,8 +13,13 @@ const PedidoSchema = z.object({
   productos: z.array(ProductoSchema),
 });
 
+type Result = {
+  success: boolean;
+  error?: string;
+};
+
 // Tipos inferidos de los esquemas
 type Pedido = z.infer<typeof PedidoSchema>;
 type Producto = z.infer<typeof ProductoSchema>;
 
-export { Pedido, Producto, ProductoSchema, PedidoSchema };
+export { Pedido, Producto, ProductoSchema, PedidoSchema, Result };
