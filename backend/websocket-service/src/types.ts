@@ -7,6 +7,7 @@ const ProductoSchema = z.object({
 });
 
 const PedidoSchema = z.object({
+  id: z.number(),
   comprador: z.string(),
   descripcion: z.string(),
   pagado: z.boolean(),

@@ -8,8 +8,14 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { WebSocketService } from './websocket.service';
+import { OrdersArrayService } from 'src/components/ordersArraySingleton.service';
+
+/**
+ * Clase dedicada a configurar el Websocket y su funcionamiento
+ */
 
 @WebSocketGateway({
+  // Cors del cliente React
   cors: {
     origin: 'http://localhost:5173',
     methods: ['GET', 'POST'],
@@ -22,9 +28,17 @@ export class WebsocketGateway
   @WebSocketServer()
   server: Server;
 
-  constructor(private readonly websocketService: WebSocketService) {}
+  constructor(
+    private readonly websocketService: WebSocketService,
+    private readonly ordersArray: OrdersArrayService,
+  ) {}
 
   afterInit(server: Server) {
+    //envía todos los componentes almacenados al iniciar
+    this.ordersArray
+      .getOrders()
+      .forEach((order) => this.websocketService.processMessage(order));
+
     this.websocketService.setServer(server);
   }
 
@@ -39,5 +53,10 @@ export class WebsocketGateway
   @SubscribeMessage('mensaje')
   handleMessage(@MessageBody() data: unknown) {
     return this.websocketService.processMessage(data);
+  }
+
+  @SubscribeMessage('removeOrder')
+  handleRemoveOrder(@MessageBody() id: number) {
+    return this.websocketService.processRemoveOrder(id);
   }
 }

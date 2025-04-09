@@ -8,6 +8,11 @@ import {
 import { WebSocketService } from './websocket.service';
 import { Result } from 'src/types';
 
+/**
+ * Este controlador recibe json con objetos Pedido
+ * Se apoya en el servicio para validar la lógica y enviar a React
+ */
+
 @Controller('websocket')
 export class WebsocketController {
   constructor(private readonly websocketService: WebSocketService) {}
