@@ -9,7 +9,8 @@ function App() {
   const [mensajeEvents, setMensajeEvents] = useState([]);
 
   useEffect( () => {
-      
+    setIsConnected(socket.connected);
+
     function onConnect() {
       console.log("conectado");
       setIsConnected(true);
