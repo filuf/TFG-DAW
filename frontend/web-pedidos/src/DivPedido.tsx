@@ -2,8 +2,13 @@ import React from "react";
 import { useRef } from "react";
 import { Pedido } from "./types.ts";
 
-export default function DivPedido({ pedido }: { pedido: Pedido }) {
-  const { comprador, descripcion, pagado, productos } = pedido;
+/**
+ * 
+ * @param pedido Extrae el pedido directamente de las props y utiliza sus datos para generar el componente
+ * @returns instancia de DivPedido
+ */
+export default function DivPedido({ pedido, removeOrderFunction, isFading }: { pedido: Pedido, removeOrderFunction: any, isFading: boolean }) {
+  const { id, comprador, descripcion, pagado, productos } = pedido;
 
   const modalRef = useRef<HTMLDialogElement>(null);
 
@@ -11,8 +16,17 @@ export default function DivPedido({ pedido }: { pedido: Pedido }) {
     modalRef.current?.showModal();
   };
 
+  const informOrderComplete = () => {
+    removeOrderFunction(id);
+  };
+
+  console.log(id);
   return (
-    <div className="pedido">
+    <div className="pedido"
+      style={{
+        opacity: isFading ? 0 : 1, // Cambia la opacidad si se está desvaneciendo
+        transition: "opacity 1s", // Animación de 1 segundo
+      }}>
       <p className="comprador">{comprador}</p>
       <p className={`estado ${pagado ? "pagado" : "pendiente"}`}>
         {pagado ? "✅ Pagado" : "❌ Pendiente"}
@@ -20,7 +34,7 @@ export default function DivPedido({ pedido }: { pedido: Pedido }) {
 
       <p>Productos</p>
       <div className="productos">
-        {productos.map((producto) => { //mapeo de cada producto
+        {productos.map((producto) => { // mapeo de cada producto
           const { nombreProducto, cantidad } = producto;
 
           return (
@@ -44,7 +58,7 @@ export default function DivPedido({ pedido }: { pedido: Pedido }) {
         <p className="pedido-de">pedido de {comprador.split(" ")[0]}</p>
         <p>¿Estás seguro?</p>
         <form method="dialog">
-            <button className="concluir">concluir</button>
+            <button className="concluir" onClick={informOrderComplete}>concluir</button>
             <button className="cancelar">cancelar</button>
         </form>
     </dialog>
