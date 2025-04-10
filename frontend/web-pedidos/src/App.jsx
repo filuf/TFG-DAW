@@ -9,11 +9,14 @@ function App() {
   const [mensajeEvents, setMensajeEvents] = useState([]);
 
   useEffect( () => {
+      
     function onConnect() {
+      console.log("conectado");
       setIsConnected(true);
     }
 
     function onDisconnect() {
+      console.log("desconectado");
       setIsConnected(false);
     }
 
@@ -48,9 +51,13 @@ function App() {
       socket.off("connect", onConnect);
       socket.off("disconnect", onDisconnect);
       socket.off("mensajeServer", onMessageEvents);
+      socket.off("removeOrderServer", onRemoveOrderServer); // evento concluir pedido
     }
+
+
   }, []);
 
+  
   //función que se pasa a cada componente para poder eliminarse
   const sendRemoveOrder = (id) => {
     socket.emit("removeOrder", id);
