@@ -34,12 +34,13 @@ export class WebsocketGateway
   ) {}
 
   afterInit(server: Server) {
+    // configura la conexión de websocket
+    this.websocketService.setServer(server);
+
     //envía todos los componentes almacenados al iniciar
     this.ordersArray
       .getOrders()
       .forEach((order) => this.websocketService.processMessage(order));
-
-    this.websocketService.setServer(server);
   }
 
   handleConnection(client: Socket) {
