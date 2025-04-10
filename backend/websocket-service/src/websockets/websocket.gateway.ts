@@ -40,11 +40,14 @@ export class WebsocketGateway
   handleConnection(client: Socket) {
     console.log(`Cliente conectado: ${client.id}`);
     //envía todos los componentes almacenados al iniciar
-    this.ordersArray
-      .getOrders()
-      .forEach((order) =>
-        this.websocketService.processInitialMessage(client, order),
-      );
+    setTimeout(() => {
+      this.ordersArray
+        .getOrders()
+        .forEach((order) =>
+          this.websocketService.processInitialMessage(client, order),
+        );
+    }, 1000);
+
     //TODO: SOLUCIONAR PROBLEMA ENVIO A TODOS LOS CLIENTES
   }
 
