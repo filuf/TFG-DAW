@@ -29,7 +29,7 @@ export default function DivPedido({ pedido, removeOrderFunction, isFading }: { p
       }}>
       <p className="comprador">{comprador}</p>
       <p className={`estado ${pagado ? "pagado" : "pendiente"}`}>
-        {pagado ? "✅ Pagado" : "❌ Pendiente"}
+        {pagado ? "✅ Pagado" : "❌ Pendiente de pago"}
       </p>
 
       <p>Productos</p>
