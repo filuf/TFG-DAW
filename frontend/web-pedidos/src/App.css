@@ -61,6 +61,14 @@ div.pedido {
     transition: transform 0.3s ease-in-out; 
 }
 
+div .estado {
+    text-align: end;
+}
+
+.productos-text {
+    font-size: 20px;
+}
+
 
 div.productos {
     border: 2px solid #2ecc71; 
@@ -78,7 +86,17 @@ p {
     line-height: 1.6;
 }
 
+.descripcion {
+    font-size: 12px;
+}
+
 /* Estilos modal */
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
 button.concluido {
     color: white;
