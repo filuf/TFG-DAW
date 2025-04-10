@@ -11,6 +11,7 @@ export class OrdersArrayService {
   private orders: Pedido[] = [];
 
   getOrders() {
+    console.log('contenido del array:\n', this.orders);
     return this.orders;
   }
 

@@ -34,23 +34,25 @@ export class WebsocketGateway
   ) {}
 
   afterInit(server: Server) {
-    // configura la conexión de websocket
     this.websocketService.setServer(server);
-
-    //envía todos los componentes almacenados al iniciar
-    this.ordersArray
-      .getOrders()
-      .forEach((order) => this.websocketService.processMessage(order));
   }
 
   handleConnection(client: Socket) {
     console.log(`Cliente conectado: ${client.id}`);
+    //envía todos los componentes almacenados al iniciar
+    this.ordersArray
+      .getOrders()
+      .forEach((order) =>
+        this.websocketService.processInitialMessage(client, order),
+      );
+    //TODO: SOLUCIONAR PROBLEMA ENVIO A TODOS LOS CLIENTES
   }
 
   handleDisconnect(client: Socket) {
     console.log(`Cliente desconectado: ${client.id}`);
   }
 
+  //deprecar
   @SubscribeMessage('mensaje')
   handleMessage(@MessageBody() data: unknown) {
     return this.websocketService.processMessage(data);
