@@ -9,11 +9,14 @@ function App() {
   const [mensajeEvents, setMensajeEvents] = useState([]);
 
   useEffect( () => {
+      
     function onConnect() {
+      console.log("conectado");
       setIsConnected(true);
     }
 
     function onDisconnect() {
+      console.log("desconectado");
       setIsConnected(false);
     }
 
@@ -21,21 +24,44 @@ function App() {
       console.log("mensaje recibido");
       
       //crea un nuevo array con el contenido del anterior y el nuevo valor (react requiere que sea inmutable)
-      setMensajeEvents(previous => [...previous, newMessage])
+      setMensajeEvents(previous => [...previous, newMessage]);
+    }
+
+    // elimina el pedido correspondiente a id de la visualización
+    function onRemoveOrderServer(id) {
+      //setea fading=true en el elemento a eliminar
+      setMensajeEvents( (prevOrders) => {
+        return prevOrders.map( (order) => order.id === id ? { ...order, fading: true} : order);
+      });
+
+      //espera un segundo y elimina el elemento del array
+      setTimeout( () => {
+        setMensajeEvents(previousOrders => previousOrders.filter(order => order.id != id));
+      }, 1000);
     }
 
     //registra en cada evento cada función
     socket.on("connect", onConnect);
     socket.on("disconnect", onDisconnect);
-    socket.on("mensajeServer", onMessageEvents); //evento mensajeServer
+    socket.on("mensajeServer", onMessageEvents); //evento mensajeServer crear elemento
+    socket.on("removeOrderServer", onRemoveOrderServer); // evento concluir pedido
 
     //limpia los eventos al desmontarse
     return () => {
       socket.off("connect", onConnect);
       socket.off("disconnect", onDisconnect);
       socket.off("mensajeServer", onMessageEvents);
+      socket.off("removeOrderServer", onRemoveOrderServer); // evento concluir pedido
     }
+
+
   }, []);
+
+  
+  //función que se pasa a cada componente para poder eliminarse
+  const sendRemoveOrder = (id) => {
+    socket.emit("removeOrder", id);
+  }
 
   return (
     <>
@@ -46,8 +72,13 @@ function App() {
         }
       </div>
 
-      {mensajeEvents.map( (mensaje, index) => (
-        <DivPedido key={index} pedido={mensaje}></DivPedido>
+      {mensajeEvents.map( (mensaje) => (
+        <DivPedido 
+          key={mensaje.id}
+          pedido={mensaje} 
+          removeOrderFunction={sendRemoveOrder} 
+          isFading={mensaje.fading ?? false}>  
+        </DivPedido>
       ))}
     </>
   )
