@@ -1,0 +1,21 @@
+# archivo de ejemplo para construir el application.yml
+spring:
+  application:
+    name: auth
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/db_cafeteria?useSSL=false&serverTimezone=UTC
+    username: #username
+    password: #password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update # modificar fuera de test
+    show-sql: true
+
+app:
+  security:
+    jwt:
+      secret: # CLAVE SECRETA SUPERIOR A 64 BYTES - NO EXPONER
+      expiration: 28800 #8 horas
