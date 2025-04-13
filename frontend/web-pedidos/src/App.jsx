@@ -13,20 +13,19 @@ function App() {
     setIsConnected(socket.connected);
 
     function onConnect() {
-      console.log("conectado");
+      toast.info("Conexión establecida");
       setIsConnected(true);
     }
 
     function onDisconnect() {
-      console.log("desconectado");
+      toast.error("Conexión perdida");
       setIsConnected(false);
     }
 
-    function onMessageEvents(newMessage) {
-      console.log("mensaje recibido");
-      
+    function onMessageEvents(newMessage) {      
       //crea un nuevo array con el contenido del anterior y el nuevo valor (react requiere que sea inmutable)
       setMensajeEvents(previous => [...previous, newMessage]);
+      toast.success("Pedido recibido correctamente");
     }
 
     // elimina el pedido correspondiente a id de la visualización
