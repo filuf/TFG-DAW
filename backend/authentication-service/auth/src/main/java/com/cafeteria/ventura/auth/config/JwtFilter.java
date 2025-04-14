@@ -53,7 +53,7 @@ public class JwtFilter extends OncePerRequestFilter {
                     user.getPassword(),
                     user.getAuthorities());
 
-            //almacenamos en el contexto de seguridad (para extraer más tarde donde necesitemos)
+            //almacenamos en el contexto de seguridad (para extraer más tarde donde necesitemos) y autenticamos
             SecurityContextHolder.getContext().setAuthentication(auth);
         }
 
