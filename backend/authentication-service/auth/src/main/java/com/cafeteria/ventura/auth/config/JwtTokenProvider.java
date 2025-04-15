@@ -37,7 +37,7 @@ public class JwtTokenProvider {
         return Jwts.builder()
                 .signWith(Keys.hmacShaKeyFor(jwtSecret.getBytes()), SignatureAlgorithm.HS512)
                 .setHeaderParam("typ", "JWT") //type JWT estandar
-                .setSubject(Long.toString(user.getId()))
+                .setSubject(Long.toString(user.getIdUser()))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + (jwtDurationSeconds * 1000)))
                 .claim("username", user.getUsername()) //guarda username y email en el map de claims

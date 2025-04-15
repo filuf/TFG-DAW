@@ -29,11 +29,13 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Data
 @Entity
-@Table(name = "user_entity")
+@Table(name = "users")
 public class UserEntity implements UserDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "id_user")
+    private Long idUser;
 
     @Column(unique = true)
     private String username;
@@ -46,6 +48,7 @@ public class UserEntity implements UserDetails {
     //se crea una tabla aparte (esta tabla se carga cuando cargues al UserEntity)
     @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
+    @CollectionTable(name = "user_authorities", joinColumns = @JoinColumn(name = "id_user"))
     private List<UserAuthority> authorities = new ArrayList<>(); //lista de roles
 
     @Override
