@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { Server, Socket } from 'socket.io';
 import { OrdersArrayService } from 'src/components/ordersArraySingleton.service';
 import { PedidoSchema, Pedido, Result } from 'src/types';
-import { number } from 'zod';
 
 /**
  * Este servicio maneja el contenido de los Post para ver si son componentes bien formados
