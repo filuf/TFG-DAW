@@ -12,10 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.Objects;
@@ -27,6 +24,7 @@ import java.util.UUID;
  * Controlador principal para autenticación
  * No es necesaria la autenticación para los endpoints
  */
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/auth")
 @AllArgsConstructor
