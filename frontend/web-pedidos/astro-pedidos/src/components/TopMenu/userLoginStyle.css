@@ -1,0 +1,153 @@
+.login-button {
+    border-radius: 20px;
+    padding: 10px;
+}
+
+/* modal */
+
+dialog {
+    background-color: rgba(135, 207, 235, 0.183);
+    overflow: hidden;
+    text-align: center;
+    width: 500px;
+    height: 850px;
+    padding-top: 30px;
+    border: 0px;
+    border-radius: 30px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    animation: fadeIn 0.5s ease forwards;
+    box-sizing: border-box;
+}
+
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-100px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Login container */
+
+.login-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-sizing: border-box;
+
+}
+
+/* botón cierre */
+
+.close-button-container {
+    align-self: flex-end;
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.close-button {
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.close-button-image {
+    height: 30px;
+    width: 30px;
+    padding: 7px;
+    margin-right: 10px;
+    border-radius: 100%;
+
+    transition: all 0.25s ease-out;
+}
+
+.close-button-image:hover {
+    transform: rotate(180deg);
+    background-color: rgba(128, 128, 128, 0.244);
+}
+
+/* campos login */
+
+.login-form-container {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+}
+
+.login-text {
+    font-weight: bold;
+    text-align: center;
+    font-size: 40px;
+    font-family: "Pacifico";
+}
+
+.login-label {
+    font-size: 22px;
+    font-weight: 500;
+    color: #555;
+    margin: 10px 10px 5px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.login-input {
+    border: none;
+    border-bottom: 2px solid #ccc;
+    background-color: transparent;
+    padding: 10px;
+    margin: 0 10px 20px;
+    font-size: 16px;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.login-input:focus {
+    border-color: #4c78af;
+    background-color: #f0fff4;
+    outline: none;
+}
+
+/* Botón enviar */
+.login-submit {
+    background-color: #4c78af;
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 0 10px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.login-submit:hover {
+    background-color: #204470;
+}
+
+/* error */
+
+.error-container {
+    height: 40px;
+    margin-top: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.error-message {
+    color: red;
+    font-size: 20px;
+    font-weight: 900;
+    text-transform: uppercase;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* register */
+
+.register {
+    font-size: 30px;
+}

@@ -1,0 +1,120 @@
+import "./userLoginStyle.css"
+import { useEffect, useRef, useState } from "react";
+const apiAuthUrl = import.meta.env.VITE_API_AUTH_URL;
+
+
+export default function UserLogin() {
+    const [userLogin, setUserLogin] = useState(null);
+    const [showModal, setShowModal] = useState(false);
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
+    const modalRef = useRef(null);
+
+    // fetch al hacer submit en el formulario de login
+    const handleLogin = async (e) => {
+        e.preventDefault();
+
+        try {
+            const res = await fetch(apiAuthUrl + "/auth/login", {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json"
+                },
+                body: JSON.stringify({email, password})
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                setUserLogin(data.username);
+                setShowModal(false);
+
+                //TODO: guardar en sesion storage
+            } else if (res.status == 404) {
+                setErrorMessage("No existe un usuario con estas credenciales");
+            }
+        } catch (error) {
+            console.error("Error en el login", error);
+        }
+    }
+
+    useEffect(() => {
+        if (showModal && modalRef.current) {
+          modalRef.current.showModal();
+        }
+      }, [showModal]);
+    
+    //apertura
+    const handleClick = () => {
+        if(!userLogin) {
+            setShowModal(true);
+        } else {
+            console.log("usuario ya logado");
+        }
+    }
+
+    //cierre por botón
+    const closeModal = () => {
+        setShowModal(false);
+        modalRef.current?.close();
+    }
+
+    return(
+        <>
+            <button onClick={handleClick} className="login-button">
+                {userLogin ? `${userLogin}` : "inicia sesión"}
+            </button>
+
+            {showModal && (
+                <dialog ref={modalRef}>
+                    <div className="login-container">
+
+                        <div className="close-button-container">
+                            <button className="close-button" onClick={closeModal}>
+                                <img src="/close.png" alt="botón cierre" className="close-button-image" />
+                            </button>
+                        </div>
+
+                        <form onSubmit={handleLogin} className="login-form-container">
+                            <p className="login-text">Inicia Sesión</p>
+
+                                <label htmlFor="email" className="login-label">email</label>
+                                <input
+                                    type="email"
+                                    name="email"
+                                    id="email"
+                                    className="login-input"
+                                    onChange={ (e) => setEmail(e.target.value)}
+                                /><br/>
+
+                                <label htmlFor="password" className="login-label">contraseña</label>
+                                <input
+                                    type="password"
+                                    name="password" 
+                                    id="password"
+                                    className="login-input"
+                                    onChange={ (e) => setPassword(e.target.value)}
+                                /><br/>
+
+                                <input type="submit" value="ENVIAR" className="login-submit"/>
+
+                        </form>
+                        <a href="/forgotPassword">¿Olvidaste la contraseña?</a>
+
+                        <div className="error-container">
+                            <p className="error-message">{errorMessage}</p>
+                        </div>
+                        <div className="register">
+                            <p>¿Todavía no tienes cuenta?</p>
+                            <a href="/example">Regístrate</a>
+                        </div>
+
+                    </div>
+
+                </dialog>
+                )
+                
+            }
+        </>
+    );
+}

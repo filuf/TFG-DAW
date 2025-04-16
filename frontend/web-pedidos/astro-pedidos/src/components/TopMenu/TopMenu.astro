@@ -1,3 +1,7 @@
+---
+import UserLogin from "./UserLogin"
+---
+
 <nav>
     <div class="logo-container">
         <div class="logo">
@@ -18,7 +22,7 @@
         </div>
     </div>
     <div class="session-container">
-        <p>soy un usuario</p>
+        <UserLogin client:only="react"/>
     </div>
 </nav>
 
