@@ -1,12 +1,11 @@
 import "./userLoginStyle.css"
 import { useEffect, useRef, useState } from "react";
-const apiAuthUrl = import.meta.env.VITE_API_AUTH_URL;
 
 
-export default function UserLogin() {
+export default function UserLogin( {apiAuthUrl} ) {
     const [userLogin, setUserLogin] = useState(null);
     const [showModal, setShowModal] = useState(false);
-    const [email, setEmail] = useState("");
+    const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
     const modalRef = useRef(null);
@@ -21,7 +20,7 @@ export default function UserLogin() {
                 headers: {
                     "Content-type": "application/json"
                 },
-                body: JSON.stringify({email, password})
+                body: JSON.stringify({username, password})
             });
 
             if (res.ok) {
@@ -35,6 +34,7 @@ export default function UserLogin() {
             }
         } catch (error) {
             console.error("Error en el login", error);
+            setErrorMessage("Ha ocurrido un error de conexión");
         }
     }
 
@@ -78,13 +78,13 @@ export default function UserLogin() {
                         <form onSubmit={handleLogin} className="login-form-container">
                             <p className="login-text">Inicia Sesión</p>
 
-                                <label htmlFor="email" className="login-label">email</label>
+                                <label htmlFor="username" className="login-label">usuario</label>
                                 <input
-                                    type="email"
-                                    name="email"
-                                    id="email"
+                                    type="text"
+                                    name="username"
+                                    id="username"
                                     className="login-input"
-                                    onChange={ (e) => setEmail(e.target.value)}
+                                    onChange={ (e) => setUsername(e.target.value)}
                                 /><br/>
 
                                 <label htmlFor="password" className="login-label">contraseña</label>

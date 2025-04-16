@@ -1,5 +1,6 @@
 ---
 import UserLogin from "./UserLogin"
+const apiAuthUrl = import.meta.env.VITE_API_AUTH_URL;
 ---
 
 <nav>
@@ -22,7 +23,7 @@ import UserLogin from "./UserLogin"
         </div>
     </div>
     <div class="session-container">
-        <UserLogin client:only="react"/>
+        <UserLogin apiAuthUrl={apiAuthUrl} client:only="react"/>
     </div>
 </nav>
 
