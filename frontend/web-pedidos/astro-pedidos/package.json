@@ -10,10 +10,14 @@
   },
   "dependencies": {
     "@astrojs/react": "^4.2.4",
+    "@prisma/client": "^6.6.0",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
     "astro": "^5.5.3",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "prisma": "^6.6.0"
   }
 }

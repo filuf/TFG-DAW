@@ -1,0 +1,15 @@
+---
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
+
+const products = await prisma.products.findMany(); //trae todos los productos de la tabla productos
+---
+
+
+
+<ul>
+    { products.map( product => (
+        <li>nombre: {product.product_name} | precio: {product.product_price}</li>
+    ))}
+</ul>
