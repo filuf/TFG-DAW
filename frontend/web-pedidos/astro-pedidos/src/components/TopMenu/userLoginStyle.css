@@ -1,6 +1,47 @@
 .login-button {
-    border-radius: 20px;
-    padding: 10px;
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color: #4c78af;
+    color: white;
+    font-weight: bold;
+    font-size: 15px;
+    padding: 15px;
+    transition: all ease 0.3s;
+}
+
+.login-button:hover {
+    cursor: pointer;
+    background-color: #204470;
+}
+
+.username-container {
+    padding-right: 10px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    transition: all ease 0.5s;
+}
+
+.username-container:hover {
+    background-color: rgb(235, 235, 235);
+}
+
+.username-text {
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 90px;    
+}
+
+.arrow-down-svg {
+    transition: all ease 0.3s;
+}
+
+.username-container:hover .arrow-down-svg {
+    transform: rotate(180deg);
 }
 
 /* modal */

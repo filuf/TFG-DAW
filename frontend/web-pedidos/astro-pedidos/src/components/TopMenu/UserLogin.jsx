@@ -10,6 +10,16 @@ export default function UserLogin( {apiAuthUrl} ) {
     const [errorMessage, setErrorMessage] = useState("");
     const modalRef = useRef(null);
 
+    // renderiza el username si ya existe junto al token en el sesion storage
+    useEffect( () => {
+        const userStored = sessionStorage.getItem("username");
+
+        if (userStored && sessionStorage.getItem("token")) {
+            setUserLogin(userStored);
+        }
+    }, []);
+
+
     // fetch al hacer submit en el formulario de login
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -28,8 +38,11 @@ export default function UserLogin( {apiAuthUrl} ) {
                 setUserLogin(data.username);
                 setShowModal(false);
 
-                //TODO: guardar en sesion storage
-            } else if (res.status == 404) {
+                //almacena el usuario y token en sessionStorage
+                sessionStorage.setItem("username", data.username);
+                sessionStorage.setItem("token", data.token);
+                
+            } else if (res.status == 403) {
                 setErrorMessage("No existe un usuario con estas credenciales");
             }
         } catch (error) {
@@ -44,7 +57,7 @@ export default function UserLogin( {apiAuthUrl} ) {
         }
       }, [showModal]);
     
-    //apertura
+    //apertura en caso de que no exista usuario
     const handleClick = () => {
         if(!userLogin) {
             setShowModal(true);
@@ -61,10 +74,18 @@ export default function UserLogin( {apiAuthUrl} ) {
 
     return(
         <>
-            <button onClick={handleClick} className="login-button">
-                {userLogin ? `${userLogin}` : "inicia sesión"}
-            </button>
+            {!userLogin ? (
+                <button onClick={handleClick} className="login-button">
+                    inicia sesión
+                </button>
+            ) : (
+                <div className="username-container">
+                    <p className="username-text">{userLogin}</p>
+                    <img className="arrow-down-svg" src="/keyboard_arrow_down.svg" alt="arrow-down-svg" />
+                </div>
+            )}
 
+            {/* Modal de Login*/}
             {showModal && (
                 <dialog ref={modalRef}>
                     <div className="login-container">
