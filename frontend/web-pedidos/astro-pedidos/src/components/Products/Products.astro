@@ -10,16 +10,16 @@ const products = await prisma.products.findMany(); //trae todos los productos de
 <section class="products-container">
 
     { products.map( product => (
-        <a href={"/products/" + product.product_name + "-" + product.id_product}>
             <article class="product">
-                <div class="image-container">
-                    <img src="" alt="imagen producto">
-                </div>
-            
-                <p class="product-name">{product.product_name}</p>
-                <p class="product-price">{product.product_price.toFixed(2)} €</p>
+                <a href={"/products/" + product.product_name + "-" + product.id_product}>
+                    <div class="image-container">
+                        <img src="" alt="imagen producto">
+                    </div>
+                
+                    <p class="product-name">{product.product_name}</p>
+                    <p class="product-price">{product.product_price.toFixed(2)} €</p>
+                </a>
             </article>
-        </a>
     ))}
 
 </section>
