@@ -3,7 +3,7 @@ import UserLogin from "./UserLogin"
 const apiAuthUrl = import.meta.env.VITE_API_AUTH_URL;
 ---
 
-<nav>
+<header>
     <div class="logo-container">
         <div class="logo">
             <a href="/">
@@ -11,7 +11,7 @@ const apiAuthUrl = import.meta.env.VITE_API_AUTH_URL;
             </a>
         </div>
     </div>
-    <div class="options-container">
+    <nav class="options-container">
         <div class="option">
             <p>opcion1</p>
         </div>
@@ -21,15 +21,15 @@ const apiAuthUrl = import.meta.env.VITE_API_AUTH_URL;
         <div class="option">        
             <p>opcion3</p>
         </div>
-    </div>
+    </nav>
     <div class="session-container">
         <UserLogin apiAuthUrl={apiAuthUrl} client:only="react"/>
     </div>
-</nav>
+</header>
 
 
 <style>
-    nav {
+    header {
 
         border: 3px green solid;
         box-sizing: border-box;
@@ -60,7 +60,7 @@ const apiAuthUrl = import.meta.env.VITE_API_AUTH_URL;
         border-radius: 10px;
     }
 
-    div.options-container {
+    nav.options-container {
         border: 3px solid red;
         
         display: flex;
