@@ -1,6 +1,7 @@
 import "./userLoginStyle.css"
 import { useEffect, useRef, useState } from "react";
 import LoginModal from "./LoginModal";
+import SidebarMenu from "./SidebarMenu";
 
 
 export default function UserLogin( {apiAuthUrl} ) {
@@ -9,6 +10,7 @@ export default function UserLogin( {apiAuthUrl} ) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
+    const [showSidebar, setShowSidebar] = useState(false);
     const modalRef = useRef(null);
 
     // renderiza el username si ya existe junto al token en el sesion storage
@@ -71,6 +73,11 @@ export default function UserLogin( {apiAuthUrl} ) {
         modalRef.current?.close();
     }
 
+    // alternar el estado del sidebar
+    const toggleSidebar = () => {
+        setShowSidebar(!showSidebar);
+    }
+
     return(
         <>
             {!userLogin ? (
@@ -78,13 +85,12 @@ export default function UserLogin( {apiAuthUrl} ) {
                     inicia sesión
                 </button>
             ) : (
-                <div className="username-container">
+                <div className="username-container" onClick={toggleSidebar}>
                     <p className="username-text">{userLogin}</p>
                     <img className="arrow-down-svg" src="/keyboard_arrow_down.svg" alt="arrow-down-svg" />
                 </div>
             )}
 
-            {/* Modal de Login*/}
             {showModal && (
                 <LoginModal
                     onClose={closeModal}
@@ -94,6 +100,10 @@ export default function UserLogin( {apiAuthUrl} ) {
                     setPassword={setPassword}
                 />
             )}
+
+            {/* Sidebar (menú lateral) */}
+            {showSidebar && <SidebarMenu onClose={() => setShowSidebar(false)} />}
+
         </>
     );
 }
