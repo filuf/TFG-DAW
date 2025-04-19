@@ -21,4 +21,6 @@ public class ProductEntity {
     @Column(name = "is_unlimited", nullable = false)
     private Boolean isUnlimited;
 
+    @Column(name = "url_image", nullable = false)
+    private String urlImage;
 }
