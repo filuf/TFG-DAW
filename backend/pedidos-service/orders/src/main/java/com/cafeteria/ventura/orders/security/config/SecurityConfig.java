@@ -13,6 +13,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 /**
  * Configura el AuthenticationManager, el orden y funcionamiento de la cadena de filtros y el encoder de contraseñas
@@ -46,7 +50,9 @@ public class SecurityConfig {
      */
     @Bean
     public SecurityFilterChain securityFilterChain (HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable)
+        http.cors(httpSecurityCorsConfigurer ->
+                        httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource()))
+                .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement( sesion -> sesion.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         // todos los endpoint piden autenticación previa
@@ -59,6 +65,18 @@ public class SecurityConfig {
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    @Bean
+    UrlBasedCorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of("http://localhost:4321/orders", "http://localhost:4321")); //TODO: CORREGIR ACCESO CUANDO TENGAMOS EL DOMINIO
+        configuration.setAllowedMethods(List.of("GET","POST","OPTIONS"));
+        configuration.setAllowedHeaders(List.of("*")); //TODO: AJUSTAR LAS CABECERAS NECESARIAS
+        configuration.setAllowCredentials(true);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 
     /**
