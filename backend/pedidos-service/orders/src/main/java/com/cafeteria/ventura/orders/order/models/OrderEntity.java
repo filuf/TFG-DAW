@@ -1,6 +1,5 @@
 package com.cafeteria.ventura.orders.order.models;
 
-import com.cafeteria.ventura.orders.security.models.UserAuthority;
 import com.cafeteria.ventura.orders.security.models.UserEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -39,5 +38,9 @@ public class OrderEntity {
 
     @Column(name = "is_paid")
     private boolean isPaid;
+
+    //relación con la tabla intermedia para poder usar @EntityGraph
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+    private List<OrderHasProductsEntity> orderHasProducts;
 
 }
