@@ -1,0 +1,102 @@
+---
+import UserLogin from "./UserLogin"
+const apiAuthUrl = import.meta.env.VITE_API_AUTH_URL;
+---
+
+<header>
+    <div class="logo-container">
+        <div class="logo">
+            <a href="/">
+                <img src="/logo_instituto.png" alt="logo ventura" class="logo-image">
+            </a>
+        </div>
+    </div>
+    <nav class="options-container">
+        <div class="option">
+            <p>opcion1</p>
+        </div>
+        <div class="option">        
+            <p>opcion2</p>
+        </div>
+        <div class="option">        
+            <p>opcion3</p>
+        </div>
+    </nav>
+    <div class="session-container">
+        <UserLogin apiAuthUrl={apiAuthUrl} client:only="react"/>
+    </div>
+</header>
+
+
+<style>
+    header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+
+        border: 3px green solid;
+        background-color: rgb(255, 255, 255);
+        box-sizing: border-box;
+        width: 100%;
+        height: 80px;
+
+        display: grid;
+        grid-template-columns: 2fr 8fr 3fr;
+        align-items: center;
+
+        padding: 0px 20px 0px 20px;
+    }
+
+    div.logo-container {
+        border: 3px solid purple ;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    div.logo {
+        
+    }
+
+    img.logo-image {
+        height: 60px;
+        border-radius: 10px;
+    }
+
+    nav.options-container {
+        border: 3px solid red;
+        
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 40px;
+    }
+
+    div.session-container {
+        border: 3px solid yellow;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    div.option {
+        border-radius: 20px;
+        padding: 5px;
+        width: 80px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        transition: all 0.7s;
+    }
+
+    div.option:hover {
+        background-color: grey;
+    }
+
+</style>

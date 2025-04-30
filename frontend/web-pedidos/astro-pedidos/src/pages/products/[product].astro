@@ -1,0 +1,24 @@
+---
+import TopMenu from "../../components/TopMenu/TopMenu.astro";
+import LayoutProduct from "../../layouts/LayoutProduct.astro";
+import { PrismaClient } from "@prisma/client";
+
+export async function getStaticPaths() {
+    
+    const prisma = new PrismaClient();
+    const products = await prisma.products.findMany(); //trae todos los productos de la tabla productos
+    
+    return products.map( product => ({
+        params: { product: product.product_name + "-" + product.id_product},
+        props: { product }
+    }));
+};
+
+
+const { product } = Astro.props;
+const {id_product, is_unlimited, product_name, product_price} = product
+---
+<LayoutProduct title={product_name}>
+    <TopMenu />
+    <h1>hola, soy {product_name}</h1>
+</LayoutProduct>
