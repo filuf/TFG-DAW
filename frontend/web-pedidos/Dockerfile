@@ -1,0 +1,1 @@
+# correr npx prisma generate
