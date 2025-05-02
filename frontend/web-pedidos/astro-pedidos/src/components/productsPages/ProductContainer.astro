@@ -1,0 +1,118 @@
+---
+const { img_url, id_product, is_unlimited, product_name, product_price } = Astro.props;
+// añadir descripción e imagen
+---
+
+<main class="top-container">
+    <section class="image-container">
+        <img src={img_url} alt="imagen producto">
+    </section>
+
+    <section class="product-details-container">
+        <h1 class="product-name">{product_name}</h1>
+        <p>{product_price.toFixed(2)} €</p>
+        <div class="quantity-container">
+            <label for="cantidad">Cantidad:</label>
+            <select name="cantidad" class="product-quantity">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+        </div>
+
+        <div class="add-cart-container">
+            <button class="add-cart-button">añadir al carrito</button>
+        </div>
+
+        {!is_unlimited && 
+        <div class="product-limited-container">
+            <span class="product-limited-alert">Este producto deberá ser pagado en caja</span>
+        </div>}
+
+    </section>
+</ma>
+
+<style>
+    .top-container {
+        margin: 10px;
+        padding: 10px;
+        border: 1px solid black;
+
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+
+    }
+    @media screen and (max-width: 600px) {
+        .top-container {
+            flex-direction: column;
+        }
+    }
+
+    .image-container {
+        border: 1px solid black;
+        width: 100%;
+        margin: 10px;
+        padding: 10px;
+        box-sizing: border-box;
+
+    }
+    .product-details-container {
+        border: 1px solid black;
+        border-radius: 10px;
+        margin: 10px;
+        padding: 10px;
+        box-sizing: border-box;
+        width: 100%;
+    }
+    .product-name {
+        text-transform: capitalize;
+    }
+    .quantity-container {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 5px;
+    }
+    .product-quantity {
+        box-sizing: border-box;
+        width: 100%;
+    }
+
+    .add-cart-container {
+        box-sizing: border-box;
+        display: flex;
+        width: 100%;
+        padding: 20px;
+        justify-content: center;
+    }
+    .add-cart-button {
+        width: 100%;
+        max-width: 200px;
+        border: 0;
+        padding: 10px;
+        color: white;
+        background-color: rgb(82, 173, 173);
+        text-align: center;
+        cursor: pointer;
+        border-radius: 10px;
+        transition: all 0.3s;
+    }
+    .add-cart-button:hover {
+        background-color: rgb(52, 107, 107);
+    }
+
+    .product-limited-container {
+        display: flex;
+        width: 100%;
+        margin-top: 20px;
+        justify-content: center;
+    }
+    .product-limited-alert {
+        color: gray;
+    }
+</style>
