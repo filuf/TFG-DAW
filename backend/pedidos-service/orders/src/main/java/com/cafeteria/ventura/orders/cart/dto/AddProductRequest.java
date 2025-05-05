@@ -9,7 +9,7 @@ import lombok.NonNull;
 public class AddProductRequest {
 
     @NonNull
-    private Long id_product;
+    private Long idProduct;
 
     @NonNull
     private Integer quantity;
