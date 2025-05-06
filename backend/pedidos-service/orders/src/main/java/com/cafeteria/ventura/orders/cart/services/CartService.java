@@ -26,6 +26,15 @@ public class CartService {
     private final UserEntityService userEntityService;
     private final ProductService productService;
 
+    /**
+     * Añade un producto al carrito de un usuario
+     *
+     * @param username usuario
+     * @param idProduct id del producto a añadir
+     * @param quantity cantidad del producto
+     * @return producto añadido al carrito con la cantidad actual
+     * @throws CustomException si el id del producto es inválido
+     */
     public CartHasProductsEntity addProduct(String username, Long idProduct, Integer quantity) throws CustomException {
         CartEntity cart = this.getCartByUsername(username);
 
@@ -51,6 +60,13 @@ public class CartService {
         );
     }
 
+    /**
+     * Obtiene el carrito de un usuario
+     *
+     * @param username usuario
+     * @return carrito del usuario
+     * @throws CustomException si el usuario se ha borrado de la base de datos
+     */
     private CartEntity getCartByUsername (String username) throws CustomException {
         Optional<UserEntity> optUserEntity = userEntityService.findByUsername(username);
         if (optUserEntity.isEmpty()) {
@@ -67,8 +83,61 @@ public class CartService {
         ));
     }
 
+    /**
+     * Obtiene todos los productos del carrito de un usuario
+     *
+     * @param username usuario
+     * @return todos los productos de un carrito
+     * @throws CustomException si el usuario se ha borrado de la base de datos
+     */
     public List<CartHasProductsEntity> getAllProducts(String username) throws CustomException {
         CartEntity cart = this.getCartByUsername(username);
         return this.cartHasProductsRepository.findAllByCart(cart);
+    }
+
+    /**
+     * Obtiene todos los productos del carrito de un usuario
+     *
+     * @param cart carrito del usuario
+     * @return todos los productos del carrito
+     */
+    public List<CartHasProductsEntity> getAllProducts(CartEntity cart) {
+        return this.cartHasProductsRepository.findAllByCart(cart);
+    }
+
+    /**
+     * Obtiene un producto del carrito de un usuario por id del producto
+     *
+     * @param username usuario
+     * @param idProduct id del producto
+     * @return producto contenido en el carrito del usuario
+     * @throws CustomException si no se encuentra ese producto en el carrito del usuario o es inválido
+     */
+    public Optional<CartHasProductsEntity> getProductById(String username, Long idProduct) throws CustomException {
+        CartEntity cart = this.getCartByUsername(username);
+        ProductEntity product = this.productService.getProductById(idProduct)
+                .orElseThrow( () -> new CustomException("No se ha encontrado un producto con esta id", HttpStatus.NOT_FOUND));
+
+        return this.cartHasProductsRepository.findByCartAndProduct(cart, product);
+    }
+
+    /**
+     * Resta una unidad de producto del carrito de un usuario, si es la última unidad elimina el registro
+     *
+     * @param productInCart producto existente en el carrito del usuario
+     * @return vacío si es el último registro, producto con la cantidad actualizada si no
+     */
+    public Optional<CartHasProductsEntity> deleteOneProduct(CartHasProductsEntity productInCart) {
+        Integer quantity = productInCart.getQuantity();
+
+        //si es el último elemento elimina el registro del carrito
+        if (quantity <= 1) {
+            this.cartHasProductsRepository.deleteById(productInCart.getId());
+            return Optional.empty();
+        }
+
+        //si no es el último resta uno a la cantidad
+        productInCart.setQuantity(quantity - 1);
+        return Optional.of(this.cartHasProductsRepository.save(productInCart));
     }
 }

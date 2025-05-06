@@ -6,11 +6,7 @@ import lombok.NonNull;
 
 @AllArgsConstructor
 @Data
-public class AddProductRequest {
-
+public class DeleteProductRequest {
     @NonNull
     private Long idProduct;
-
-    @NonNull
-    private Integer quantity;
 }
