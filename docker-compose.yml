@@ -1,0 +1,88 @@
+services:
+
+  # proxy inverso nginx
+  nginx:
+    container_name: nginx-proxy
+    build: 
+      context: ./reverse-proxy/
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - nginx
+
+  # base de datos mysql
+  database:
+    container_name: mysql-database
+    build: 
+      context: ./database/
+    volumes:
+      - mysql-data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - internal
+
+  # backend autenticación JWT Spring Boot
+  authentication:
+    container_name: spring-authentication
+    build: 
+      context: ./backend/authentication-service/
+    ports:
+      - "8080:8080"
+    networks:
+      - nginx
+      - internal
+
+  # backend pedidos, productos y carrito Spring Boot
+  order:
+    container_name: spring-order
+    build: 
+      context: ./backend/pedidos-service/
+    ports:
+      - "8081:8081"
+    networks:
+      - nginx
+      - internal
+
+  # backend aplicacion cafetería pedidos en tiempo real
+  websocket:
+    container_name: nest-websocket
+    build: 
+      context: ./backend/websocket-service/
+    ports:
+      - "3000:3000"
+    networks:
+      - internal
+      - coffee-shop
+
+  # frontend web principal
+  web-astro:
+    container_name: astro-web
+    build: 
+      context: ./frontend/cafeteria-app/
+    ports:
+      - "4321:4321"
+    networks:
+      - nginx
+
+  # frontend aplicacion cafetería pedidos en tiempo real
+  app-cafeteria:
+    container_name: react-web
+    build: 
+      context: ./frontend/web-pedidos/
+    ports:
+      - "3001:3001"
+    networks:
+      - nginx
+      - coffee-shop
+    
+volumes:
+  mysql-data:
+
+networks:
+  nginx:
+    driver: bridge
+  internal:
+  coffee-shop:
+    
