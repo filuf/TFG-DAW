@@ -21,10 +21,10 @@ USE `db_cafeteria` ;
 -- Table `db_cafeteria`.`users`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `db_cafeteria`.`users` (
-  `id_user` INT NOT NULL AUTO_INCREMENT,
+  `id_user` BIGINT NOT NULL AUTO_INCREMENT,
   `username` VARCHAR(50) NOT NULL,
   `email` VARCHAR(255) NOT NULL,
-  `password` VARCHAR(32) NOT NULL,
+  `password` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id_user`),
   UNIQUE INDEX `username_UNIQUE` (`username` ASC) ,
   UNIQUE INDEX `email_UNIQUE` (`email` ASC) );
@@ -34,8 +34,8 @@ CREATE TABLE IF NOT EXISTS `db_cafeteria`.`users` (
 -- Table `db_cafeteria`.`orders`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `db_cafeteria`.`orders` (
-  `id_order` INT NOT NULL AUTO_INCREMENT,
-  `id_user` INT NOT NULL,
+  `id_order` BIGINT NOT NULL AUTO_INCREMENT,
+  `id_user` BIGINT NOT NULL,
   `description` VARCHAR(300) NULL,
   `is_paid` BIT(1) NOT NULL,
   PRIMARY KEY (`id_order`),
@@ -52,7 +52,7 @@ ENGINE = InnoDB;
 -- Table `db_cafeteria`.`products`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `db_cafeteria`.`products` (
-  `id_product` INT NOT NULL AUTO_INCREMENT,
+  `id_product` BIGINT NOT NULL AUTO_INCREMENT,
   `product_name` VARCHAR(45) NOT NULL,
   `product_price` FLOAT NOT NULL,
   `is_unlimited` BIT(1) NOT NULL,
@@ -66,8 +66,8 @@ ENGINE = InnoDB;
 -- Table `db_cafeteria`.`orders_has_products`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `db_cafeteria`.`orders_has_products` (
-  `id_order` INT NOT NULL,
-  `id_product` INT NOT NULL,
+  `id_order` BIGINT NOT NULL,
+  `id_product` BIGINT NOT NULL,
   `quantity` INT NOT NULL,
   PRIMARY KEY (`id_order`, `id_product`),
   INDEX `fk_pedidos_has_productos_productos1_idx` (`id_product` ASC) ,
@@ -86,15 +86,15 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `db_cafeteria`.`authorities`
+-- Table `db_cafeteria`.`user_authorities`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `db_cafeteria`.`authorities` (
-  `users_id_user` INT NOT NULL,
+CREATE TABLE IF NOT EXISTS `db_cafeteria`.`user_authorities` (
+  `id_user` BIGINT NOT NULL,
   `authorities` ENUM('ADMIN', 'SYSTEM', 'USER') NOT NULL,
-  INDEX `fk_authorities_users1_idx` (`users_id_user` ASC) ,
-  PRIMARY KEY (`users_id_user`, `authorities`),
-  CONSTRAINT `fk_authorities_users1`
-    FOREIGN KEY (`users_id_user`)
+  INDEX `fk_user_authorities_users1_idx` (`id_user` ASC) ,
+  PRIMARY KEY (`id_user`, `authorities`),
+  CONSTRAINT `fk_user_authorities_users1`
+    FOREIGN KEY (`id_user`)
     REFERENCES `db_cafeteria`.`users` (`id_user`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -105,12 +105,12 @@ ENGINE = InnoDB;
 -- Table `db_cafeteria`.`cart`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `db_cafeteria`.`cart` (
-  `id_cart` INT NOT NULL AUTO_INCREMENT,
-  `users_id_user` INT NOT NULL,
-  INDEX `fk_CART_users1_idx` (`users_id_user` ASC) ,
+  `id_cart` BIGINT NOT NULL AUTO_INCREMENT,
+  `id_user` BIGINT NOT NULL,
+  INDEX `fk_CART_users1_idx` (`id_user` ASC) ,
   PRIMARY KEY (`id_cart`),
   CONSTRAINT `fk_CART_users1`
-    FOREIGN KEY (`users_id_user`)
+    FOREIGN KEY (`id_user`)
     REFERENCES `db_cafeteria`.`users` (`id_user`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -121,19 +121,19 @@ ENGINE = InnoDB;
 -- Table `db_cafeteria`.`cart_has_products`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `db_cafeteria`.`cart_has_products` (
-  `products_id_product` INT NOT NULL,
-  `CART_id_cart` INT NOT NULL,
+  `id_product` BIGINT NOT NULL,
+  `id_cart` BIGINT NOT NULL,
   `quantity` INT NOT NULL,
-  PRIMARY KEY (`products_id_product`, `CART_id_cart`),
-  INDEX `fk_products_has_CART_CART1_idx` (`CART_id_cart` ASC) ,
-  INDEX `fk_products_has_CART_products1_idx` (`products_id_product` ASC) ,
+  PRIMARY KEY (`id_product`, `id_cart`),
+  INDEX `fk_cart_has_products_idx` (`id_cart` ASC) ,
+  INDEX `fk_cart_has_products_products1_idx` (`id_product` ASC) ,
   CONSTRAINT `fk_products_has_CART_products1`
-    FOREIGN KEY (`products_id_product`)
+    FOREIGN KEY (`id_product`)
     REFERENCES `db_cafeteria`.`products` (`id_product`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_products_has_CART_CART1`
-    FOREIGN KEY (`CART_id_cart`)
+  CONSTRAINT `fk_cart_has_products`
+    FOREIGN KEY (`id_cart`)
     REFERENCES `db_cafeteria`.`cart` (`id_cart`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -141,15 +141,15 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `db_cafeteria`.`orderState`
+-- Table `db_cafeteria`.`order_states`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `db_cafeteria`.`orderState` (
-  `orders_id_order` INT NOT NULL,
-  `state` ENUM("PENDIENTE", "FINALIZADO") NOT NULL,
-  INDEX `fk_orderState_orders1_idx` (`orders_id_order` ASC) ,
-  PRIMARY KEY (`orders_id_order`),
-  CONSTRAINT `fk_orderState_orders1`
-    FOREIGN KEY (`orders_id_order`)
+CREATE TABLE IF NOT EXISTS `db_cafeteria`.`order_states` (
+  `id_order` BIGINT NOT NULL,
+  `states` ENUM("PENDIENTE", "FINALIZADO") NOT NULL,
+  INDEX `fk_order_states_orders1_idx` (`id_order` ASC) ,
+  PRIMARY KEY (`id_order`),
+  CONSTRAINT `fk_order_states_orders1`
+    FOREIGN KEY (`id_order`)
     REFERENCES `db_cafeteria`.`orders` (`id_order`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
