@@ -1,4 +1,5 @@
 :root {
+  /* Tema claro (por defecto) */
   --primary-color: #2563eb;
   --primary-hover: #1d4ed8;
   --success-color: #22c55e;
@@ -13,6 +14,52 @@
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+}
+
+[data-theme="dark"] {
+  --primary-color: #3b82f6;
+  --primary-hover: #60a5fa;
+  --success-color: #22c55e;
+  --success-hover: #4ade80;
+  --danger-color: #ef4444;
+  --danger-hover: #f87171;
+  --background-color: #0f172a;
+  --card-background: #1e293b;
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --border-color: #334155;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
+}
+
+/* Toggle de tema */
+.theme-toggle {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: var(--card-background);
+  border: 1px solid var(--border-color);
+  border-radius: 50%;
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--shadow-md);
+  transition: all 0.3s ease;
+  z-index: 100;
+}
+
+.theme-toggle:hover {
+  transform: scale(1.1);
+}
+
+.theme-toggle svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--text-primary);
 }
 
 html, body {
@@ -47,6 +94,33 @@ html, body {
   border-radius: 9999px;
   color: white;
   transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.estado-websocket::before {
+  content: '';
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: currentColor;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 .conectado {
@@ -73,6 +147,8 @@ div.pedido {
   opacity: 1;
   transform: translateY(0);
   animation: slideIn 0.3s ease-out;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 div.pedido.fading {
@@ -146,6 +222,26 @@ button {
   font-size: 0.875rem;
   cursor: pointer;
   transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+button::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s, height 0.3s;
+}
+
+button:active::after {
+  width: 200%;
+  height: 200%;
 }
 
 button.concluido {
@@ -185,6 +281,7 @@ dialog {
   max-width: 90%;
   width: 400px;
   animation: modalFadeIn 0.3s ease forwards;
+  backdrop-filter: blur(8px);
 }
 
 @keyframes modalFadeIn {
@@ -230,6 +327,23 @@ dialog .pedido-de {
   button {
     width: 100%;
   }
+
+  .theme-toggle {
+    bottom: 1rem;
+    right: 1rem;
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  .producto-info {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
+  }
+
+  .producto-cantidad {
+    align-self: flex-end;
+  }
 }
 
 /* Estilos adicionales para DivPedido */
@@ -271,6 +385,24 @@ dialog .pedido-de {
   background-color: var(--background-color);
   border-radius: 0.5rem;
   margin-bottom: 0.5rem;
+  position: relative;
+}
+
+.producto-info::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 4px;
+  background: var(--primary-color);
+  border-radius: 2px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.producto-info:hover::before {
+  opacity: 1;
 }
 
 .producto-nombre {
@@ -291,6 +423,17 @@ dialog .pedido-de {
   padding: 1rem;
   background-color: var(--background-color);
   border-radius: 0.5rem;
+  position: relative;
+  padding-left: 2rem;
+}
+
+.descripcion-container::before {
+  content: '📝';
+  position: absolute;
+  left: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.25rem;
 }
 
 .dialog-message {

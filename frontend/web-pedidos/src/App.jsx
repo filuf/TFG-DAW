@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import './App.css'
 import { socket } from './socket'
 import DivPedido from "./DivPedido.tsx"
+import ThemeToggle from './components/ThemeToggle'
 import { Slide, toast, ToastContainer } from "react-toastify"
 
 function App() {
@@ -84,6 +85,7 @@ function App() {
         theme="colored"
         transition={Slide}
       />
+      <ThemeToggle />
       <div className='contenedor-conexion'>
         {isConnected 
           ?  <p className='estado-websocket conectado'>CONECTADO</p>
