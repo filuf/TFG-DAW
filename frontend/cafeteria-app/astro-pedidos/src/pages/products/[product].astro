@@ -1,6 +1,7 @@
 ---
 import TopMenu from "../../components/TopMenu/TopMenu.astro";
 import LayoutProduct from "../../layouts/LayoutProduct.astro";
+import ProductContainer from "../../components/productsPages/ProductContainer.astro";
 import { PrismaClient } from "@prisma/client";
 
 export async function getStaticPaths() {
@@ -14,11 +15,15 @@ export async function getStaticPaths() {
     }));
 };
 
-
 const { product } = Astro.props;
-const {id_product, is_unlimited, product_name, product_price} = product
+const { id_product, is_unlimited, product_name, product_price } = product;
 ---
 <LayoutProduct title={product_name}>
     <TopMenu />
-    <h1>hola, soy {product_name}</h1>
+    <ProductContainer 
+        id_product={id_product} 
+        is_unlimited={is_unlimited} 
+        product_name={product_name} 
+        product_price={product_price} 
+    />
 </LayoutProduct>

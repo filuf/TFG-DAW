@@ -1,0 +1,159 @@
+---
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
+const products = await prisma.products.findMany(); //trae todos los productos de la tabla productos
+---
+
+<h1 class="products-title">¿Que te apetece tomar hoy?</h1>
+
+<section class="products-container">
+
+    { products.map( product => (
+            <article class="product">
+                <a href={"/products/" + product.product_name + "-" + product.id_product}>
+                    <div class="image-container">
+                        <img src="" alt="imagen producto" class="product-image">
+                    </div>
+                
+                    <p class="product-name">{product.product_name}</p>
+                    <p class="product-price">{product.product_price.toFixed(2)} €</p>
+                </a>
+            </article>
+    ))}
+
+</section>
+
+
+<style>
+    .products-title {
+        text-align: center;
+        margin: 1rem 0;
+        font-family: "Open Sans", sans-serif;
+    }
+
+    .products-container {
+        box-sizing: border-box;
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        border: 1px solid green;
+
+        display: grid;
+        grid-template-columns: repeat(
+            auto-fit,
+            minmax(
+                min(140px, 100%),
+                1fr
+            )
+        );
+        gap: 16px;
+        padding: 20px;
+
+        font-family: "Open Sans", sans-serif;
+        font-optical-sizing: auto;
+        font-weight: <weight>;
+        font-style: normal;
+        font-variation-settings: "wdth" 100;
+    }
+
+    .product {
+        width: 100%;
+        height: auto;
+        min-height: 250px;
+        padding: 10px;
+        border: 1px solid black;
+        border-radius: 10px;
+        transition: transform 0.2s ease;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        cursor: pointer;
+    }
+
+    .product:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    a {
+        color: inherit;
+        text-decoration: none;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .image-container {
+        border: 1px solid black;
+        border-radius: 10px;
+        width: 100%;
+        aspect-ratio: 1/1;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .product-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .product-name {
+        font-weight: 600;
+        margin: 5px 0;
+        text-align: center;
+        word-wrap: break-word;
+    }
+
+    .product-price {
+        font-weight: bold;
+        margin: 5px 0;
+    }
+
+    /* Media queries para diferentes tamaños de pantalla */
+    @media (max-width: 768px) {
+        .products-container {
+            padding: 15px;
+            grid-template-columns: repeat(
+                auto-fit,
+                minmax(
+                    min(120px, 100%),
+                    1fr
+                )
+            );
+        }
+
+        .product {
+            min-height: 220px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .products-container {
+            padding: 10px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .product {
+            min-height: 200px;
+            padding: 8px;
+        }
+
+        .product-name {
+            font-size: 0.9rem;
+        }
+
+        .product-price {
+            font-size: 0.9rem;
+        }
+    }
+</style>
