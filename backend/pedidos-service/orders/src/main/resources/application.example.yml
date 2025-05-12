@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: orders
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/db_cafeteria?useSSL=false&serverTimezone=UTC
+    username: # usuario
+    password: # contraseña
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update # "validate" en producci�n
+    show-sql: true
+
+app:
+  security:
+    jwt:
+      secret: # NO EXPONER
+      expiration: 28800 #8 horas
+
+server:
+  port: 8081

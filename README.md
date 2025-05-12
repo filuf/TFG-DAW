@@ -13,17 +13,23 @@ El desarrollo sigue una metodología **iterativa e incremental**, dividiéndose 
 
 | Componente                  | Tecnología |
 |-----------------------------|------------|
-| **tecnologías base** |HTML, CSS, JavaScript, Java |
+| **tecnologías base** |HTML, CSS, JavaScript, TypeScript, Java, SQL |
 | **Frontend Web**            | framework Astro |
 | **Frontend Cafetería**      | framework React |
-| **Backend - Servir Pedidos** | frameworks Spring Boot / Nest.js |
+| **Backend - Gestionar Pedidos** | framework Spring Boot |
 | **Backend - Autenticación**  | framework Spring Boot (Spring Security, JWT) |
 | **Base de Datos**           | MySQL |
 | **Pasarela de Pago**        | API Banco / sumUp API |
-| **Comunicación en tiempo real** | WebSockets |
+| **Backend - Servir Pedidos** | framework Nest.js |
+| **Comunicación en tiempo real** | WebSockets (Socket.io)|
 | **Despliegue** | Docker / Kubernetes |
 
 ---
+
+## 🎨 Diseño incial
+
+<img src="diseño_inicial.png" style=" border-radius: 10px; box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);">
+
 
 ## 🔄 Iteraciones de Desarrollo
 
@@ -31,18 +37,19 @@ El desarrollo sigue una metodología **iterativa e incremental**, dividiéndose 
 - Configuración inicial del repositorio y estructura de microservicios.
 - Implementación del **microservicio de autenticación** (JWT con Spring Security).
 - Creación de la **base de datos** en MySQL y estructura inicial.
-- Desarrollo de la **web para hacer pedidos** con Astro.
-- Integración con pasarelas de pago.
+- Implementación de **WebSockets** en Nest para actualizaciones en tiempo real en la cafetería.
+- Creación del **frontend React** para la cafetería.
 
 ### 🚀 Iteración 2: Gestión de Pedidos en Tiempo Real
-- Desarrollo del **microservicio de pedidos** con Spring Boot o Nest.js.
-- Implementación de **WebSockets** para actualizaciones en tiempo real en la cafetería.
-- Creación del **frontend React** para la cafetería.
+- Desarrollo del **microservicio de pedidos** con Spring.
 - Integración del **microservicio de pedidos** con la base de datos y autenticación.
+- Desarrollo de la **web para hacer pedidos** con Astro.
+- Integración con pasarelas de pago.
 
 ### 🔥 Iteración 3: Histórico de Pedidos y Mejoras Finales
 - Desarrollo del **microservicio de histórico de pedidos**.
 - Implementación de envío de correos electrónicos con la confirmación de pedidos.
+- Despliegue en Docker / Kubernetes
 - Pruebas de carga y optimización del sistema.
 - Documentación y entrega final.
 
