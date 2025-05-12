@@ -73,6 +73,7 @@ html, body {
 
 /* Estilos barra de conexión */
 .contenedor-conexion {
+  box-sizing: border-box;
   background-color: var(--card-background);
   width: 100%;
   display: flex;
