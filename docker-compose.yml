@@ -24,7 +24,7 @@ services:
       - internal
 
   # backend autenticación JWT Spring Boot
-  authentication:
+  spring-authentication:
     container_name: spring-authentication
     build: 
       context: ./backend/authentication-service/
@@ -35,7 +35,7 @@ services:
       - internal
 
   # backend pedidos, productos y carrito Spring Boot
-  order:
+  spring-order:
     container_name: spring-order
     build: 
       context: ./backend/pedidos-service/
@@ -46,7 +46,7 @@ services:
       - internal
 
   # backend aplicacion cafetería pedidos en tiempo real
-  websocket:
+  nest-websocket:
     container_name: nest-websocket
     build: 
       context: ./backend/websocket-service/
