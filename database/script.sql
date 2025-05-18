@@ -38,6 +38,7 @@ CREATE TABLE IF NOT EXISTS `db_cafeteria`.`orders` (
   `id_user` BIGINT NOT NULL,
   `description` VARCHAR(300) NULL,
   `is_paid` BIT(1) NOT NULL,
+  `state` ENUM('PENDIENTE', 'FINALIZADO') NOT NULL,
   PRIMARY KEY (`id_order`),
   INDEX `fk_pedidos_usuarios1_idx` (`id_user` ASC) ,
   CONSTRAINT `fk_pedidos_usuarios1`
@@ -139,21 +140,6 @@ CREATE TABLE IF NOT EXISTS `db_cafeteria`.`cart_has_products` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-
--- -----------------------------------------------------
--- Table `db_cafeteria`.`order_states`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `db_cafeteria`.`order_states` (
-  `id_order` BIGINT NOT NULL,
-  `states` ENUM("PENDIENTE", "FINALIZADO") NOT NULL,
-  INDEX `fk_order_states_orders1_idx` (`id_order` ASC) ,
-  PRIMARY KEY (`id_order`),
-  CONSTRAINT `fk_order_states_orders1`
-    FOREIGN KEY (`id_order`)
-    REFERENCES `db_cafeteria`.`orders` (`id_order`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
