@@ -10,6 +10,7 @@ async function bootstrap() {
     AppModule,
     new FastifyAdapter(),
   );
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(process.env.PORT ?? 3000, '0.0.0.0');
+  console.log('WebSocket server is running on port', process.env.PORT ?? 3000);
 }
 bootstrap();
