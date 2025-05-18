@@ -2,32 +2,29 @@ package com.cafeteria.ventura.orders.order.models;
 
 import com.cafeteria.ventura.orders.security.models.UserEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "orders")
-@Data
-@AllArgsConstructor
+@Getter
+@Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Builder
 public class OrderEntity {
 
+    @EqualsAndHashCode.Include
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_order")
     private Long id;
 
-    //se crea una tabla aparte (esta tabla se carga cuando cargues al orderEntity)
-    @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
-    @CollectionTable(name = "order_states", joinColumns = @JoinColumn(name = "id_order"))
-    private List<OrderState> states = new ArrayList<>(); //lista de roles
+    @Column(name = "state")
+    private OrderState state;
 
     @ManyToOne
     @JoinColumn(name = "id_user")
@@ -40,7 +37,8 @@ public class OrderEntity {
     private boolean isPaid;
 
     //relación con la tabla intermedia para poder usar @EntityGraph
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
-    private List<OrderHasProductsEntity> orderHasProducts;
+    //uso de cascada en vez de repo intermedio como en carrito debido a que la inserción de productos es atómica
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<OrderHasProductsEntity> orderHasProducts;
 
 }

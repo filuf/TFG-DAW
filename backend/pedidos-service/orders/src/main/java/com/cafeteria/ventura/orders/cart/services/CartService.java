@@ -10,6 +10,7 @@ import com.cafeteria.ventura.orders.product.models.ProductEntity;
 import com.cafeteria.ventura.orders.product.services.ProductService;
 import com.cafeteria.ventura.orders.security.models.UserEntity;
 import com.cafeteria.ventura.orders.security.services.UserEntityService;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -67,13 +68,29 @@ public class CartService {
      * @return carrito del usuario
      * @throws CustomException si el usuario se ha borrado de la base de datos
      */
-    private CartEntity getCartByUsername (String username) throws CustomException {
+    public CartEntity getCartByUsername (String username) throws CustomException {
         Optional<UserEntity> optUserEntity = userEntityService.findByUsername(username);
         if (optUserEntity.isEmpty()) {
             throw new CustomException("Usuario no encontrado en la base de datos, vuelve a iniciar sesión", HttpStatus.FORBIDDEN);
         }
         UserEntity user = optUserEntity.get();
 
+        Optional<CartEntity> optCartEntity = cartRepository.findByUser_idUser(user.getIdUser());
+
+        return optCartEntity.orElseGet(() -> cartRepository.save( //nuevo carrito
+                CartEntity.builder()
+                        .user(user)
+                        .build()
+        ));
+    }
+
+    /**
+     * Obtiene el carrito de un usuario
+     *
+     * @param user entidad del usuario de la base de datos
+     * @return carrito del usuario
+     */
+    public CartEntity getCartByUserEntity (UserEntity user) {
         Optional<CartEntity> optCartEntity = cartRepository.findByUser_idUser(user.getIdUser());
 
         return optCartEntity.orElseGet(() -> cartRepository.save( //nuevo carrito
@@ -139,5 +156,10 @@ public class CartService {
         //si no es el último resta uno a la cantidad
         productInCart.setQuantity(quantity - 1);
         return Optional.of(this.cartHasProductsRepository.save(productInCart));
+    }
+
+    @Transactional
+    public void clearCart(CartEntity cart) {
+       this.cartHasProductsRepository.deleteByCart(cart);
     }
 }

@@ -1,10 +1,17 @@
 package com.cafeteria.ventura.orders.order.services;
 
+import com.cafeteria.ventura.orders.cart.models.CartHasProductsEntity;
 import com.cafeteria.ventura.orders.exceptions.CustomException;
 import com.cafeteria.ventura.orders.order.dto.OrderDTO;
 import com.cafeteria.ventura.orders.order.dto.OrderProductDTO;
 import com.cafeteria.ventura.orders.order.models.OrderEntity;
+import com.cafeteria.ventura.orders.order.models.OrderHasProductsEntity;
+import com.cafeteria.ventura.orders.order.models.OrderHasProductsId;
+import com.cafeteria.ventura.orders.order.models.OrderState;
 import com.cafeteria.ventura.orders.order.repositories.OrderRepository;
+import com.cafeteria.ventura.orders.order.webhooks.nest.NestjsWebhook;
+import com.cafeteria.ventura.orders.order.webhooks.nest.dto.NestWebhookWebsocketEmitResponse;
+import com.cafeteria.ventura.orders.product.models.ProductEntity;
 import com.cafeteria.ventura.orders.security.models.UserEntity;
 import com.cafeteria.ventura.orders.security.services.UserEntityService;
 import lombok.AllArgsConstructor;
@@ -12,10 +19,13 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,6 +34,7 @@ public class OrderService {
 
     private OrderRepository orderRepository;
     private UserEntityService userEntityService;
+    private NestjsWebhook nestjsWebhook;
 
     /**
      *
@@ -42,6 +53,35 @@ public class OrderService {
 
         Page<OrderEntity> ordersPaged = orderRepository.findAllByUser(user, pageable);
         return ordersPaged.map(this::mapOrderToDTO);
+    }
+
+    public OrderDTO registerOrder(UserEntity user, Collection<CartHasProductsEntity> products, boolean isPaid, String description) throws CustomException {
+
+        //crear order para un usuario
+        OrderEntity order = OrderEntity.builder()
+                .user(user)
+                .state(OrderState.PENDIENTE)
+                .isPaid(isPaid)
+                .description(description)
+                .build();
+        order = orderRepository.save(order);
+
+        //registrar producto y cantidad a ese order
+        order.setOrderHasProducts(this.mapCartProductsToOrderProducts(products, order));
+
+        //guardar order con sus productos
+        order = this.orderRepository.save(order);
+
+        //mapear order
+        OrderDTO orderDTO = mapOrderToDTO(order);
+
+        // mandar post a nest
+        ResponseEntity<NestWebhookWebsocketEmitResponse> response = nestjsWebhook.sendOrderToNest(orderDTO, user.getUsername());
+        if (response.getStatusCode().is4xxClientError()) {
+            throw new CustomException("Ha ocurrido un error interno al conectarse a la cafetería", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return orderDTO;
     }
 
     /**
@@ -66,5 +106,23 @@ public class OrderService {
                 .isPaid(order.isPaid())
                 .products(productDTOs)
                 .build();
+    }
+
+    private Set<OrderHasProductsEntity> mapCartProductsToOrderProducts(Collection<CartHasProductsEntity> cartHasProductsEntity, OrderEntity order) {
+        Long orderId = order.getId();
+        return cartHasProductsEntity.stream()
+                .map(cartProduct -> {
+                    Long productId = cartProduct.getId().getProductId();
+                    ProductEntity product = cartProduct.getProduct();
+                    Integer quantity = cartProduct.getQuantity();
+
+                    return OrderHasProductsEntity.builder()
+                            .id(new OrderHasProductsId(orderId, productId))
+                            .order(order)
+                            .product(product)
+                            .quantity(quantity)
+                            .build();
+                })
+                .collect(Collectors.toSet());
     }
 }
