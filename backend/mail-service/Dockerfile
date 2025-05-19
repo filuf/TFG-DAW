@@ -1,7 +1,7 @@
 FROM maven:3.9.6-eclipse-temurin-21 AS build
 WORKDIR /app
-COPY ./orders/pom.xml .
-COPY ./orders/src ./src
+COPY ./mailer/pom.xml .
+COPY ./mailer/src ./src
 RUN mvn clean package -DskipTests
 
 
