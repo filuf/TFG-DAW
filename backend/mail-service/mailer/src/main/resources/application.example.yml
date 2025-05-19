@@ -1,0 +1,19 @@
+# archivo de ejemplo para construir el application.yml
+spring:
+  application:
+    name: mailer
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: correoElectronico@mail.com
+    password: miContraseñaSeguraDeAplicacion
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+
+server:
+  port: 8082
