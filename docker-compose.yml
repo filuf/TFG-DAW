@@ -45,6 +45,16 @@ services:
       - nginx
       - internal
 
+  # backend envío de correos Spring Boot
+  spring-mailer:
+    container_name: spring-mailer
+    build: 
+      context: ./backend/mail-service/
+    ports:
+      - "8082:8082"
+    networks:
+      - internal
+
   # backend aplicacion cafetería pedidos en tiempo real
   nest-websocket:
     container_name: nest-websocket
