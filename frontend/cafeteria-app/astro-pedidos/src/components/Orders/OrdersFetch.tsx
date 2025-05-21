@@ -18,35 +18,46 @@ export default function OrdersFetch({ apiOrdersUrl }: { apiOrdersUrl: string }) 
 
     useEffect(() => {
         const fetchOrders = async () => {
+            // ¿Existe el token de sesión? Si existe, se ejecuta el fetch.
             if (sessionStorageToken) {
+                // Se establece el estado de carga a true para mostrar un loading.
                 setLoading(true);
+                // Intentar ejecutar el fetch.
                 try {
-                    //añadir pagina al fetch
+                    // Se ejecuta el fetch a la API de pedidos usando el token de sesión.
                     const response = await fetch(apiOrdersUrl + "/order/history" + "?page=" + page, {
                         headers: {
                             authorization: `Bearer ${sessionStorageToken}`,
                         },
                     });
-
-                    if (response.status === 403) { //forbidden
+                    // Si el fetch devuelve un error 403, se elimina el token de sesión.
+                    if (response.status === 403) {
+                        // Se elimina el token de sesión.
                         sessionStorage.removeItem("token");
+                        // Se muestra un mensaje de error.
                         console.error("Token eliminado debido a un error de autenticación.");
                         return;
                     }
-
+                    // Se convierte la respuesta a un objeto JSON.
                     const data = await response.json();
+                    // Se muestra el objeto JSON en la consola.
                     console.log(data);
+                    // Se establece el estado de los pedidos.
                     setOrders(data);
                 } catch (error) {
+                    // Se muestra un mensaje de error en la consola.
                     console.error("Error fetching orders:", error);
                 } finally {
+                    // Se establece el estado de carga a false para ocultar el loading.
                     setLoading(false);
                 }
             }
         };
-
+        // Se ejecuta el fetch.
         fetchOrders();
-    }, [page, apiOrdersUrl, sessionStorageToken]);
+    }, 
+    // Si "page", la "url" o el "token" cambian, se ejecuta el fetch otra vez.
+    [page, apiOrdersUrl, sessionStorageToken]);
 
     return (
         <>
