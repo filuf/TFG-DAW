@@ -1,12 +1,15 @@
 import {
   Body,
   Controller,
+  HttpCode,
   HttpException,
   HttpStatus,
   Post,
+  Req,
 } from '@nestjs/common';
 import { WebSocketService } from './websocket.service';
 import { Result } from 'src/types';
+import { FastifyRequest } from 'fastify';
 
 /**
  * Este controlador recibe json con objetos Pedido
@@ -18,7 +21,12 @@ export class WebsocketController {
   constructor(private readonly websocketService: WebSocketService) {}
 
   @Post('emit')
-  emitMessage(@Body() data: unknown) {
+  @HttpCode(HttpStatus.OK)
+  emitMessage(@Req() request: FastifyRequest, @Body() data: unknown) {
+    // Verificar el JWT
+    if (!this.websocketService.verifySystemJwt(request)) {
+      throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED); // 401
+    }
     const result: Result = this.websocketService.processMessage(data);
 
     if (!result.success) {
@@ -26,8 +34,7 @@ export class WebsocketController {
     }
 
     return {
-      statusCode: HttpStatus.OK,
       data: result,
-    }; // 200
+    };
   }
 }
