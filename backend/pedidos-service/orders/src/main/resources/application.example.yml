@@ -17,7 +17,15 @@ app:
   security:
     jwt:
       secret: # NO EXPONER
-      expiration: 28800 #8 horas
+      # la tasa de refresco debe ser acorde
+      expiration: 28800 # 8 horas
+      refresh-rate-ms: 25920000 # 28800 * 1000 * 0.9
+  webhook:
+    nest: http://nest-websocket:3000
+    spring-auth: http://spring-authentication:8080
+  system-user-details:
+    user: # usuario con rol SYSTEM
+    password: # contraseña del usuario con rol SYSTEM
 
 server:
   port: 8081
