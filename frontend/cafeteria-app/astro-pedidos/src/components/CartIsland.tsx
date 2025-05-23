@@ -3,15 +3,20 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
 interface Product {
-  productId: number;
-  name: string;
-  price: number;
-  imageUrl: string;
+  idProduct: number;
+  productName: string;
+  productPrice: number;
+  urlImage: string;
+  isUnlimited: boolean;
+}
+
+interface ProductItem {
+  product: Product;
   quantity: number;
 }
 
 interface CartSummaryResponse {
-  productList: Product[];
+  productList: ProductItem[];
   totalProductPrice: number;
   totalUnlimitedProductPrice: number;
 }
@@ -162,15 +167,15 @@ export default function CartIsland({ apiCartUrl }: { apiCartUrl: string }) {
       ) : (
         <>
           {cart.productList.map((product) => (
-            <div key={product.productId} style={{ display: "flex", alignItems: "center", marginBottom: 16, border: "1px solid #ccc", borderRadius: 8, padding: 8 }}>
-              <img src={product.imageUrl || "/astro.png"} alt={product.name} style={{ width: 60, height: 60, borderRadius: 8, marginRight: 16 }} />
+            <div key={product.product.idProduct} style={{ display: "flex", alignItems: "center", marginBottom: 16, border: "1px solid #ccc", borderRadius: 8, padding: 8 }}>
+              <img src={product.product.urlImage ?? "/astro.png"} alt={product.product.productName} style={{ width: 60, height: 60, borderRadius: 8, marginRight: 16 }} />
               <div style={{ flex: 1 }}>
-                <a href={`/products/${product.productId}`} style={{ fontWeight: "bold", fontSize: 18 }}>{product.name}</a>
-                <div>Precio: {product.price.toFixed(2)} €</div>
+                <a href={`/products/${product.product.idProduct}`} style={{ fontWeight: "bold", fontSize: 18 }}>{product.product.productName}</a>
+                <div>Precio: {product.product.productPrice.toFixed(2)} €</div>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  <button onClick={() => handleRemove(product.productId)} disabled={updating || product.quantity <= 0}>-</button>
+                  <button onClick={() => handleRemove(product.product.idProduct)} disabled={updating || product.quantity <= 0}>-</button>
                   <span>{product.quantity}</span>
-                  <button onClick={() => handleAdd(product.productId)} disabled={updating}>+</button>
+                  <button onClick={() => handleAdd(product.product.idProduct)} disabled={updating}>+</button>
                 </div>
               </div>
             </div>
