@@ -4,6 +4,8 @@ import com.cafeteria.ventura.orders.order.dto.OrderDTO;
 import com.cafeteria.ventura.orders.order.webhooks.nest.dto.NestWebhookWebsocketEmitRequest;
 import com.cafeteria.ventura.orders.order.webhooks.nest.dto.NestWebhookWebsocketEmitResponse;
 import com.cafeteria.ventura.orders.order.webhooks.nest.dto.NestProductDetails;
+import com.cafeteria.ventura.orders.security.schedule.SystemJwt;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +18,10 @@ import java.time.Duration;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class NestjsWebhook {
+
+    private final SystemJwt systemJwt;
 
     @Value("${app.webhook.nest}")
     private String nestServiceUrl;
@@ -52,6 +57,7 @@ public class NestjsWebhook {
 
         return client.post()
                 .uri("/websocket/emit")
+                .header("Authorization", "Bearer " + this.systemJwt.getSystemJwt())
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(nestWebhookWebsocketEmitRequest)
                 .accept(MediaType.APPLICATION_JSON)
