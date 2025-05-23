@@ -30,4 +30,12 @@ const {title = "pedido"} = Astro.props;
 
 		padding-top: 40px; /* Para el header fixed de TopMenu*/
 	}
+
+	@media (width <= 1000px) {
+		html,
+		body {
+			overflow-x: auto;
+		}
+		
+	}
 </style>
