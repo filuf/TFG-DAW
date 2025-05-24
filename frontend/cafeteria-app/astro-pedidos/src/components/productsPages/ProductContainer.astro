@@ -1,17 +1,22 @@
 ---
 import AddCartProduct from "./AddCartProduct";
-const { img_url, id_product, is_unlimited, product_name, product_price } = Astro.props;
+const { id_product, is_unlimited, product_name, product_price, url_image, product_description } = Astro.props;
 const apiOrdersUrl = import.meta.env.VITE_API_ORDERS_URL;
+
 // añadir descripción e imagen
 ---
 
 <main class="top-container">
     <section class="image-container">
-        <img src={img_url} alt="imagen producto">
+        <img 
+            src={url_image} alt="imagen producto" class="product-image" 
+            transition:name={product_name + "-" + id_product} />
     </section>
 
     <section class="product-details-container">
         <h1 class="product-name">{product_name}</h1>
+        <h2 class="product-description">{product_description}</h2>
+        <p>{product_price.toFixed(2)} €</p>
 
         <AddCartProduct 
             apiOrdersUrl={apiOrdersUrl}
@@ -50,9 +55,18 @@ const apiOrdersUrl = import.meta.env.VITE_API_ORDERS_URL;
         width: 100%;
         margin: 10px;
         padding: 10px;
-        box-sizing: border-box;
-
+        overflow: hidden;
+        aspect-ratio: 1/1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
+    .product-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
     .product-details-container {
         border: 1px solid black;
         border-radius: 10px;
@@ -64,8 +78,9 @@ const apiOrdersUrl = import.meta.env.VITE_API_ORDERS_URL;
     .product-name {
         text-transform: capitalize;
     }
-
-
+    .product-description {
+        font-weight: 100;
+    }
 
     .product-limited-container {
         display: flex;

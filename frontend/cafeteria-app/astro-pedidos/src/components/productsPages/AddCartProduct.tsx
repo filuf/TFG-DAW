@@ -68,7 +68,6 @@ export default function AddCartProduct({apiOrdersUrl, idProduct, productPrice} :
                 style={{marginBottom: '50px'}}
             />
 
-            <p>{productPrice.toFixed(2)} €</p>
             <div className="quantity-container">
                 <label htmlFor="cantidad">Cantidad:</label>
                 <select name="cantidad" className="product-quantity" onChange={handleQuantityChange}>
