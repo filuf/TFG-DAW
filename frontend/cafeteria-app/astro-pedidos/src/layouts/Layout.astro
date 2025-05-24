@@ -1,3 +1,6 @@
+---
+import { ClientRouter } from "astro:transitions";
+---
 <!doctype html>
 <html lang="es">
 	<head>
@@ -9,6 +12,7 @@
 		<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Pacifico&family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
 		<meta name="generator" content={Astro.generator} />
 		<title>Cafetería Arquitecto Ventura Rodríguez</title>
+		<ClientRouter /> <!-- Para que funcionen las transiciones de navegación entre páginas -->
 	</head>
 	<body>
 		<slot />
