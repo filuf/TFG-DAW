@@ -21,9 +21,9 @@ export default function OrderElement({ id, description, paid, products, loading 
 
     return(
         <article className="order-element-container" key={id}>
-            <div className="order-details">
+            <div className="order-details-container">
                 <div className="order-date">
-                    <span><b>fecha</b></span>
+                    <p className="order-details-field">IDENTIFICADOR: {loading ? <Skeleton width={100} /> : id}</p>
                     <span>{loading ? <Skeleton width={100} /> : "ejemplo"/* poner fecha */}</span>
                 </div>
             </div>
@@ -39,17 +39,17 @@ export default function OrderElement({ id, description, paid, products, loading 
                         </div>
                         
                         <div className="product-details-container">
-                            <span><b>{loading ? <Skeleton width={80} /> : name}</b></span>
-                            <span>{loading ? <Skeleton width={50} /> : `${price.toFixed(2)}€`}</span>
-                            <span>{loading ? <Skeleton width={60} /> : `${quantity} ${quantity > 1 ? "unidades" : "unidad"}`}</span>
+                            <span className="product-name"><b>{loading ? <Skeleton width={80} /> : name}</b></span>
+                            <span className="product-price">{loading ? <Skeleton width={50} /> : `${price.toFixed(2)}€`}</span>
+                            <span className="product-quantity">{loading ? <Skeleton width={60} /> : `${quantity} ${quantity > 1 ? "unidades" : "unidad"}`}</span>
                         </div>
                     </div>
                 )}
             </div>
-            <p>DESCRIPCIÓN: {loading ? <Skeleton width={180} /> : description}</p>
-            <p>PRECIO TOTAL: {loading ? <Skeleton width={80} /> : `${totalPrice(products)}€`}</p>
-            <p>PAGADO: {loading ? <Skeleton width={30} /> : paid ? "sí" : "no"}</p>
-            <p>IDENTIFICADOR: {loading ? <Skeleton width={100} /> : id}</p>
+            <p className="order-details-field">DESCRIPCIÓN: {loading ? <Skeleton width={180} /> : description}</p>
+            <p className="order-details-field">PRECIO TOTAL: {loading ? <Skeleton width={80} /> : `${totalPrice(products)}€`}</p>
+            <p className="order-details-field">PAGADO: {loading ? <Skeleton width={30} /> : paid ? "sí" : "no"}</p>
+
         </article>
     )
 }

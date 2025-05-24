@@ -170,7 +170,7 @@ export default function CartIsland({ apiCartUrl }: { apiCartUrl: string }) {
             <div key={product.product.idProduct} style={{ display: "flex", alignItems: "center", marginBottom: 16, border: "1px solid #ccc", borderRadius: 8, padding: 8 }}>
               <img src={product.product.urlImage ?? "/astro.png"} alt={product.product.productName} style={{ width: 60, height: 60, borderRadius: 8, marginRight: 16 }} />
               <div style={{ flex: 1 }}>
-                <a href={`/products/${product.product.idProduct}`} style={{ fontWeight: "bold", fontSize: 18 }}>{product.product.productName}</a>
+                <a href={`/products/${product.product.productName}-${product.product.idProduct}`} style={{ fontWeight: "bold", fontSize: 18 }}>{product.product.productName}</a>
                 <div>Precio: {product.product.productPrice.toFixed(2)} €</div>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                   <button onClick={() => handleRemove(product.product.idProduct)} disabled={updating || product.quantity <= 0}>-</button>

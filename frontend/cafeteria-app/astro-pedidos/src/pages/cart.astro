@@ -1,9 +1,14 @@
 ---
-import CartIsland from "../components/CartIsland";
+import CartIsland from "../components/cart/CartIsland";
+import Layout from "../layouts/Layout.astro";
+import TopMenu from "../components/topMenu/TopMenu.astro";
 const apiCartUrl = import.meta.env.VITE_API_ORDERS_URL;
 ---
 
-<main style="margin: 30px; min-height: 200px;">
-  <h1>Tu carrito</h1>
-  <CartIsland apiCartUrl={apiCartUrl} client:only="react" />
-</main>
+<Layout>
+  <TopMenu />
+  <main style="margin: 30px; min-height: 200px;">
+    <h1>Tu carrito</h1>
+    <CartIsland apiCartUrl={apiCartUrl} client:only="react" />
+  </main>
+</Layout>
