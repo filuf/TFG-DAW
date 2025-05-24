@@ -70,7 +70,7 @@ public class SecurityConfig {
     @Bean
     UrlBasedCorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:4321/orders", "http://localhost:4321")); //TODO: CORREGIR ACCESO CUANDO TENGAMOS EL DOMINIO
+        configuration.setAllowedOriginPatterns(List.of("http://localhost:4321")); //TODO: CORREGIR ACCESO CUANDO TENGAMOS EL DOMINIO
         configuration.setAllowedMethods(List.of("GET","POST","OPTIONS"));
         configuration.setAllowedHeaders(List.of("*")); //TODO: AJUSTAR LAS CABECERAS NECESARIAS
         configuration.setAllowCredentials(true);
