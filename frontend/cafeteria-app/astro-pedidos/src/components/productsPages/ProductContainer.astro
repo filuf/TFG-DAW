@@ -1,5 +1,7 @@
 ---
+import AddCartProduct from "./AddCartProduct";
 const { img_url, id_product, is_unlimited, product_name, product_price } = Astro.props;
+const apiOrdersUrl = import.meta.env.VITE_API_ORDERS_URL;
 // añadir descripción e imagen
 ---
 
@@ -10,21 +12,12 @@ const { img_url, id_product, is_unlimited, product_name, product_price } = Astro
 
     <section class="product-details-container">
         <h1 class="product-name">{product_name}</h1>
-        <p>{product_price.toFixed(2)} €</p>
-        <div class="quantity-container">
-            <label for="cantidad">Cantidad:</label>
-            <select name="cantidad" class="product-quantity">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-            </select>
-        </div>
 
-        <div class="add-cart-container">
-            <button class="add-cart-button">añadir al carrito</button>
-        </div>
+        <AddCartProduct 
+            apiOrdersUrl={apiOrdersUrl}
+            idProduct={id_product} 
+            productPrice={product_price} client:only="react"/>
+
 
         {!is_unlimited && 
         <div class="product-limited-container">
@@ -32,7 +25,7 @@ const { img_url, id_product, is_unlimited, product_name, product_price } = Astro
         </div>}
 
     </section>
-</ma>
+</main>
 
 <style>
     .top-container {
@@ -71,40 +64,8 @@ const { img_url, id_product, is_unlimited, product_name, product_price } = Astro
     .product-name {
         text-transform: capitalize;
     }
-    .quantity-container {
-        width: 100%;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        gap: 5px;
-    }
-    .product-quantity {
-        box-sizing: border-box;
-        width: 100%;
-    }
 
-    .add-cart-container {
-        box-sizing: border-box;
-        display: flex;
-        width: 100%;
-        padding: 20px;
-        justify-content: center;
-    }
-    .add-cart-button {
-        width: 100%;
-        max-width: 200px;
-        border: 0;
-        padding: 10px;
-        color: white;
-        background-color: rgb(82, 173, 173);
-        text-align: center;
-        cursor: pointer;
-        border-radius: 10px;
-        transition: all 0.3s;
-    }
-    .add-cart-button:hover {
-        background-color: rgb(52, 107, 107);
-    }
+
 
     .product-limited-container {
         display: flex;
