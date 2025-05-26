@@ -14,7 +14,7 @@ interface DivPedidoProps {
  */
 export default function DivPedido({ pedido, removeOrderFunction, isFading }: DivPedidoProps) {
   const { id, comprador, descripcion, pagado, productos } = pedido;
-  const modalRef = useRef<HTMLDialogElement>(null);
+  const modalRef = useRef<HTMLDialogElement>(null); // Referencia al nodo real dialog
 
   const openModal = () => modalRef.current?.showModal();
   const closeModal = () => modalRef.current?.close();
