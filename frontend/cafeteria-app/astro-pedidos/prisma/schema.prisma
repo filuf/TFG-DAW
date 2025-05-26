@@ -12,4 +12,6 @@ model products {
   product_price     Float               @db.Float
   id_product        BigInt              @id @default(autoincrement())
   product_name      String              @db.VarChar(45)
+  url_image           String?               @db.VarChar(255)
+  product_description String?               @db.VarChar(255)
 }

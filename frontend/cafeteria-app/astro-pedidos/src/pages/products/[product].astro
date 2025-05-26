@@ -16,7 +16,7 @@ export async function getStaticPaths() {
 };
 
 const { product } = Astro.props;
-const { id_product, is_unlimited, product_name, product_price } = product;
+const { id_product, is_unlimited, product_name, product_price, url_image, product_description } = product;
 ---
 <LayoutProduct title={product_name}>
     <TopMenu />
@@ -24,6 +24,8 @@ const { id_product, is_unlimited, product_name, product_price } = product;
         id_product={id_product} 
         is_unlimited={is_unlimited} 
         product_name={product_name} 
-        product_price={product_price} 
+        product_price={product_price}
+        url_image={url_image}
+        product_description={product_description}
     />
 </LayoutProduct>

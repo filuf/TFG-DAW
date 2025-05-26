@@ -13,7 +13,9 @@ const products = await prisma.products.findMany(); //trae todos los productos de
             <article class="product">
                 <a href={"/products/" + product.product_name + "-" + product.id_product}>
                     <div class="image-container">
-                        <img src="" alt="imagen producto" class="product-image">
+                        <img 
+                            src={product.url_image ?? "/astro.png"} alt={"imagen " + product.product_name} class="product-image"
+                            transition:name={product.product_name + "-" + product.id_product}>
                     </div>
                 
                     <p class="product-name">{product.product_name}</p>
