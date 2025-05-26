@@ -1,16 +1,28 @@
 import { useEffect, useState } from 'react'
 import './App.css'
-import { socket } from './socket'
+import { getSocket } from './socket'
+import DivLogin from './DivLogin.tsx'
 import DivPedido from "./DivPedido.tsx"
 import ThemeToggle from './components/ThemeToggle'
 import { Slide, toast, ToastContainer } from "react-toastify"
 
 function App() {
+
+  // estado de login
+  const [isLoged, setIsLoged] = useState(false);
+
   //estados de conexión y mensajes
-  const [isConnected, setIsConnected] = useState(socket.connected);
+  const [isConnected, setIsConnected] = useState(false);
   const [mensajeEvents, setMensajeEvents] = useState([]);
 
   useEffect( () => {
+    // no monta el socket si no está logueado
+    if (!isLoged) {
+      return;
+    }
+
+    const socket = getSocket();
+
     setIsConnected(socket.connected);
 
     function onConnect() {
@@ -62,12 +74,18 @@ function App() {
     }
 
 
-  }, []);
+  }, [isLoged]);
 
   
   //función que se pasa a cada componente para poder eliminarse
   const sendRemoveOrder = (id) => {
+    const socket = getSocket();
+    //envía el id del pedido a eliminar al servidor
     socket.emit("removeOrder", id);
+  }
+
+  if (!isLoged) {
+    return <DivLogin setIsLoged={setIsLoged} />
   }
 
   return (
