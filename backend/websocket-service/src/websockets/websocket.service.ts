@@ -57,6 +57,34 @@ export class WebSocketService {
     );
   }
 
+  verifyAdminJwt(client: Socket): boolean {
+    //extraer el token del objeto de autenticación del cliente
+    console.log('Verificando token JWT de ADMIN - ' + client.id);
+    const token = client.handshake.auth?.token as string | undefined;
+    if (!token) {
+      return false;
+    }
+
+    //verificar la clave secreta
+    const secret = this.configService.get<string>('VITE_JWT_SECRET');
+    if (!secret) {
+      throw new Error('Clave secreta de JWT no definida');
+    }
+
+    //verificar el token
+    let tokenData: JwtUserDetailsAuthorities;
+    try {
+      tokenData = jwt.verify(token, secret) as JwtUserDetailsAuthorities;
+    } catch (err) {
+      console.error('Token inválido:', err);
+      return false;
+    }
+    console.log('Token verificado:', tokenData);
+    return (
+      tokenData.authorities?.some((authority) => authority === 'ADMIN') ?? false
+    );
+  }
+
   processMessage(data: unknown): Result {
     console.log('Procesando mensaje:\n', data);
 

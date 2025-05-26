@@ -17,7 +17,7 @@ import { OrdersArrayService } from 'src/components/ordersArraySingleton.service'
 @WebSocketGateway({
   // Cors del cliente React
   cors: {
-    origin: 'http://localhost:5173',
+    origin: '*', //TODO: Cambiar a la url cuando se defina donde esta el cliente
     methods: ['GET', 'POST'],
     allowedHeaders: ['Content-Type'],
   },
@@ -35,6 +35,18 @@ export class WebsocketGateway
 
   afterInit(server: Server) {
     this.websocketService.setServer(server);
+    // Verifica que el token JWT sea válido y tenga el rol de ADMIN
+    server.use((socket, next) => {
+      try {
+        const valid = this.websocketService.verifyAdminJwt(socket);
+        if (!valid) {
+          return next(new Error('Authentication error'));
+        }
+        next();
+      } catch (error) {
+        next(new Error('Authentication error')); //error al cliente
+      }
+    });
   }
 
   handleConnection(client: Socket) {
