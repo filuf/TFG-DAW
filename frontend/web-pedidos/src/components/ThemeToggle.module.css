@@ -1,0 +1,36 @@
+.themeToggle {
+  position: fixed;
+  bottom: 2rem;
+  left: 2rem;
+  background: var(--card-background);
+  border: 1px solid var(--border-color);
+  border-radius: 50%;
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--shadow-md);
+  transition: all 0.3s ease;
+  z-index: 100;
+}
+
+.themeToggle:hover {
+  transform: scale(1.1);
+}
+
+.themeToggleSvg {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--text-primary);
+}
+
+@media (max-width: 640px) {
+  .themeToggle {
+    bottom: 1rem;
+    left: 1rem;
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+} 
