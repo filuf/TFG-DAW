@@ -67,12 +67,6 @@ export class WebsocketGateway
     console.log(`Cliente desconectado: ${client.id}`);
   }
 
-  //deprecar
-  @SubscribeMessage('mensaje')
-  handleMessage(@MessageBody() data: unknown) {
-    return this.websocketService.processMessage(data);
-  }
-
   @SubscribeMessage('removeOrder')
   handleRemoveOrder(@MessageBody() id: number) {
     return this.websocketService.processRemoveOrder(id);
