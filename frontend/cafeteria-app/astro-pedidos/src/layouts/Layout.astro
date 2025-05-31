@@ -1,5 +1,6 @@
 ---
 import { ClientRouter } from "astro:transitions";
+import Header from "../components/Header.astro";
 ---
 <!doctype html>
 <html lang="es">
@@ -13,21 +14,34 @@ import { ClientRouter } from "astro:transitions";
 		<meta name="generator" content={Astro.generator} />
 		<title>Cafetería Arquitecto Ventura Rodríguez</title>
 		<ClientRouter /> <!-- Para que funcionen las transiciones de navegación entre páginas -->
+		<slot name="head" />
 	</head>
 	<body>
+		<Header />
 		<slot />
 	</body>
 </html>
 
 <style>
+	/*
+	Reset global para los navegadores web, esta es una buena
+	práctica para evitar que los estilos de los navegadores web
+	afecten el diseño de la página web, ejemplo, el navegador
+	Chrome tiene estilos por defecto como el padding, margin, etc.
+	*/
+	* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	}
+	/*
+	Estilos globales adicionales para el body y el html que
+	garantizan que el contenido ocupe el 100% de la pantalla.
+	*/
 	html,
 	body {
-		box-sizing: border-box;
-		margin: 0;
-		padding: 0;
 		width: 100%;
 		height: 100%;
-
-		padding-top: 40px; /* Para el header fixed de TopMenu*/
+		overflow-x: hidden;
 	}
 </style>

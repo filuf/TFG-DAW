@@ -1,0 +1,17 @@
+---
+import styles from "./Header.module.css";
+---
+
+<header class={styles.header}>
+  <div class={styles.logoContainer}>
+    <img src="/favicon.png" alt="Logo cafetería" class={styles.logoImg} />
+    <span class={styles.title}>Cafetería Ventura Rodríguez</span>
+  </div>
+  <nav class={styles.nav}>
+    <a href="/" class={styles.navLink}>Inicio</a>
+    <a href="/products" class={styles.navLink}>Productos</a>
+    <a href="/cart" class={styles.navLink}>Carrito</a>
+    <a href="/login" class={styles.button}>Iniciar sesión</a>
+    <a href="/register" class={styles.button}>Registrarse</a>
+  </nav>
+</header> 
