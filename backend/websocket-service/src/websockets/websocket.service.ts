@@ -9,6 +9,7 @@ import {
   Result,
   JwtUserDetailsAuthorities,
 } from 'src/types';
+import { PrismaClient } from '@prisma/client';
 import * as jwt from 'jsonwebtoken';
 
 /**
@@ -18,10 +19,12 @@ import * as jwt from 'jsonwebtoken';
 @Injectable()
 export class WebSocketService {
   private server: Server; //conexion websocket
+  private prisma: PrismaClient; //ORM prisma
 
   //no puede estar en el builder porque server no está disponible instantaneamente al iniciar
   setServer(server: Server) {
     this.server = server;
+    this.prisma = new PrismaClient();
   }
 
   constructor(
@@ -105,8 +108,19 @@ export class WebSocketService {
     console.log('procesando pedido concluido:\nID:', id);
 
     //hacer query a db actualizando el estado
-    this.server.emit('removeOrderServer', id);
-    this.ordersArray.removerOrderById(id);
+    this.prisma.orders
+      .update({
+        where: { id_order: id },
+        data: { state: 'FINALIZADO' },
+      })
+      .then(() => {
+        console.log(
+          `Pedido ${id} actualizado a FINALIZADO en la base de datos`,
+        );
+        this.server.emit('removeOrderServer', id);
+        this.ordersArray.removerOrderById(id);
+      });
+
     return { success: true } as Result;
   }
 
