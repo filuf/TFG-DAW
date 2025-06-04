@@ -1,5 +1,4 @@
 ---
-import TopMenu from "../../components/topMenu/TopMenu.astro";
 import LayoutProduct from "../../layouts/LayoutProduct.astro";
 import ProductContainer from "../../components/productsPages/ProductContainer.astro";
 import { PrismaClient } from "@prisma/client";
@@ -19,7 +18,6 @@ const { product } = Astro.props;
 const { id_product, is_unlimited, product_name, product_price, url_image, product_description } = product;
 ---
 <LayoutProduct title={product_name}>
-    <TopMenu />
     <ProductContainer 
         id_product={id_product} 
         is_unlimited={is_unlimited} 
