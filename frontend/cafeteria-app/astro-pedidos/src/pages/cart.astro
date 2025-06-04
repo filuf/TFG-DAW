@@ -1,12 +1,10 @@
 ---
 import CartIsland from "../components/cart/CartIsland";
 import LayoutCart from "../layouts/Layout.astro";
-import TopMenu from "../components/topMenu/TopMenu.astro";
 const apiCartUrl = import.meta.env.VITE_API_ORDERS_URL;
 ---
 
 <LayoutCart>
-  <TopMenu />
   <main>
     <h1>Tu carrito</h1>
     <CartIsland apiCartUrl={apiCartUrl} client:only="react" />
