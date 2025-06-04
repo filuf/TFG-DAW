@@ -1,94 +1,26 @@
 ---
-import AddCartProduct from "./AddCartProduct";
-const { id_product, is_unlimited, product_name, product_price, url_image, product_description } = Astro.props;
-const apiOrdersUrl = import.meta.env.VITE_API_ORDERS_URL;
-
-// añadir descripción e imagen
+import ProductCard from './ProductCard.jsx';
+const { products } = Astro.props;
 ---
 
-<main class="top-container">
-    <section class="image-container">
-        <img 
-            src={url_image} alt="imagen producto" class="product-image" 
-            transition:name={product_name + "-" + id_product} />
-    </section>
-
-    <section class="product-details-container">
-        <h1 class="product-name">{product_name}</h1>
-        <h2 class="product-description">{product_description}</h2>
-        <p>{product_price.toFixed(2)} €</p>
-
-        <AddCartProduct 
-            apiOrdersUrl={apiOrdersUrl}
-            idProduct={id_product} 
-            productPrice={product_price} client:only="react"/>
-
-
-        {!is_unlimited && 
-        <div class="product-limited-container">
-            <span class="product-limited-alert">Este producto deberá ser pagado en caja</span>
-        </div>}
-
-    </section>
+<main class="products-list-container">
+  <!-- Mapeamos los productos existentes en la base de datos y mostramos cada uno
+  esto funciona como un bucle foreach (for in) -->
+  {products.map((product: any) => (
+    <ProductCard product={product} client:only="react" />
+  ))}
 </main>
 
 <style>
-    .top-container {
-        margin: 10px;
-        padding: 10px;
-        border: 1px solid black;
-
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-
-    }
-    @media screen and (max-width: 600px) {
-        .top-container {
-            flex-direction: column;
-        }
-    }
-
-    .image-container {
-        border: 1px solid black;
-        width: 100%;
-        margin: 10px;
-        padding: 10px;
-        overflow: hidden;
-        aspect-ratio: 1/1;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    .product-image {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    .product-details-container {
-        border: 1px solid black;
-        border-radius: 10px;
-        margin: 10px;
-        padding: 10px;
-        box-sizing: border-box;
-        width: 100%;
-    }
-    .product-name {
-        text-transform: capitalize;
-    }
-    .product-description {
-        font-weight: 100;
-    }
-
-    .product-limited-container {
-        display: flex;
-        width: 100%;
-        margin-top: 20px;
-        justify-content: center;
-    }
-    .product-limited-alert {
-        color: gray;
-    }
+.products-list-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.8rem;
+  padding: 2rem 0.5rem;
+  justify-items: center;
+  align-items: stretch;
+  width: 100%;
+  max-width: 1300px;
+  margin: 0 auto;
+}
 </style>

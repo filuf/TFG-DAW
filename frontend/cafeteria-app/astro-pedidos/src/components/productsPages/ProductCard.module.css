@@ -1,0 +1,154 @@
+/***************************************************
+MODULO CSS PRODUCT CARD
+Autores: Aitor y Agustín
+Fecha: 04/06/2025
+Version: 1.0
+
+Modulo de estilos CSS para el componente ProductCard.
+***************************************************/
+.card {
+  background: var(--white);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(65, 39, 34, 0.10);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  transition: box-shadow 0.18s, transform 0.18s, border 0.18s;
+  max-width: 240px;
+  min-width: 0;
+  margin: 0 auto;
+  border: 1px solid #ececec;
+  font-family: 'Quicksand', 'Open Sans', Arial, sans-serif;
+}
+
+.card:hover {
+  box-shadow: 0 6px 24px rgba(65, 39, 34, 0.16);
+  border: 1.5px solid var(--yellow-green);
+  transform: translateY(-2px) scale(1.01);
+}
+
+.imageContainer {
+  width: 100%;
+  aspect-ratio: 1/1;
+  background: var(--lemon-chiffon);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.image {
+  width: 80%;
+  height: 80%;
+  object-fit: contain;
+  border-radius: 8px;
+  background: var(--lemon-chiffon);
+  margin: 0.5rem auto;
+  display: block;
+}
+
+.infoRow {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0.8rem 1rem 0.5rem 1rem;
+  font-size: 1.05rem;
+  gap: 0.2rem;
+}
+
+.name {
+  font-weight: 700;
+  color: var(--bistre);
+  font-size: 1.05rem;
+  margin-bottom: 0.1rem;
+  font-family: 'Quicksand', 'Open Sans', Arial, sans-serif;
+}
+
+.price {
+  font-weight: 600;
+  color: var(--yellow-green);
+  font-size: 1.05rem;
+  margin-bottom: 0.3rem;
+}
+
+.cartButton {
+  background: #ffd814;
+  color: #111;
+  border: 1px solid #fcd200;
+  border-radius: 6px;
+  padding: 0.5rem 1.2rem;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 0.3rem;
+  align-self: stretch;
+  transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+  box-shadow: 0 1px 4px rgba(65, 39, 34, 0.07);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4em;
+}
+.cartButton:hover {
+  background: #f7ca00;
+  color: #111;
+}
+
+.toggleButton {
+  background: none;
+  border: none;
+  color: var(--buff);
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0.7rem 1.2rem 0.7rem 1.2rem;
+  text-align: left;
+  transition: color 0.18s;
+  outline: none;
+  align-self: flex-start;
+}
+.toggleButton:hover {
+  color: var(--yellow-green);
+}
+
+.moreInfo {
+  padding: 0.5rem 1.2rem 1.2rem 1.2rem;
+  background: var(--lemon-chiffon);
+  border-radius: 0 0 12px 12px;
+  animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.description {
+  color: var(--bistre);
+  font-size: 0.98rem;
+  margin-bottom: 0.5rem;
+  margin-top: 0;
+}
+
+.unlimited {
+  display: inline-block;
+  background: var(--yellow-green);
+  color: var(--bistre);
+  font-weight: 700;
+  font-size: 0.95rem;
+  padding: 0.2rem 0.7rem;
+  border-radius: 8px;
+  margin-top: 0.2rem;
+}
+
+@media (max-width: 600px) {
+  .card {
+    max-width: 98vw;
+    min-width: 0;
+  }
+  .infoRow, .moreInfo {
+    padding-left: 0.7rem;
+    padding-right: 0.7rem;
+  }
+} 

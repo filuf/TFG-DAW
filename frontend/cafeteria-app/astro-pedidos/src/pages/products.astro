@@ -1,0 +1,38 @@
+---
+/***************************************************
+PAGINA PRODUCTOS
+Autores: Aitor y Agustín
+Fecha: 04/06/2025
+Version: 1.0
+***************************************************/
+import Layout from "../layouts/Layout.astro";
+import ProductContainer from "../components/productsPages/ProductContainer.astro";
+import { PrismaClient } from "@prisma/client";
+// Que dolor de cabeza fue entender que tengo que instanciar siempre prisma.
+const prisma = new PrismaClient();
+const products = await prisma.products.findMany();
+---
+
+<Layout>
+  <main class="products-page-container">
+    <h1 class="products-title">¿Qué te apetece tomar hoy?</h1>
+    <ProductContainer products={products} />
+  </main>
+</Layout>
+
+<style>
+.products-page-container {
+  width: 100%;
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 2rem 0 3rem 0;
+}
+.products-title {
+  text-align: center;
+  font-family: 'Pacifico', cursive;
+  font-size: 2.2rem;
+  color: var(--bistre, #412722);
+  margin-bottom: 2.5rem;
+  letter-spacing: 1px;
+}
+</style> 
