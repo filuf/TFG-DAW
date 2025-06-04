@@ -52,7 +52,8 @@ const apiAuthUrl = import.meta.env.VITE_API_AUTH_URL;
 
   // Escuchar evento personalizado para logout desde React
   window.addEventListener('user-logout', updateCartVisibility);
-
-  // Escuchar evento personalizado para login y logout desde React
   window.addEventListener('user-login', updateCartVisibility);
+
+  // Escuchar evento de navegación de Astro para actualizar el carrito tras cada cambio de página
+  document.addEventListener('astro:after-swap', updateCartVisibility);
 </script> 
