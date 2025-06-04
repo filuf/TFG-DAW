@@ -1,5 +1,12 @@
 ---
+/***************************************************
+LAYOUT CART
+Autores: Aitor y Agustín
+Fecha: 04/06/2025
+Version: 1.0
+***************************************************/
 import { ClientRouter } from "astro:transitions";
+import Header from "../components/Header.astro";
 ---
 <!doctype html>
 <html lang="es">
@@ -15,6 +22,7 @@ import { ClientRouter } from "astro:transitions";
 		<ClientRouter /> <!-- Para que funcionen las transiciones de navegación entre páginas -->
 	</head>
 	<body>
+		<Header />
 		<slot />
 	</body>
 </html>
@@ -27,7 +35,6 @@ import { ClientRouter } from "astro:transitions";
 		padding: 0;
 		width: 100%;
 		height: 100%;
-
-		padding-top: 40px; /* Para el header fixed de TopMenu*/
+		background: var(--lemon-chiffon);
 	}
 </style>
