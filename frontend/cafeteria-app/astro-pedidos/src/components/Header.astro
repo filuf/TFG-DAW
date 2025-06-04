@@ -1,5 +1,13 @@
 ---
+/***************************************************
+COMPONENTE HEADER
+Autores: Aitor y Agustín
+Fecha: 04/06/2025
+Version: 1.0
+***************************************************/
 import styles from "./Header.module.css";
+import UserLogin from "./TopMenu/UserLogin";
+const apiAuthUrl = import.meta.env.VITE_API_AUTH_URL;
 ---
 
 <header class={styles.header}>
@@ -10,8 +18,41 @@ import styles from "./Header.module.css";
   <nav class={styles.nav}>
     <a href="/" class={styles.navLink}>Inicio</a>
     <a href="/products" class={styles.navLink}>Productos</a>
-    <a href="/cart" class={styles.navLink}>Carrito</a>
-    <a href="/login" class={styles.button}>Iniciar sesión</a>
-    <a href="/register" class={styles.button}>Registrarse</a>
+    <!-- El carrito se muestra solo si el usuario está autenticado -->
+    <a href="/cart" class={styles.navLink} id="cartLink">Carrito</a>
+    <!-- Contenedor que contiene el componente de login y registro -->
+    <div class={styles.authContainer}>
+      <UserLogin apiAuthUrl={apiAuthUrl} client:only="react" />
+    </div>
   </nav>
-</header> 
+</header>
+
+<script>
+  // Script para controlar la visibilidad del carrito basado en la autenticación
+  function updateCartVisibility() {
+    // Esta variable almacena el elemento del carrito.
+    const cartLink = document.getElementById('cartLink');
+    // Esta variable almacena el estado de autenticación del usuario.
+    const isLoggedIn = sessionStorage.getItem('token') !== null;
+    // Si el carrito existe, se muestra solo si el usuario está autenticado.
+    if (cartLink) {
+      cartLink.style.display = isLoggedIn ? 'block' : 'none';
+    }
+  }
+
+  // Actualizar al cargar la página
+  document.addEventListener('DOMContentLoaded', updateCartVisibility);
+
+  // Escuchar cambios en el sessionStorage
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'token') {
+      updateCartVisibility();
+    }
+  });
+
+  // Escuchar evento personalizado para logout desde React
+  window.addEventListener('user-logout', updateCartVisibility);
+
+  // Escuchar evento personalizado para login y logout desde React
+  window.addEventListener('user-login', updateCartVisibility);
+</script> 

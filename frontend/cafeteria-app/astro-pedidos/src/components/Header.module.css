@@ -1,6 +1,14 @@
+/***************************************************
+MODULO CSS DEL ELEMENTO GLOBAL HEADER
+Autores: Aitor y Agustín
+Fecha: 01/06/2025
+Version: 1.0
+***************************************************/
+
 /*
   Variables de colores globales generadas en 
   https://coolors.co/visualizer/000000-aed000-f5f3bb-dfa06e-412722
+
 */
 :root {
   --black: #000000ff;
@@ -120,6 +128,15 @@
 }
 
 /*
+  Estilos del contenedor de autenticación
+*/
+.authContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/*
   Estilos del header global para pantallas de 700px o menos (responsive).
 */
 @media (max-width: 700px) {
@@ -137,4 +154,12 @@
     flex-wrap: wrap;
     gap: 0.5rem;
   }
+  .authContainer {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
+#cartLink {
+  display: none;
 } 
