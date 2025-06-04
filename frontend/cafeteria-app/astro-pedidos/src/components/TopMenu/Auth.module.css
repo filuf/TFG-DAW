@@ -1,0 +1,436 @@
+.authButtons {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.loginButton {
+  background: var(--yellow-green);
+  color: var(--black);
+  font-weight: bold;
+  font-size: clamp(0.9rem, 2vw, 1.05rem);
+  padding: clamp(0.3rem, 1vw, 0.4rem) clamp(0.8rem, 2vw, 1.2rem);
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s, transform 0.18s;
+  box-shadow: 0 1px 6px rgba(65, 39, 34, 0.10);
+  white-space: nowrap;
+}
+
+.loginButton:hover {
+  background: var(--buff);
+  color: var(--bistre);
+  transform: translateY(-2px) scale(1.04);
+}
+
+.registerButton {
+  background: var(--white);
+  color: var(--bistre);
+  font-weight: bold;
+  font-size: clamp(0.9rem, 2vw, 1.05rem);
+  padding: clamp(0.3rem, 1vw, 0.4rem) clamp(0.8rem, 2vw, 1.2rem);
+  border: 2px solid var(--bistre);
+  border-radius: 7px;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s, transform 0.18s;
+  box-shadow: 0 1px 6px rgba(65, 39, 34, 0.07);
+  white-space: nowrap;
+}
+
+.registerButton:hover {
+  background: var(--bistre);
+  color: var(--white);
+  transform: translateY(-2px) scale(1.04);
+}
+
+.usernameContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: clamp(0.3rem, 1vw, 0.4rem) clamp(0.8rem, 2vw, 1rem);
+  border-radius: 7px;
+  cursor: pointer;
+  transition: background 0.18s;
+}
+
+.usernameContainer:hover {
+  background: var(--lemon-chiffon);
+}
+
+.usernameText {
+  color: var(--bistre);
+  font-weight: 600;
+  font-size: clamp(0.9rem, 2vw, 1.05rem);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: clamp(100px, 15vw, 120px);
+}
+
+.arrowDown {
+  width: clamp(16px, 2vw, 20px);
+  height: clamp(16px, 2vw, 20px);
+  transition: transform 0.3s ease;
+}
+
+.usernameContainer:hover .arrowDown {
+  transform: rotate(180deg);
+}
+
+/* Estilos del modal */
+.modal {
+  background-color: var(--white);
+  border: none;
+  border-radius: 20px;
+  box-shadow: 0 4px 24px rgba(65, 39, 34, 0.15);
+  padding: clamp(1.2rem, 3vw, 1.8rem);
+  width: fit-content;
+  min-width: 280px;
+  max-width: 95vw;
+  height: fit-content;
+  min-height: 200px;
+  max-height: 95vh;
+  animation: fadeIn 0.3s ease forwards;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+}
+
+@supports not (width: fit-content) {
+  .modal {
+    width: min(400px, 90vw);
+    height: auto;
+  }
+}
+
+/* Añadir overlay para el modal */
+.modal::backdrop {
+  background-color: rgba(65, 39, 34, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -60%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+.modalContainer {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.8rem, 2vw, 1.2rem);
+  overflow: visible;
+}
+
+.closeButtonContainer {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.closeButton {
+  background: transparent;
+  border: none;
+  width: clamp(24px, 3vw, 32px);
+  height: clamp(24px, 3vw, 32px);
+  padding: 0;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: background-color 0.18s;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.closeButton::before,
+.closeButton::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 2px;
+  background-color: var(--bistre);
+  border-radius: 2px;
+  transition: transform 0.3s ease, background-color 0.18s;
+}
+
+.closeButton::before {
+  transform: rotate(45deg);
+}
+
+.closeButton::after {
+  transform: rotate(-45deg);
+}
+
+.closeButton:hover {
+  background: var(--lemon-chiffon);
+}
+
+.closeButton:hover::before,
+.closeButton:hover::after {
+  background-color: var(--yellow-green);
+}
+
+.closeButton:hover::before {
+  transform: rotate(225deg);
+}
+
+.closeButton:hover::after {
+  transform: rotate(135deg);
+}
+
+.closeButtonText {
+  display: none;
+}
+
+.modalLogoContainer {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+
+.modalLogo {
+  width: clamp(40px, 8vw, 60px);
+  height: clamp(40px, 8vw, 60px);
+  object-fit: contain;
+  animation: logoAppear 0.5s ease forwards;
+}
+
+@keyframes logoAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.modalTitle {
+  font-family: 'Pacifico', cursive;
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  color: var(--bistre);
+  text-align: center;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  animation: titleSlideUp 0.5s ease forwards;
+}
+
+@keyframes titleSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.8rem, 2vw, 1rem);
+}
+
+.formLabel {
+  color: var(--bistre);
+  font-weight: 600;
+  font-size: clamp(0.8rem, 2vw, 1rem);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.formInput {
+  width: 100%;
+  padding: clamp(0.6rem, 2vw, 0.8rem);
+  border: 2px solid var(--lemon-chiffon);
+  border-radius: 7px;
+  font-size: clamp(0.9rem, 2vw, 1rem);
+  transition: border-color 0.18s, box-shadow 0.18s;
+}
+
+.formInput:focus {
+  outline: none;
+  border-color: var(--yellow-green);
+  box-shadow: 0 0 0 3px rgba(174, 208, 0, 0.1);
+}
+
+.submitButton {
+  background: var(--yellow-green);
+  color: var(--black);
+  font-weight: bold;
+  font-size: clamp(0.9rem, 2vw, 1.05rem);
+  padding: clamp(0.6rem, 2vw, 0.8rem);
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: background 0.18s, transform 0.18s;
+  margin-top: clamp(0.8rem, 2vw, 1rem);
+}
+
+.submitButton:hover {
+  background: var(--buff);
+  transform: translateY(-2px);
+}
+
+.errorMessage {
+  color: #e53935;
+  font-size: clamp(0.8rem, 2vw, 0.9rem);
+  text-align: center;
+  font-weight: 600;
+}
+
+.switchAuth {
+  text-align: center;
+  margin-top: clamp(0.8rem, 2vw, 1rem);
+  color: var(--bistre);
+  font-size: clamp(0.8rem, 2vw, 0.9rem);
+}
+
+.switchAuthButton {
+  background: none;
+  border: none;
+  color: var(--yellow-green);
+  font-weight: bold;
+  cursor: pointer;
+  padding: clamp(0.2rem, 1vw, 0.3rem) clamp(0.4rem, 1vw, 0.5rem);
+  border-radius: 4px;
+  transition: background 0.18s;
+  font-size: clamp(0.8rem, 2vw, 0.9rem);
+}
+
+.switchAuthButton:hover {
+  background: var(--lemon-chiffon);
+}
+
+/* Media queries para ajustes específicos */
+@media (max-width: 700px) {
+  .authButtons {
+    width: 100%;
+    justify-content: flex-end;
+  }
+  
+  .modal {
+    width: 95vw;
+    padding: 1.5rem;
+  }
+
+  .formContainer {
+    gap: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal {
+    padding: 1rem;
+  }
+
+  .modalTitle {
+    font-size: 1.5rem;
+  }
+
+  .formLabel {
+    font-size: 0.8rem;
+  }
+
+  .formInput {
+    padding: 0.6rem;
+    font-size: 0.9rem;
+  }
+
+  .submitButton {
+    padding: 0.6rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Ajustes para pantallas muy pequeñas */
+@media (max-height: 600px) {
+  .modal {
+    max-height: 95vh;
+    padding: 1rem;
+  }
+
+  .modalLogo {
+    width: 40px;
+    height: 40px;
+  }
+
+  .modalTitle {
+    font-size: 1.5rem;
+    margin: 0.3rem 0;
+  }
+
+  .formContainer {
+    gap: 0.6rem;
+  }
+
+  .formLabel {
+    font-size: 0.8rem;
+  }
+
+  .formInput {
+    padding: 0.5rem;
+  }
+
+  .submitButton {
+    padding: 0.5rem;
+    margin-top: 0.5rem;
+  }
+}
+
+/* Estilizar la barra de scroll para que sea más elegante */
+.modal::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal::-webkit-scrollbar-track {
+  background: var(--lemon-chiffon);
+  border-radius: 4px;
+}
+
+.modal::-webkit-scrollbar-thumb {
+  background: var(--yellow-green);
+  border-radius: 4px;
+}
+
+.modal::-webkit-scrollbar-thumb:hover {
+  background: var(--buff);
+}
+
+.logoutButton {
+  background: var(--buff);
+  color: var(--white);
+  font-weight: 600;
+  font-size: clamp(0.9rem, 2vw, 1rem);
+  padding: clamp(0.3rem, 1vw, 0.4rem) clamp(0.8rem, 2vw, 1.2rem);
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s, transform 0.18s;
+  box-shadow: 0 1px 6px rgba(65, 39, 34, 0.10);
+  margin-top: 0.3rem;
+  width: auto;
+  min-width: 0;
+  display: inline-block;
+}
+
+.logoutButton:hover {
+  background: var(--yellow-green);
+  color: var(--bistre);
+  transform: translateY(-2px) scale(1.04);
+} 
