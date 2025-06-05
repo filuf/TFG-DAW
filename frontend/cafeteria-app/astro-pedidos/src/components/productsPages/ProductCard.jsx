@@ -30,6 +30,10 @@ export default function ProductCard({ product }) {
           src={imageSrc}
           alt={product.product_name}
           className={styles.image}
+          onError={e => {
+            e.target.onerror = null;
+            e.target.src = '/favicon.png';
+          }}
         />
       </div>
       <div className={styles.infoRow}>
