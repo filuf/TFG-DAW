@@ -1,21 +1,36 @@
 .homeContainer {
+  width: 100%;
   min-height: 100vh;
-  background: var(--lemon-chiffon);
+  background: var(--white);
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: flex-start;
+  padding: 2.5rem 0 0 0;
   font-family: 'Quicksand', 'Open Sans', Arial, sans-serif;
 }
 
+.mainContentBox {
+  background: var(--lemon-chiffon);
+  border-radius: 18px;
+  box-shadow: 0 2px 12px rgba(65, 39, 34, 0.08);
+  max-width: 1300px;
+  width: 98%;
+  margin: 0 auto 2.5rem auto;
+  padding: 2.5rem 1.5rem 2.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .heroSection {
-  width: 100%;
-  max-width: 900px;
-  margin: 2rem auto 0 auto;
-  text-align: center;
-  padding: 2rem 1rem 1.5rem 1rem;
   background: var(--white);
-  border-radius: 20px;
-  box-shadow: 0 4px 24px rgba(65, 39, 34, 0.08);
+  border-radius: 18px;
+  box-shadow: 0 2px 12px rgba(65, 39, 34, 0.08);
+  max-width: 700px;
+  margin: 0 auto 2.5rem auto;
+  padding: 2.5rem 1.5rem 2.5rem 1.5rem;
+  text-align: center;
 }
 
 .heroLogo {
@@ -87,10 +102,12 @@
 }
 
 .featuredSection {
-  width: 100%;
-  max-width: 1100px;
-  margin: 2.5rem auto 0 auto;
-  padding: 2rem 1rem 1rem 1rem;
+  margin: 0 auto 2.5rem auto;
+  background: var(--white);
+  border-radius: 18px;
+  box-shadow: 0 2px 12px rgba(65, 39, 34, 0.08);
+  max-width: 1200px;
+  padding: 2rem 1.5rem 2.5rem 1.5rem;
 }
 
 .featuredTitle {
@@ -102,10 +119,14 @@
 }
 
 .featuredGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  display: flex;
+  flex-direction: row;
   gap: 1.5rem;
-  justify-items: center;
+  justify-content: center;
+  align-items: stretch;
+  max-width: 950px;
+  margin: 0 auto;
+  flex-wrap: nowrap;
 }
 
 .productCard {
@@ -155,6 +176,12 @@
   background: transparent;
 }
 
+@media (max-width: 900px) {
+  .featuredGrid {
+    flex-wrap: wrap;
+  }
+}
+
 @media (max-width: 600px) {
   .heroTitle {
     font-size: 1.2rem;
@@ -168,5 +195,10 @@
   }
   .productCard {
     padding: 0.7rem 0.3rem 0.6rem 0.3rem;
+  }
+  .featuredGrid {
+    flex-direction: column;
+    max-width: 100%;
+    gap: 1rem;
   }
 } 

@@ -17,8 +17,5 @@ const featuredProducts = await prisma.products.findMany({
 <Layout>
 	<main class={styles.homeContainer}>
 		<HomeHero products={featuredProducts} client:only="react" />
-		<footer class={styles.footer}>
-			<p>© 2025 - Cafetería Ventura Rodríguez. Todos los derechos reservados.</p>
-		</footer>
 	</main>
 </Layout>

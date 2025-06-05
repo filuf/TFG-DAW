@@ -18,7 +18,7 @@ export default function HomeHero({ products }) {
   }, []);
 
   return (
-    <>
+    <div className={styles.mainContentBox}>
       <section className={styles.heroSection}>
         <img src="/logo_instituto.png" alt="Logo cafetería" className={styles.heroLogo} />
         <h1 className={styles.heroTitle}>¡Bienvenido a la Cafetería Ventura Rodríguez!</h1>
@@ -42,6 +42,6 @@ export default function HomeHero({ products }) {
           )}
         </div>
       </section>
-    </>
+    </div>
   );
 } 
