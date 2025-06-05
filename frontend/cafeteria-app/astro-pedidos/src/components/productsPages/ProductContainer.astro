@@ -14,13 +14,23 @@ const { products } = Astro.props;
 <style>
 .products-list-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 0.8rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.2rem;
   padding: 2rem 0.5rem;
   justify-items: center;
   align-items: stretch;
   width: 100%;
   max-width: 1300px;
   margin: 0 auto;
+  background: var(--lemon-chiffon);
+  border-radius: 18px;
+  box-shadow: 0 2px 12px rgba(65, 39, 34, 0.08);
+}
+@media (max-width: 700px) {
+  .products-list-container {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 0.7rem;
+    padding: 1rem 0.2rem;
+  }
 }
 </style>

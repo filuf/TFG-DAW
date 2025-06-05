@@ -33,32 +33,32 @@ export default function ProductCard({ product }) {
         />
       </div>
       <div className={styles.infoRow}>
-        <div>
-          <span className={styles.name}>{product.product_name}</span>
-          <span className={styles.price}>{product.product_price.toFixed(2)} €</span>
-        </div>
+        <span className={styles.name}>{product.product_name}</span>
+        <span className={styles.price}>{product.product_price.toFixed(2)} €</span>
+      </div>
+      <div className={styles.cardActions}>
         <button className={styles.cartButton} title="Añadir al carrito">
           🛒 Añadir
         </button>
+        <button
+          className={styles.toggleButton}
+          onClick={() => setShowMore((v) => !v)}
+          aria-expanded={showMore}
+          aria-controls={`product-details-${product.id_product}`}
+        >
+          {showMore ? 'Ver menos ▲' : 'Ver más ▼'}
+        </button>
+        {showMore && (
+          <div className={styles.moreInfo} id={`product-details-${product.id_product}`}>
+            {product.product_description && (
+              <p className={styles.description}>{product.product_description}</p>
+            )}
+            {product.is_unlimited && (
+              <span className={styles.unlimited}>☕ Producto ilimitado</span>
+            )}
+          </div>
+        )}
       </div>
-      <button
-        className={styles.toggleButton}
-        onClick={() => setShowMore((v) => !v)}
-        aria-expanded={showMore}
-        aria-controls={`product-details-${product.id_product}`}
-      >
-        {showMore ? 'Ver menos ▲' : 'Ver más ▼'}
-      </button>
-      {showMore && (
-        <div className={styles.moreInfo} id={`product-details-${product.id_product}`}>
-          {product.product_description && (
-            <p className={styles.description}>{product.product_description}</p>
-          )}
-          {product.is_unlimited && (
-            <span className={styles.unlimited}>☕ Producto ilimitado</span>
-          )}
-        </div>
-      )}
     </div>
   );
 } 
