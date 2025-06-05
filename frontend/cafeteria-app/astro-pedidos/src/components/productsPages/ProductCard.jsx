@@ -20,14 +20,11 @@ import 'react-toastify/dist/ReactToastify.css';
  * @param {*} product 
  * @returns un componente de react.
  */
-export default function ProductCard({ product }) {
+export default function ProductCard({ product, apiOrdersUrl }) {
   const [showMore, setShowMore] = useState(false);
 
   // Usar favicon si no hay imagen disponible
   const imageSrc = product.url_image && product.url_image.trim() !== '' ? product.url_image : '/favicon.png';
-
-  // Obtener la URL de la API de pedidos desde variable de entorno
-  const apiOrdersUrl = import.meta.env.VITE_API_ORDERS_URL || '/api';
 
   const handleAddToCart = async () => {
     const sessionStorageToken = sessionStorage.getItem('token');
@@ -35,8 +32,14 @@ export default function ProductCard({ product }) {
       toast.error('No estás autenticado. Por favor, inicia sesión.');
       return;
     }
+    if (!apiOrdersUrl) {
+      toast.error('No se ha configurado la URL de la API de pedidos.');
+      return;
+    }
     try {
-      const response = await fetch(apiOrdersUrl + '/cart/addProduct', {
+      const url = apiOrdersUrl + '/cart/addProduct';
+      console.log('Añadiendo producto al carrito. URL:', url);
+      const response = await fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -54,6 +57,7 @@ export default function ProductCard({ product }) {
       }
     } catch (error) {
       toast.error('Error al añadir el producto al carrito.');
+      console.error('Error al añadir producto:', error);
     }
   };
 
@@ -91,9 +95,6 @@ export default function ProductCard({ product }) {
           <div className={styles.moreInfo} id={`product-details-${product.id_product}`}>
             {product.product_description && (
               <p className={styles.description}>{product.product_description}</p>
-            )}
-            {product.is_unlimited && (
-              <span className={styles.unlimited}>☕ Producto ilimitado</span>
             )}
           </div>
         )}
