@@ -158,8 +158,8 @@ export default function CartIsland({ apiCartUrl }: { apiCartUrl: string }) {
   }
 
   return (
-    <div>
-      <h2>Carrito</h2>
+    <div style={{ fontFamily: "'Quicksand', 'Open Sans', sans-serif", textAlign: "center" }}>
+      <h2 style={{ fontFamily: "'Pacifico', cursive", fontSize: "1.8rem", color: "var(--bistre)", marginBottom: "1.5rem" }}>Resumen del carrito</h2>
       {error && <p style={{ color: "red" }}>{error}</p>}
       {success && <p style={{ color: "green" }}>{success}</p>}
       {!cart || !cart.productList || cart.productList.length === 0 ? (
@@ -167,23 +167,23 @@ export default function CartIsland({ apiCartUrl }: { apiCartUrl: string }) {
       ) : (
         <>
           {cart.productList.map(({ product: { idProduct, productName, productPrice, urlImage }, quantity }) => (
-            <div key={idProduct} style={{ display: "flex", alignItems: "center", marginBottom: 16, border: "1px solid #ccc", borderRadius: 8, padding: 8 }}>
-              <img src={urlImage ?? "/astro.png"} alt={productName} style={{ width: 60, height: 60, borderRadius: 8, marginRight: 16 }} />
-              <div style={{ flex: 1 }}>
-                <a href={`/products/${productName}-${idProduct}`} style={{ fontWeight: "bold", fontSize: 18 }}>{productName}</a>
-                <div>Precio: {productPrice.toFixed(2)} €</div>
-                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  <button onClick={() => handleRemove(idProduct)} disabled={updating || quantity <= 0}>-</button>
-                  <span>{quantity}</span>
-                  <button onClick={() => handleAdd(idProduct)} disabled={updating}>+</button>
+            <div key={idProduct} style={{ display: "flex", alignItems: "center", marginBottom: "1rem", padding: "1rem", borderRadius: "12px", boxShadow: "0 2px 12px rgba(65, 39, 34, 0.08)", background: "var(--white)", border: "1px solid var(--lemon-chiffon)" }}>
+              <img src={urlImage ?? "/favicon.png"} alt={productName} style={{ width: "60px", height: "60px", borderRadius: "8px", marginRight: "1rem" }} />
+              <div style={{ flex: 1, textAlign: "left" }}>
+                <a href={`/products/${productName}-${idProduct}`} style={{ fontWeight: "bold", fontSize: "1.2rem", color: "var(--bistre)", textDecoration: "none" }}>{productName}</a>
+                <div style={{ color: "var(--yellow-green)", fontWeight: "bold" }}>Precio: {productPrice.toFixed(2)} €</div>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                  <button onClick={() => handleRemove(idProduct)} disabled={updating || quantity <= 0} style={{ background: "var(--lemon-chiffon)", border: "1px solid var(--buff)", borderRadius: "6px", padding: "0.3rem 0.6rem", cursor: "pointer" }}>-</button>
+                  <span style={{ fontWeight: "bold" }}>{quantity}</span>
+                  <button onClick={() => handleAdd(idProduct)} disabled={updating} style={{ background: "var(--lemon-chiffon)", border: "1px solid var(--buff)", borderRadius: "6px", padding: "0.3rem 0.6rem", cursor: "pointer" }}>+</button>
                 </div>
               </div>
             </div>
           ))}
-          <div style={{ fontWeight: "bold", fontSize: 20, marginTop: 16 }}>
+          <div style={{ fontWeight: "bold", fontSize: "1.5rem", marginTop: "1.5rem", color: "var(--bistre)" }}>
             Total: {cart.totalProductPrice.toFixed(2)} €
           </div>
-          <button onClick={handleOrder} disabled={updating} style={{ marginTop: 24, padding: "10px 20px", fontSize: 18, borderRadius: 8, background: "#4caf50", color: "white", border: "none", cursor: "pointer" }}>
+          <button onClick={handleOrder} disabled={updating} style={{ margin: "1.5rem auto 0", padding: "0.8rem 1.5rem", fontSize: "1.2rem", borderRadius: "8px", background: "var(--yellow-green)", color: "var(--black)", border: "none", cursor: "pointer", boxShadow: "0 1px 6px rgba(65, 39, 34, 0.10)", display: "block" }}>
             Realizar pedido
           </button>
         </>
