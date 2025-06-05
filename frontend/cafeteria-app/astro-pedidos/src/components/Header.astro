@@ -83,7 +83,7 @@ const apiAuthUrl = import.meta.env.VITE_API_AUTH_URL;
         const header = document.querySelector('header');
         const mainNav = document.getElementById('mainNav');
         if (header && mainNav) {
-          header.insertBefore(authContainer, mainNav);
+          mainNav.appendChild(authContainer);
         }
       }
     }
