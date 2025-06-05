@@ -167,16 +167,95 @@ export default function CartIsland({ apiCartUrl }: { apiCartUrl: string }) {
       ) : (
         <>
           {cart.productList.map(({ product: { idProduct, productName, productPrice, urlImage }, quantity }) => (
-            <div key={idProduct} style={{ display: "flex", alignItems: "center", marginBottom: "1rem", padding: "1rem", borderRadius: "12px", boxShadow: "0 2px 12px rgba(65, 39, 34, 0.08)", background: "var(--white)", border: "1px solid var(--lemon-chiffon)" }}>
-              <img src={urlImage ?? "/favicon.png"} alt={productName} style={{ width: "60px", height: "60px", borderRadius: "8px", marginRight: "1rem" }} />
-              <div style={{ flex: 1, textAlign: "left" }}>
-                <a href={`/products/${productName}-${idProduct}`} style={{ fontWeight: "bold", fontSize: "1.2rem", color: "var(--bistre)", textDecoration: "none" }}>{productName}</a>
-                <div style={{ color: "var(--yellow-green)", fontWeight: "bold" }}>Precio: {productPrice.toFixed(2)} €</div>
-                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                  <button onClick={() => handleRemove(idProduct)} disabled={updating || quantity <= 0} style={{ background: "var(--lemon-chiffon)", border: "1px solid var(--buff)", borderRadius: "6px", padding: "0.3rem 0.6rem", cursor: "pointer" }}>-</button>
-                  <span style={{ fontWeight: "bold" }}>{quantity}</span>
-                  <button onClick={() => handleAdd(idProduct)} disabled={updating} style={{ background: "var(--lemon-chiffon)", border: "1px solid var(--buff)", borderRadius: "6px", padding: "0.3rem 0.6rem", cursor: "pointer" }}>+</button>
+            <div
+              key={idProduct}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                marginBottom: "1rem",
+                padding: "1rem",
+                borderRadius: "12px",
+                boxShadow: "0 2px 12px rgba(65, 39, 34, 0.08)",
+                background: "var(--white)",
+                border: "1px solid var(--lemon-chiffon)",
+                maxWidth: 700,
+                margin: "0 auto 1rem auto",
+                gap: "1rem",
+                flexWrap: "wrap"
+              }}
+            >
+              {/* Imagen */}
+              <img
+                src={urlImage ?? "/favicon.png"}
+                alt={productName}
+                style={{ width: 60, height: 60, borderRadius: 8, flexShrink: 0 }}
+              />
+              {/* Info: nombre y precio */}
+              <div style={{ flex: 2, minWidth: 120 }}>
+                <a
+                  href={`/products/${productName}-${idProduct}`}
+                  style={{ fontWeight: "bold", fontSize: "1.1rem", color: "var(--bistre)", textDecoration: "none" }}
+                >
+                  {productName}
+                </a>
+                <div style={{ color: "var(--yellow-green)", fontWeight: "bold", fontSize: "0.98rem" }}>
+                  Precio: {productPrice.toFixed(2)} €
                 </div>
+              </div>
+              {/* Cantidad */}
+              <div style={{ display: "flex", alignItems: "center", gap: "0.3rem", flex: 1, minWidth: 90, justifyContent: "center" }}>
+                <button
+                  onClick={() => handleRemove(idProduct)}
+                  disabled={updating || quantity <= 0}
+                  style={{ background: "var(--lemon-chiffon)", border: "1px solid var(--buff)", borderRadius: 6, padding: "0.3rem 0.6rem", cursor: "pointer" }}
+                  title="Quitar uno"
+                >
+                  -
+                </button>
+                <span style={{ fontWeight: "bold", minWidth: 18, textAlign: "center" }}>{quantity}</span>
+                <button
+                  onClick={() => handleAdd(idProduct)}
+                  disabled={updating}
+                  style={{ background: "var(--lemon-chiffon)", border: "1px solid var(--buff)", borderRadius: 6, padding: "0.3rem 0.6rem", cursor: "pointer" }}
+                  title="Añadir uno"
+                >
+                  +
+                </button>
+              </div>
+              {/* Subtotal */}
+              <div style={{ flex: 1, minWidth: 90, textAlign: "center", color: "var(--bistre)", fontWeight: 600 }}>
+                { (productPrice * quantity).toFixed(2) } €
+              </div>
+              {/* Botón eliminar */}
+              <div style={{ flex: 0, minWidth: 60, textAlign: "center" }}>
+                <button
+                  onClick={async () => { setUpdating(true); setError(""); setSuccess("");
+                    const token = sessionStorage.getItem("token");
+                    try {
+                      const res = await fetch(apiCartUrl + "/cart/deleteProduct", {
+                        method: "POST",
+                        headers: {
+                          "Content-Type": "application/json",
+                          Authorization: `Bearer ${token}`,
+                        },
+                        body: JSON.stringify({ idProduct: idProduct }),
+                      });
+                      if (res.ok) {
+                        await fetchCart();
+                      } else {
+                        setError("No se pudo eliminar el producto.");
+                      }
+                    } catch {
+                      setError("Error de conexión al eliminar producto.");
+                    } finally {
+                      setUpdating(false);
+                    }
+                  }}
+                  style={{ background: "#fff0f0", border: "1px solid #e57373", borderRadius: 6, padding: "0.3rem 0.7rem", color: "#c62828", fontWeight: 700, cursor: "pointer" }}
+                  title="Eliminar producto"
+                >
+                  🗑️
+                </button>
               </div>
             </div>
           ))}
