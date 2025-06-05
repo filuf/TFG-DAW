@@ -32,19 +32,15 @@ export default function HomeHero({ products }) {
 
       <section className={styles.featuredSection}>
         <h2 className={styles.featuredTitle}>Productos destacados</h2>
-        {isLogged ? (
-          <div className={styles.featuredGrid}>
-            {products && products.length > 0 ? (
-              products.map(product => (
-                <ProductCard key={product.id_product} product={product} apiOrdersUrl={import.meta.env.VITE_API_ORDERS_URL} />
-              ))
-            ) : (
-              <p>No hay productos destacados.</p>
-            )}
-          </div>
-        ) : (
-          <p className={styles.featuredDesc}>Inicia sesión para ver nuestros productos más atractivos.</p>
-        )}
+        <div className={styles.featuredGrid}>
+          {products && products.length > 0 ? (
+            products.map(product => (
+              <ProductCard key={product.id_product} product={product} apiOrdersUrl={import.meta.env.VITE_API_ORDERS_URL} />
+            ))
+          ) : (
+            <p>No hay productos destacados.</p>
+          )}
+        </div>
       </section>
     </>
   );
