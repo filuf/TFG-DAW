@@ -1,0 +1,112 @@
+/* Footer global - Cafetería Ventura Rodríguez */
+.footer {
+  width: 100%;
+  background: var(--lemon-chiffon);
+  color: var(--bistre);
+  box-shadow: 0 -2px 12px rgba(65, 39, 34, 0.08);
+  padding: 2rem 0 0.5rem 0;
+  margin-top: 2rem;
+  font-family: 'Quicksand', 'Open Sans', Arial, sans-serif;
+}
+.footerContent {
+  max-width: 1300px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2.5rem;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 0 1.5rem;
+}
+.footerBrand {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+.logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: var(--yellow-green);
+  box-shadow: 0 1px 6px rgba(65, 39, 34, 0.10);
+}
+.brandName {
+  font-family: 'Pacifico', cursive;
+  color: var(--bistre);
+  font-size: 1.25rem;
+}
+.footerNav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.footerLink {
+  color: var(--bistre);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: color 0.18s;
+}
+.footerLink:hover {
+  color: var(--yellow-green);
+}
+.footerContact {
+  font-size: 0.98rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.footerLegal {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.95rem;
+}
+.footerSocial {
+  display: flex;
+  gap: 0.7rem;
+  align-items: center;
+}
+.socialIcon img {
+  width: 28px;
+  height: 28px;
+  filter: grayscale(0.2);
+  transition: filter 0.18s, transform 0.18s;
+}
+.socialIcon:hover img {
+  filter: grayscale(0) brightness(1.2);
+  transform: scale(1.1);
+}
+.footerCopyright {
+  text-align: center;
+  color: var(--bistre);
+  font-size: 0.98rem;
+  margin-top: 2rem;
+  padding-bottom: 0.5rem;
+  opacity: 0.8;
+}
+@media (max-width: 900px) {
+  .footerContent {
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: flex-start;
+  }
+  .footerNav, .footerLegal, .footerContact, .footerSocial {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+}
+@media (max-width: 600px) {
+  .footerContent {
+    padding: 0 0.5rem;
+  }
+  .footerBrand {
+    font-size: 1rem;
+  }
+  .footerCopyright {
+    font-size: 0.92rem;
+  }
+} 

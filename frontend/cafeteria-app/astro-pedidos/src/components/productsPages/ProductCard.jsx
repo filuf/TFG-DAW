@@ -81,7 +81,7 @@ export default function ProductCard({ product, apiOrdersUrl }) {
       </div>
       <div className={styles.cardActions}>
         <button className={styles.cartButton} title="Añadir al carrito" onClick={handleAddToCart}>
-          🛒 Añadir
+          <i class="fa-solid fa-cart-plus"></i> Añadir
         </button>
         <button
           className={styles.toggleButton}
@@ -89,7 +89,7 @@ export default function ProductCard({ product, apiOrdersUrl }) {
           aria-expanded={showMore}
           aria-controls={`product-details-${product.id_product}`}
         >
-          {showMore ? 'Ver menos ▲' : 'Ver más ▼'}
+          {showMore ? (<span>Ver menos <i class="fa-solid fa-chevron-up"></i></span>) : (<span>Ver más <i class="fa-solid fa-chevron-down"></i></span>)}
         </button>
         {showMore && (
           <div className={styles.moreInfo} id={`product-details-${product.id_product}`}>

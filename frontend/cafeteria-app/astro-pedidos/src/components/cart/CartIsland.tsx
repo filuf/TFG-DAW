@@ -254,7 +254,7 @@ export default function CartIsland({ apiCartUrl }: { apiCartUrl: string }) {
                   style={{ background: "#fff0f0", border: "1px solid #e57373", borderRadius: 6, padding: "0.3rem 0.7rem", color: "#c62828", fontWeight: 700, cursor: "pointer" }}
                   title="Eliminar producto"
                 >
-                  🗑️
+                  <i className="fa-solid fa-trash-can"></i>
                 </button>
               </div>
             </div>
