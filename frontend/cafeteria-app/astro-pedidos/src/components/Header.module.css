@@ -134,6 +134,8 @@ Version: 1.0
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  margin-left: auto;
+  z-index: 101;
 }
 
 /*
@@ -141,25 +143,187 @@ Version: 1.0
 */
 @media (max-width: 700px) {
   .header {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 0.7rem 0.5rem;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.7rem 1rem;
     width: 100vw;
     max-width: 100vw;
   }
+
   .logoContainer {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0;
+    flex-shrink: 0;
   }
+
+  /* Ocultar menú de escritorio */
   .nav {
-    flex-wrap: wrap;
-    gap: 0.5rem;
+    display: none !important;
   }
+
+  /* Mostrar botón hamburguesa */
+  .hamburger {
+    display: block !important;
+    margin-left: auto;
+  }
+
+  /* Ajustar el contenedor de auth en móvil */
   .authContainer {
-    width: 100%;
-    justify-content: flex-end;
+    display: none; /* Se oculta en el header y se muestra en el menú móvil */
+  }
+
+  /* Mostrar menú móvil cuando está abierto */
+  .mobileNav {
+    display: block;
+  }
+
+  /* Animación del botón hamburguesa cuando está activo */
+  .hamburger[aria-expanded="true"] .bar1 {
+    transform: translateY(8px) rotate(45deg);
+  }
+
+  .hamburger[aria-expanded="true"] .bar2 {
+    opacity: 0;
+  }
+
+  .hamburger[aria-expanded="true"] .bar3 {
+    transform: translateY(-8px) rotate(-45deg);
   }
 }
 
 #cartLink {
   display: none;
+}
+
+/* Estilos del botón hamburguesa */
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  z-index: 102;
+  position: relative;
+}
+
+.hamburger .bar {
+  display: block;
+  width: 25px;
+  height: 3px;
+  margin: 5px 0;
+  background-color: var(--bistre);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  border-radius: 2px;
+}
+
+/* Estilos del menú móvil */
+.mobileNav {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 80%;
+  max-width: 300px;
+  height: 100vh;
+  background: var(--white);
+  box-shadow: -2px 0 12px rgba(65, 39, 34, 0.15);
+  z-index: 101;
+  transition: right 0.3s ease;
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+.mobileNav.open {
+  right: 0;
+  display: block;
+}
+
+.mobileNavHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--lemon-chiffon);
+  margin-bottom: 1rem;
+}
+
+.mobileNavTitle {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--bistre);
+  font-family: 'Pacifico', cursive;
+}
+
+.mobileNavList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.mobileNavLink {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1rem;
+  color: var(--bistre);
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.mobileNavLink:hover {
+  background-color: var(--lemon-chiffon);
+  color: var(--black);
+}
+
+.mobileNavIcon {
+  width: 20px;
+  height: 20px;
+  color: currentColor;
+}
+
+.mobileNavDivider {
+  height: 1px;
+  background-color: var(--lemon-chiffon);
+  margin: 0.5rem 0;
+}
+
+/* Estilos del botón de cerrar actualizados */
+.closeBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  color: var(--bistre);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+}
+
+.closeBtn:hover {
+  background-color: var(--lemon-chiffon);
+}
+
+/* Estilos del overlay */
+.overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.overlay.show {
+  opacity: 1;
 } 

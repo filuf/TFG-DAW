@@ -15,33 +15,169 @@ const apiAuthUrl = import.meta.env.VITE_API_AUTH_URL;
     <img src="/favicon.png" alt="Logo cafetería" class={styles.logoImg} />
     <span class={styles.title}>Cafetería Ventura Rodríguez</span>
   </div>
-  <nav class={styles.nav}>
+  <!-- Botón hamburguesa -->
+  <button class={styles.hamburger} id="hamburgerBtn" aria-label="Abrir menú" aria-controls="mobileNav" aria-expanded="false">
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect y="7" width="32" height="3" rx="1.5" fill="#412722" class="bar bar1" />
+      <rect y="15" width="32" height="3" rx="1.5" fill="#412722" class="bar bar2" />
+      <rect y="23" width="32" height="3" rx="1.5" fill="#412722" class="bar bar3" />
+    </svg>
+  </button>
+  <!-- Componente de login compartido -->
+  <div class={styles.authContainer} id="sharedAuthContainer">
+    <UserLogin apiAuthUrl={apiAuthUrl} client:only="react" />
+  </div>
+  <!-- Menú normal (escritorio) -->
+  <nav class={styles.nav} id="mainNav">
     <a href="/" class={styles.navLink}>Inicio</a>
     <a href="/products" class={styles.navLink}>Productos</a>
-    <!-- El carrito se muestra solo si el usuario está autenticado -->
     <a href="/cart" class={styles.navLink} id="cartLink">Carrito</a>
-    <!-- Contenedor que contiene el componente de login y registro -->
-    <div class={styles.authContainer}>
-      <UserLogin apiAuthUrl={apiAuthUrl} client:only="react" />
-    </div>
   </nav>
+  <!-- Menú móvil (sidebar) -->
+  <nav class={styles.mobileNav} id="mobileNav" aria-hidden="true">
+    <div class={styles.mobileNavHeader}>
+      <button class={styles.closeBtn} id="closeMobileNav" aria-label="Cerrar menú">×</button>
+      <h2 class={styles.mobileNavTitle}>Menú</h2>
+    </div>
+    <ul class={styles.mobileNavList}>
+      <li><a href="/" class={styles.mobileNavLink}>Inicio</a></li>
+      <li><a href="/products" class={styles.mobileNavLink}>Productos</a></li>
+      <li id="mobileCartItem" style="display: none;">
+        <a href="/cart" class={styles.mobileNavLink}>
+          <img src="/cart.png" alt="Carrito" class={styles.mobileNavIcon} />
+          Carrito
+        </a>
+      </li>
+      <li class={styles.mobileNavDivider}></li>
+      <li id="mobileAuthItem">
+        <!-- El contenido de autenticación se insertará aquí dinámicamente -->
+      </li>
+    </ul>
+  </nav>
+  <div class={styles.overlay} id="navOverlay"></div>
 </header>
 
 <script>
   // Script para controlar la visibilidad del carrito basado en la autenticación
   function updateCartVisibility() {
-    // Esta variable almacena el elemento del carrito.
     const cartLink = document.getElementById('cartLink');
-    // Esta variable almacena el estado de autenticación del usuario.
+    const mobileCartItem = document.getElementById('mobileCartItem');
     const isLoggedIn = sessionStorage.getItem('token') !== null;
-    // Si el carrito existe, se muestra solo si el usuario está autenticado.
-    if (cartLink) {
-      cartLink.style.display = isLoggedIn ? 'block' : 'none';
+    
+    if (cartLink) cartLink.style.display = isLoggedIn ? 'block' : 'none';
+    if (mobileCartItem) mobileCartItem.style.display = isLoggedIn ? 'block' : 'none';
+  }
+
+  // Función para mover el componente de autenticación al menú móvil
+  function updateMobileAuth() {
+    const authContainer = document.getElementById('sharedAuthContainer');
+    const mobileAuthItem = document.getElementById('mobileAuthItem');
+    const isMobile = window.innerWidth <= 700;
+
+    if (authContainer && mobileAuthItem) {
+      if (isMobile) {
+        // En móvil, mover el componente al menú
+        mobileAuthItem.appendChild(authContainer);
+      } else {
+        // En escritorio, devolver el componente a su posición original
+        const header = document.querySelector('header');
+        const mainNav = document.getElementById('mainNav');
+        if (header && mainNav) {
+          header.insertBefore(authContainer, mainNav);
+        }
+      }
     }
   }
 
-  // Actualizar al cargar la página
-  document.addEventListener('DOMContentLoaded', updateCartVisibility);
+  // Script del menú móvil
+  document.addEventListener('DOMContentLoaded', () => {
+    // Obtener elementos del DOM
+    const elements = {
+      hamburgerBtn: document.getElementById('hamburgerBtn'),
+      mobileNav: document.getElementById('mobileNav'),
+      closeBtn: document.getElementById('closeMobileNav'),
+      overlay: document.getElementById('navOverlay')
+    };
+
+    // Verificar que todos los elementos existen
+    const missingElements = Object.entries(elements)
+      .filter(([_, element]) => !element)
+      .map(([name]) => name);
+
+    if (missingElements.length > 0) {
+      console.error('Elementos faltantes para el menú móvil:', missingElements.join(', '));
+      return;
+    }
+
+    const { hamburgerBtn, mobileNav, closeBtn, overlay } = elements;
+
+    function openMobileNav() {
+      if (!mobileNav || !hamburgerBtn || !overlay) return;
+      
+      console.log('Abriendo menú móvil'); // Debug
+      
+      // Actualizar atributos ARIA
+      mobileNav.setAttribute('aria-hidden', 'false');
+      hamburgerBtn.setAttribute('aria-expanded', 'true');
+      
+      // Mostrar overlay
+      overlay.style.display = 'block';
+      
+      // Forzar un reflow para asegurar que la animación funcione
+      void mobileNav.offsetWidth;
+      
+      // Añadir clases para la animación
+      mobileNav.classList.add('open');
+      overlay.classList.add('show');
+      
+      // Actualizar la posición del componente de auth
+      updateMobileAuth();
+    }
+
+    function closeMobileNav() {
+      if (!mobileNav || !hamburgerBtn || !overlay) return;
+      
+      console.log('Cerrando menú móvil'); // Debug
+      
+      // Actualizar atributos ARIA
+      mobileNav.setAttribute('aria-hidden', 'true');
+      hamburgerBtn.setAttribute('aria-expanded', 'false');
+      
+      // Remover clases para la animación
+      mobileNav.classList.remove('open');
+      overlay.classList.remove('show');
+      
+      // Ocultar overlay después de la animación
+      setTimeout(() => { 
+        if (overlay) overlay.style.display = 'none';
+        updateMobileAuth();
+      }, 300);
+    }
+
+    // Añadir event listeners con prevención de eventos por defecto
+    hamburgerBtn?.addEventListener('click', (e) => {
+      e.preventDefault();
+      console.log('Botón hamburguesa clickeado'); // Debug
+      openMobileNav();
+    });
+    
+    closeBtn?.addEventListener('click', (e) => {
+      e.preventDefault();
+      closeMobileNav();
+    });
+    
+    overlay?.addEventListener('click', (e) => {
+      e.preventDefault();
+      closeMobileNav();
+    });
+
+    // Actualizar al cargar la página
+    updateCartVisibility();
+    updateMobileAuth();
+  });
+
+  // Actualizar al cambiar el tamaño de la ventana
+  window.addEventListener('resize', updateMobileAuth);
 
   // Escuchar cambios en el sessionStorage
   window.addEventListener('storage', (e) => {
@@ -50,10 +186,13 @@ const apiAuthUrl = import.meta.env.VITE_API_AUTH_URL;
     }
   });
 
-  // Escuchar evento personalizado para logout desde React
+  // Escuchar eventos personalizados para login/logout
   window.addEventListener('user-logout', updateCartVisibility);
   window.addEventListener('user-login', updateCartVisibility);
 
-  // Escuchar evento de navegación de Astro para actualizar el carrito tras cada cambio de página
-  document.addEventListener('astro:after-swap', updateCartVisibility);
+  // Escuchar evento de navegación de Astro
+  document.addEventListener('astro:after-swap', () => {
+    updateCartVisibility();
+    updateMobileAuth();
+  });
 </script> 
