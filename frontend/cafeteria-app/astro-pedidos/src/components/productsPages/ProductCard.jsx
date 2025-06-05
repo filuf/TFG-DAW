@@ -11,6 +11,9 @@ los productos de la base de datos.
 
 import { useState } from 'react';
 import styles from './ProductCard.module.css';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 /**
  * Función que permite mostrar los productos en la página de productos.
  * funciona con react, recibe un producto y muestra sus datos.
@@ -23,8 +26,40 @@ export default function ProductCard({ product }) {
   // Usar favicon si no hay imagen disponible
   const imageSrc = product.url_image && product.url_image.trim() !== '' ? product.url_image : '/favicon.png';
 
+  // Obtener la URL de la API de pedidos desde variable de entorno
+  const apiOrdersUrl = import.meta.env.VITE_API_ORDERS_URL || '/api';
+
+  const handleAddToCart = async () => {
+    const sessionStorageToken = sessionStorage.getItem('token');
+    if (!sessionStorageToken) {
+      toast.error('No estás autenticado. Por favor, inicia sesión.');
+      return;
+    }
+    try {
+      const response = await fetch(apiOrdersUrl + '/cart/addProduct', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${sessionStorageToken}`,
+        },
+        body: JSON.stringify({
+          idProduct: Number(product.id_product),
+          quantity: 1,
+        }),
+      });
+      if (response.ok) {
+        toast.success('Producto añadido al carrito.');
+      } else {
+        toast.error('No se pudo añadir el producto al carrito.');
+      }
+    } catch (error) {
+      toast.error('Error al añadir el producto al carrito.');
+    }
+  };
+
   return (
     <div className={styles.card}>
+      <ToastContainer position="bottom-right" autoClose={3000} theme="colored" />
       <div className={styles.imageContainer}>
         <img
           src={imageSrc}
@@ -41,7 +76,7 @@ export default function ProductCard({ product }) {
         <span className={styles.price}>{product.product_price.toFixed(2)} €</span>
       </div>
       <div className={styles.cardActions}>
-        <button className={styles.cartButton} title="Añadir al carrito">
+        <button className={styles.cartButton} title="Añadir al carrito" onClick={handleAddToCart}>
           🛒 Añadir
         </button>
         <button
