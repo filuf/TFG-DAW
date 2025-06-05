@@ -1,42 +1,22 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import styles from "../components/Home.module.css";
+import HomeHero from "../components/HomeHero.jsx";
+import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient();
+// Seleccionamos los productos más atractivos por nombre
+const featuredProducts = await prisma.products.findMany({
+	where: {
+		product_name: {
+			in: ["Café con leche", "Napolitana de chocolate", "Bocadillo de jamón"]
+		}
+	}
+});
 ---
 
 <Layout>
 	<main class={styles.homeContainer}>
-		<section class={styles.heroSection}>
-			<img src="/logo_instituto.png" alt="Logo cafetería" class={styles.heroLogo} />
-			<h1 class={styles.heroTitle}>¡Bienvenido a la Cafetería Ventura Rodríguez!</h1>
-			<p class={styles.heroSubtitle}>Disfruta de los mejores cafés, bollería y snacks en tu centro.</p>
-			<div class={styles.heroActions}>
-				<a href="/products" class={styles.heroButton}>Ver productos</a>
-				<a href="/login" class={styles.heroButtonSec}>Iniciar sesión</a>
-				<a href="/register" class={styles.heroButtonSec}>Registrarse</a>
-			</div>
-		</section>
-
-		<section class={styles.featuredSection}>
-			<h2 class={styles.featuredTitle}>Productos destacados</h2>
-			<div class={styles.featuredGrid}>
-				<div class={styles.productCard}>
-					<img src="/images/cafe_expresso.jpeg" alt="Café espresso" class={styles.productImg} />
-					<h3 class={styles.productName}>Café espresso</h3>
-					<p class={styles.productDesc}>Intenso, aromático y recién hecho.</p>
-				</div>
-				<div class={styles.productCard}>
-					<img src="/images/croissant.jpeg" alt="Croissant" class={styles.productImg} />
-					<h3 class={styles.productName}>Croissant</h3>
-					<p class={styles.productDesc}>Hojaldre crujiente y mantecoso, perfecto para acompañar tu café.</p>
-				</div>
-				<div class={styles.productCard}>
-					<img src="/images/zumo.jpeg" alt="Zumo natural" class={styles.productImg} />
-					<h3 class={styles.productName}>Zumo natural</h3>
-					<p class={styles.productDesc}>Refrescante y lleno de vitaminas.</p>
-				</div>
-			</div>
-		</section>
-
+		<HomeHero products={featuredProducts} client:only="react" />
 		<footer class={styles.footer}>
 			<p>© 2025 - Cafetería Ventura Rodríguez. Todos los derechos reservados.</p>
 		</footer>

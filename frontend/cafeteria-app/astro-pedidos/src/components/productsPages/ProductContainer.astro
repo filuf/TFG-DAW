@@ -7,7 +7,7 @@ const { products } = Astro.props;
   <!-- Mapeamos los productos existentes en la base de datos y mostramos cada uno
   esto funciona como un bucle foreach (for in) -->
   {products.map((product: any) => (
-    <ProductCard product={product} apiOrdersUrl={import.meta.env.VITE_API_ORDERS_URL} client:only="react" />
+    <ProductCard product={product} client:only="react" />
   ))}
 </main>
 
