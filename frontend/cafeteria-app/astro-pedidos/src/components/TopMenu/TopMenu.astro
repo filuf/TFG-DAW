@@ -1,102 +1,199 @@
 ---
-import UserLogin from "./UserLogin"
+/***************************************************
+COMPONENTE TOP MENU
+Autores: Agustín
+Fecha: 04/06/2025
+Version: 1.1
+***************************************************/
+import styles from "./Header.module.css";
+import UserLogin from "./UserLogin";
 const apiAuthUrl = import.meta.env.VITE_API_AUTH_URL;
 ---
 
-<header>
-    <div class="logo-container">
-        <div class="logo">
-            <a href="/">
-                <img src="/logo_instituto.png" alt="logo ventura" class="logo-image">
-            </a>
-        </div>
+<header class={styles.header}>
+  <a href="/" class={styles.logoContainer}>
+    <img src="/favicon.png" alt="Logo cafetería" class={styles.logoImg} />
+    <span class={styles.title}>Cafetería Ventura Rodríguez</span>
+  <a/>
+  <!-- Botón hamburguesa -->
+  <button class={styles.hamburger} id="hamburgerBtn" aria-label="Abrir menú" aria-controls="mobileNav" aria-expanded="false">
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect y="7" width="32" height="3" rx="1.5" fill="#412722" class="bar bar1" />
+      <rect y="15" width="32" height="3" rx="1.5" fill="#412722" class="bar bar2" />
+      <rect y="23" width="32" height="3" rx="1.5" fill="#412722" class="bar bar3" />
+    </svg>
+  </button>
+  <!-- Componente de login compartido -->
+  <div class={styles.authContainer} id="sharedAuthContainer">
+    <UserLogin apiAuthUrl={apiAuthUrl} client:only="react" />
+  </div>
+  <!-- Menú normal (escritorio) -->
+  <nav class={styles.nav} id="mainNav">
+    <a href="/" class={styles.navLink}>Inicio</a>
+    <a href="/cart" class={styles.navLink} id="cartLink">Carrito</a>
+    <a href="/orders" class={styles.navLink} id="ordersLink">Pedidos</a>
+  </nav>
+  <!-- Menú móvil (sidebar) -->
+  <nav class={styles.mobileNav} id="mobileNav" aria-hidden="true">
+    <div class={styles.mobileNavHeader}>
+      <button class={styles.closeBtn} id="closeMobileNav" aria-label="Cerrar menú">×</button>
+      <h2 class={styles.mobileNavTitle}>Menú</h2>
     </div>
-    <nav class="options-container">
-        <div class="option">
-            <p>opcion1</p>
-        </div>
-        <div class="option">        
-            <p>opcion2</p>
-        </div>
-        <div class="option">        
-            <p>opcion3</p>
-        </div>
-    </nav>
-    <div class="session-container">
-        <UserLogin apiAuthUrl={apiAuthUrl} client:only="react"/>
-    </div>
+    <ul class={styles.mobileNavList}>
+      <li><a href="/" class={styles.mobileNavLink}>Inicio</a></li>
+      <li id="mobileCartItem" style="display: none;">
+        <a href="/cart" class={styles.mobileNavLink}>
+          <img src="/cart.png" alt="Carrito" class={styles.mobileNavIcon} />
+          Carrito
+        </a>
+      </li>
+      <li class={styles.mobileNavDivider}></li>
+      <li id="mobileAuthItem">
+        <!-- El contenido de autenticación se insertará aquí dinámicamente -->
+      </li>
+    </ul>
+  </nav>
+  <div class={styles.overlay} id="navOverlay"></div>
 </header>
 
+<script>
+  // Script para controlar la visibilidad del carrito basado en la autenticación
+  function updateCartVisibility() {
+    const cartLink = document.getElementById('cartLink');
+    const ordersLink = document.getElementById('ordersLink');
+    const mobileCartItem = document.getElementById('mobileCartItem');
+    const isLoggedIn = sessionStorage.getItem('token') !== null;
+    
+    if (cartLink) cartLink.style.display = isLoggedIn ? 'block' : 'none';
+    if (ordersLink) ordersLink.style.display = isLoggedIn ? 'block' : 'none';
+    if (mobileCartItem) mobileCartItem.style.display = isLoggedIn ? 'block' : 'none';
+  }
 
-<style>
-    header {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
+  // Función para mover el componente de autenticación al menú móvil
+  function updateMobileAuth() {
+    const authContainer = document.getElementById('sharedAuthContainer');
+    const mobileAuthItem = document.getElementById('mobileAuthItem');
+    const isMobile = window.innerWidth <= 700;
 
-        border: 3px green solid;
-        background-color: rgb(255, 255, 255);
-        box-sizing: border-box;
-        width: 100%;
-        height: 80px;
+    if (authContainer && mobileAuthItem) {
+      if (isMobile) {
+        // En móvil, mover el componente al menú
+        mobileAuthItem.appendChild(authContainer);
+      } else {
+        // En escritorio, devolver el componente a su posición original
+        const header = document.querySelector('header');
+        const mainNav = document.getElementById('mainNav');
+        if (header && mainNav) {
+          mainNav.appendChild(authContainer);
+        }
+      }
+    }
+  }
 
-        display: grid;
-        grid-template-columns: 2fr 8fr 3fr;
-        align-items: center;
+  // Script del menú móvil
+  document.addEventListener('DOMContentLoaded', () => {
+    // Obtener elementos del DOM
+    const elements = {
+      hamburgerBtn: document.getElementById('hamburgerBtn'),
+      mobileNav: document.getElementById('mobileNav'),
+      closeBtn: document.getElementById('closeMobileNav'),
+      overlay: document.getElementById('navOverlay')
+    };
 
-        padding: 0px 20px 0px 20px;
+    // Verificar que todos los elementos existen
+    const missingElements = Object.entries(elements)
+      .filter(([_, element]) => !element)
+      .map(([name]) => name);
+
+    if (missingElements.length > 0) {
+      console.error('Elementos faltantes para el menú móvil:', missingElements.join(', '));
+      return;
     }
 
-    div.logo-container {
-        border: 3px solid purple ;
+    const { hamburgerBtn, mobileNav, closeBtn, overlay } = elements;
 
-        display: flex;
-        align-items: center;
-        justify-content: center;
+    function openMobileNav() {
+      if (!mobileNav || !hamburgerBtn || !overlay) return;
+      
+      console.log('Abriendo menú móvil'); // Debug
+      
+      // Actualizar atributos ARIA
+      mobileNav.setAttribute('aria-hidden', 'false');
+      hamburgerBtn.setAttribute('aria-expanded', 'true');
+      
+      // Mostrar overlay
+      overlay.style.display = 'block';
+      
+      // Forzar un reflow para asegurar que la animación funcione
+      void mobileNav.offsetWidth;
+      
+      // Añadir clases para la animación
+      mobileNav.classList.add('open');
+      overlay.classList.add('show');
+      
+      // Actualizar la posición del componente de auth
+      updateMobileAuth();
     }
 
-    div.logo {
-        
+    function closeMobileNav() {
+      if (!mobileNav || !hamburgerBtn || !overlay) return;
+      
+      console.log('Cerrando menú móvil'); // Debug
+      
+      // Actualizar atributos ARIA
+      mobileNav.setAttribute('aria-hidden', 'true');
+      hamburgerBtn.setAttribute('aria-expanded', 'false');
+      
+      // Remover clases para la animación
+      mobileNav.classList.remove('open');
+      overlay.classList.remove('show');
+      
+      // Ocultar overlay después de la animación
+      setTimeout(() => { 
+        if (overlay) overlay.style.display = 'none';
+        updateMobileAuth();
+      }, 300);
     }
 
-    img.logo-image {
-        height: 60px;
-        border-radius: 10px;
+    // Añadir event listeners con prevención de eventos por defecto
+    hamburgerBtn?.addEventListener('click', (e) => {
+      e.preventDefault();
+      console.log('Botón hamburguesa clickeado'); // Debug
+      openMobileNav();
+    });
+    
+    closeBtn?.addEventListener('click', (e) => {
+      e.preventDefault();
+      closeMobileNav();
+    });
+    
+    overlay?.addEventListener('click', (e) => {
+      e.preventDefault();
+      closeMobileNav();
+    });
+
+    // Actualizar al cargar la página
+    updateCartVisibility();
+    updateMobileAuth();
+  });
+
+  // Actualizar al cambiar el tamaño de la ventana
+  window.addEventListener('resize', updateMobileAuth);
+
+  // Escuchar cambios en el sessionStorage
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'token') {
+      updateCartVisibility();
     }
+  });
 
-    nav.options-container {
-        border: 3px solid red;
-        
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 40px;
-    }
+  // Escuchar eventos personalizados para login/logout
+  window.addEventListener('user-logout', updateCartVisibility);
+  window.addEventListener('user-login', updateCartVisibility);
 
-    div.session-container {
-        border: 3px solid yellow;
-
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-    }
-
-    div.option {
-        border-radius: 20px;
-        padding: 5px;
-        width: 80px;
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        transition: all 0.7s;
-    }
-
-    div.option:hover {
-        background-color: grey;
-    }
-
-</style>
+  // Escuchar evento de navegación de Astro
+  document.addEventListener('astro:after-swap', () => {
+    updateCartVisibility();
+    updateMobileAuth();
+  });
+</script> 

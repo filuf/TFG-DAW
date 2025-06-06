@@ -1,0 +1,12 @@
+---
+import styles from "./Home.module.css";
+import HeroActions from './HeroActions.jsx';
+---
+
+<section class={styles.heroSection}>
+  <img src="/logo_instituto.png" alt="Logo cafetería" class={styles.heroLogo} />
+  <h1 class={styles.heroTitle}>¡Bienvenido a la Cafetería Ventura Rodríguez!</h1>
+  <p class={styles.heroSubtitle}>Disfruta de los mejores cafés, bollería y snacks en tu centro.</p>
+
+    <HeroActions client:only="react" />
+</section>

@@ -2,9 +2,17 @@
 import LayoutOrders from "../layouts/LayoutOrders.astro"
 import TopMenu from "../components/topMenu/TopMenu.astro"
 import OrdersContainer from "../components/orders/OrdersContainer.astro"
+import Footer from '../components/footer/Footer.astro';
 ---
 
 <LayoutOrders>
     <TopMenu />    
     <OrdersContainer />
+    <Footer />
 </LayoutOrders>
+
+<style>
+    body {
+        background-color: aliceblue;
+    }
+</style>
