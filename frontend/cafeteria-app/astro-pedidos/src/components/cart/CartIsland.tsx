@@ -232,7 +232,7 @@ export default function CartIsland({ apiCartUrl }: { apiCartUrl: string }) {
                   onClick={async () => { setUpdating(true); setError(""); setSuccess("");
                     const token = sessionStorage.getItem("token");
                     try {
-                      const res = await fetch(apiCartUrl + "/cart/deleteProduct", {
+                      const res = await fetch(apiCartUrl + "/cart/deleteAllQuantityProduct", {
                         method: "POST",
                         headers: {
                           "Content-Type": "application/json",
