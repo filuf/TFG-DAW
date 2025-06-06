@@ -94,4 +94,29 @@ public class CartController {
         //devuelve el carrito completo
         return this.getAllProducts(userDetails);
     }
+
+    /**
+     * Elimina un producto del carrito
+     *
+     * @param deleteProductRequest id del product
+     * @param userDetails detalles del usuario extraidos del token JWT
+     * @return Carrito completo una vez actualizado
+     * @throws CustomException Cuando el producto no está en el carrito o no existe
+     */
+    @PostMapping("/deleteAllQuantityProduct")
+    public ResponseEntity<CartSummaryResponse> deleteAllQuantityProduct(
+            @RequestBody DeleteProductRequest deleteProductRequest,
+            @AuthenticationPrincipal UserDetails userDetails) throws CustomException {
+
+        //encuentra el registro de carrito más producto
+        CartHasProductsEntity productInCart = this.cartService.getProductById(
+                userDetails.getUsername(), deleteProductRequest.getIdProduct())
+                .orElseThrow( () -> new CustomException("No se puede eliminar un producto del carrito que no está en el carrito", HttpStatus.NOT_FOUND));
+
+        //elimina el producto
+        this.cartService.deleteAllQuantityProduct(productInCart);
+
+        //devuelve el carrito completo
+        return this.getAllProducts(userDetails);
+    }
 }
