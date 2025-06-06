@@ -190,6 +190,9 @@ Version: 1.0
   .hamburger[aria-expanded="true"] .bar3 {
     transform: translateY(-8px) rotate(-45deg);
   }
+  .title {
+    display: none;
+  }
 }
 
 #cartLink {
