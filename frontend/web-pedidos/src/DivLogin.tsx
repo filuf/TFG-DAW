@@ -169,18 +169,6 @@ export default function DivLogin({setIsLoged}: {setIsLoged: (isLoged: boolean) =
                         )}
                     </div>
 
-                    <div className={styles.formGroup}>
-                        <label className={styles.formLabel}>
-                            <input
-                                type="checkbox"
-                                checked={rememberMe}
-                                onChange={(e) => setRememberMe(e.target.checked)}
-                                disabled={isLoading}
-                            />
-                            {' '}Recordar mi usuario
-                        </label>
-                    </div>
-
                     <button
                         type="submit"
                         className={`${styles.loginButton} ${isLoading ? styles.loading : ''}`}
