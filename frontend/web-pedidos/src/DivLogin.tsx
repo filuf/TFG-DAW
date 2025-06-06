@@ -112,8 +112,9 @@ export default function DivLogin({setIsLoged}: {setIsLoged: (isLoged: boolean) =
             const errorMessage = error instanceof Error ? error.message : 'Error al iniciar sesión';
             toast.error(errorMessage);
             setErrors({
-                username: errorMessage === 'Credenciales inválidas' ? 'Usuario o contraseña incorrectos' : undefined,
-                password: errorMessage === 'Credenciales inválidas' ? 'Usuario o contraseña incorrectos' : undefined
+                password: errorMessage === 'Credenciales inválidas' ? 'Usuario o contraseña incorrectos' 
+                : errorMessage === 'No tienes permisos para acceder a esta aplicación' ? 'No tienes permisos para acceder a esta aplicación'
+                : undefined 
             });
         } finally {
             setIsLoading(false);
