@@ -158,8 +158,22 @@ public class CartService {
         return Optional.of(this.cartHasProductsRepository.save(productInCart));
     }
 
+    /**
+     * Vacía un carrito de un usuario
+     *
+     * @param cart carrito
+     */
     @Transactional
     public void clearCart(CartEntity cart) {
        this.cartHasProductsRepository.deleteByCart(cart);
+    }
+
+    /**
+     * Elimina un producto del carrito de un usuario
+     *
+     * @param productInCart producto existente en el carrito del usuario
+     */
+    public void deleteAllQuantityProduct(CartHasProductsEntity productInCart) {
+        this.cartHasProductsRepository.deleteById(productInCart.getId());
     }
 }
