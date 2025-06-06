@@ -2,18 +2,26 @@
 import CartIsland from "../components/cart/CartIsland";
 import LayoutCart from "../layouts/Layout.astro";
 import TopMenu from "../components/topMenu/TopMenu.astro";
+import Footer from '../components/footer/Footer.astro';
 const apiCartUrl = import.meta.env.VITE_API_ORDERS_URL;
 ---
 
 <LayoutCart>
   <TopMenu />
-  <main>
-    <h1>Tu carrito</h1>
-    <CartIsland apiCartUrl={apiCartUrl} client:only="react" />
+  <main class="cart-page-container">
+    <h1 class="cart-title">Tu carrito</h1>
+    <div class="cart-container">
+      <CartIsland apiCartUrl={apiCartUrl} client:only="react" />
+    </div>
   </main>
+  <Footer />
 </LayoutCart>
 
 <style>
+  body {
+    background-color: aliceblue;
+  }
+
   main {
     margin: 30px;
     min-height: 200px;
@@ -22,3 +30,15 @@ const apiCartUrl = import.meta.env.VITE_API_ORDERS_URL;
   h1 {
     margin-bottom: 20px;
   }
+
+  .cart-page-container {
+    max-width: 1300px; margin: 0 auto; padding: 2rem 1rem; min-height: 200px; text-align: center; 
+    min-height: 100vh;
+  }
+  .cart-title { 
+    font-family: "Pacifico", cursive; font-size: 2.2rem; color: var(--bistre); margin-bottom: 1.5rem; letter-spacing: 1px; 
+  }
+  .cart-container { 
+    background: var(--lemon-chiffon); border-radius: 18px; box-shadow: 0 2px 12px rgba(65, 39, 34, 0.08); padding: 2rem; 
+  }
+</style>

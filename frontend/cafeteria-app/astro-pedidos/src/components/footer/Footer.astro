@@ -1,0 +1,38 @@
+---
+import styles from "./Footer.module.css";
+---
+<footer class={styles.footer}>
+  <div class={styles.footerContent}>
+    <div class={styles.footerBrand}>
+      <img src="/favicon.png" alt="Logo cafetería" class={styles.logo} />
+      <span class={styles.brandName}>Cafetería Ventura Rodríguez</span>
+    </div>
+    <nav class={styles.footerNav} aria-label="Enlaces rápidos">
+      <a href="/" class={styles.footerLink}>Inicio</a>
+      <a href="/cart" class={styles.footerLink}>Carrito</a>
+      <a href="/orders" class={styles.footerLink}>Mi cuenta</a>
+    </nav>
+    <div class={styles.footerContact}>
+      <div>
+        <strong>Contacto:</strong>
+        <a href="mailto:cafeteria@venturarodriguez.edu">cafeteria@venturarodriguez.edu</a>
+      </div>
+      <div>
+        <strong>Dirección:</strong>
+        C/ Arquitecto Ventura Rodríguez, s/n, 28000 Madrid
+      </div>
+    </div>
+    <div class={styles.footerLegal}>
+      <a href="/aviso-legal" class={styles.footerLink}>Aviso legal</a>
+      <a href="/privacidad" class={styles.footerLink}>Política de privacidad</a>
+    </div>
+    <div class={styles.footerSocial}>
+      <a href="#" title="Instagram" class={styles.socialIcon}><i class="fa-brands fa-instagram"></i></a>
+      <a href="#" title="Twitter" class={styles.socialIcon}><i class="fa-brands fa-twitter"></i></a>
+      <a href="#" title="Facebook" class={styles.socialIcon}><i class="fa-brands fa-facebook"></i></a>
+    </div>
+  </div>
+  <div class={styles.footerCopyright}>
+    © {new Date().getFullYear()} Cafetería Ventura Rodríguez. Todos los derechos reservados.
+  </div>
+</footer> 
