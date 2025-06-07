@@ -7,7 +7,6 @@ import 'react-toastify/dist/ReactToastify.css';
 
 export default function AddCartProduct({apiOrdersUrl, idProduct, productPrice} : {apiOrdersUrl: string, idProduct: number, productPrice: number}) {
 
-    const sessionStorageToken = sessionStorage.getItem("token");
     const [errorMessage, setErrorMessage] = useState("");
     const [quantity, setQuantity] = useState(1);
     const [totalPrice, setTotalPrice] = useState(productPrice);
@@ -22,6 +21,8 @@ export default function AddCartProduct({apiOrdersUrl, idProduct, productPrice} :
 
     const addToCart = async () => {
         setErrorMessage(""); // Reiniciar el mensaje de error antes de intentar añadir al carrito.
+        const sessionStorageToken = sessionStorage.getItem("token");
+
         if (!sessionStorageToken) {
             // Si no existe el token de sesión, se muestra un mensaje de error.
             toast.error("No estás autenticado. Por favor, inicia sesión.");
