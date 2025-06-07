@@ -27,12 +27,22 @@ export default function CartIsland({ apiCartUrl }: { apiCartUrl: string }) {
   const [error, setError] = useState("");
   const [updating, setUpdating] = useState(false);
   const [success, setSuccess] = useState("");
+  const [loggedIn, setLoggedIn] = useState(sessionStorage.getItem("token") !== null);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const token = sessionStorage.getItem("token");
+      setLoggedIn(token !== null);
+    }, 1000)
+  },[]);
 
   const fetchCart = async () => {
+    setError("");
     const token = sessionStorage.getItem("token");
     if (!token) {
       setError("No has iniciado sesión. Por favor, inicia sesión para ver tu carrito.");
       setLoading(false);
+      setCart(null);
       return;
     }
     setLoading(true);
@@ -62,7 +72,7 @@ export default function CartIsland({ apiCartUrl }: { apiCartUrl: string }) {
   useEffect(() => {
     fetchCart();
     // eslint-disable-next-line
-  }, []);
+  }, [loggedIn]);
 
   const handleAdd = async (productId: number) => {
     setUpdating(true);
