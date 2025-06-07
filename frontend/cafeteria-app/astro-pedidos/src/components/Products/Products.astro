@@ -1,9 +1,13 @@
 ---
 import { PrismaClient } from "@prisma/client";
+import AddToCart from "./AddToCart";
+import ToastProvider from "./ToastProvider";
+const apiOrdersUrl = import.meta.env.VITE_API_ORDERS_URL;
 
 const prisma = new PrismaClient();
 const products = await prisma.products.findMany(); //trae todos los productos de la tabla productos
 ---
+<ToastProvider client:only="react" />
 
 <h1 class="products-title">¿Que te apetece tomar hoy?</h1>
 
@@ -16,6 +20,9 @@ const products = await prisma.products.findMany(); //trae todos los productos de
                         <img 
                             src={product.url_image ?? "/astro.png"} alt={"imagen " + product.product_name} class="product-image"
                             transition:name={product.product_name + "-" + product.id_product}>
+                        <AddToCart client:only="react" 
+                            productId={product.id_product} 
+                            apiOrdersUrl={apiOrdersUrl} />
                     </div>
                 
                     <p class="product-name">{product.product_name}</p>
@@ -102,6 +109,7 @@ const products = await prisma.products.findMany(); //trae todos los productos de
         justify-content: center;
         align-items: center;
         margin-bottom: 10px;
+        position: relative;
     }
 
     .product-image {
