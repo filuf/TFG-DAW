@@ -55,30 +55,6 @@ export default function UserLogin({ apiAuthUrl }) {
         }
     }, []);
 
-    // Verificar el estado de autenticación al cargar el componente
-    useEffect(() => {
-        // Función que verifica si el usuario está autenticado.
-        const checkAuth = async () => {
-            // Intento verificar si el usuario está autenticado.
-            try {
-                // Variable que almacena la respuesta del servidor, ejemplo: { isAuthenticated: true, username: "usuario" }
-                const response = await fetch(`${apiAuthUrl}/check`);
-                // Variable que almacena los datos de la respuesta del servidor.
-                const data = await response.json();
-                // Si el usuario está autenticado, actualizo el estado del usuario.
-                if (data.isAuthenticated) {
-                    setIsLoggedIn(true);
-                    setUserLogin(data.username);
-                }
-            } catch (error) {
-                // Este error se produce si el usuario no está autenticado.
-                console.error('Error al verificar autenticación:', error);
-            }
-        };
-
-        checkAuth();
-    }, [apiAuthUrl]);
-
     // fetch al hacer submit en el formulario de login
     const handleLogin = async (e) => {
         e.preventDefault();
