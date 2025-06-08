@@ -50,6 +50,23 @@ public class JwtTokenProvider {
     }
 
     /**
+     * genera tokens que incluyen el usuario en un claim distinto para más tarde cambiar una contraseña
+     * @param user usuario
+     * @return token JWT para recovery
+     */
+    public String generateRecoverPasswordToken(UserEntity user) {
+
+        return Jwts.builder()
+                .signWith(Keys.hmacShaKeyFor(jwtSecret.getBytes()), SignatureAlgorithm.HS512)
+                .setHeaderParam("typ", "JWT")
+                .setSubject(Long.toString(user.getIdUser()))
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + (jwtDurationSeconds * 1000)))
+                .claim("username_recovery", user.getUsername()) //solo enviamos el username en un campo distinto a los tokens de acceso
+                .compact();
+    }
+
+    /**
      * Comprueba si el token es un JWT válido
      * @param token token a comprobar
      */
