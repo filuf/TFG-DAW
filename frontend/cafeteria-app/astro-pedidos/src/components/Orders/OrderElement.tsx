@@ -1,7 +1,7 @@
 import Skeleton from "react-loading-skeleton";
 import type { Order, Product } from "./PageObjectsTypes";
 import "react-loading-skeleton/dist/skeleton.css";
-import "./OrderElement.css";
+import styles from "./OrderElement.module.css";
 
 export default function OrderElement({ id, description, paid, products, loading }: Order & { loading?: boolean }) {
 
@@ -20,35 +20,35 @@ export default function OrderElement({ id, description, paid, products, loading 
     : products;
 
     return(
-        <article className="order-element-container" key={id}>
-            <div className="order-details-container">
-                <div className="order-date">
-                    <p className="order-details-field">IDENTIFICADOR: {loading ? <Skeleton width={100} /> : id}</p>
+        <article className={styles.orderElementContainer} key={id}>
+            <div className={styles.orderDetailsContainer}>
+                <div className={styles.orderDate}>
+                    <p className={styles.orderDetailsField}>IDENTIFICADOR: {loading ? <Skeleton width={100} /> : id}</p>
                     <span>{loading ? <Skeleton width={100} /> : "ejemplo"/* poner fecha */}</span>
                 </div>
             </div>
-            <div className="products-container">
+            <div className={styles.productsContainer}>
                 {productsToRender.map(({ productId, imageUrl, name, price, quantity }) => 
-                    <div key={productId} className="product-container">
-                        <div className="image-product-container">
+                    <div key={productId} className={styles.productContainer}>
+                        <div className={styles.imageProductContainer}>
                             {loading ?
                                 <Skeleton width={50} height={50} style={{borderRadius: "8px"}}/>
                             : 
-                                <img className="image-product" src={imageUrl || "/astro.png"} alt={"imagen " + name} />
+                                <img className={styles.imageProduct} src={imageUrl || "/astro.png"} alt={`imagen ${name}`} />
                             }
                         </div>
                         
-                        <div className="product-details-container">
-                            <span className="product-name"><b>{loading ? <Skeleton width={80} /> : name}</b></span>
-                            <span className="product-price">{loading ? <Skeleton width={50} /> : `${price.toFixed(2)}€`}</span>
-                            <span className="product-quantity">{loading ? <Skeleton width={60} /> : `${quantity} ${quantity > 1 ? "unidades" : "unidad"}`}</span>
+                        <div className={styles.productDetailsContainer}>
+                            <span className={styles.productName}><b>{loading ? <Skeleton width={80} /> : name}</b></span>
+                            <span className={styles.productPrice}>{loading ? <Skeleton width={50} /> : `${price.toFixed(2)}€`}</span>
+                            <span className={styles.productQuantity}>{loading ? <Skeleton width={60} /> : `${quantity} ${quantity > 1 ? "unidades" : "unidad"}`}</span>
                         </div>
                     </div>
                 )}
             </div>
-            <p className="order-details-field">DESCRIPCIÓN: {loading ? <Skeleton width={180} /> : description}</p>
-            <p className="order-details-field">PRECIO TOTAL: {loading ? <Skeleton width={80} /> : `${totalPrice(products)}€`}</p>
-            <p className="order-details-field">PAGADO: {loading ? <Skeleton width={30} /> : paid ? "sí" : "no"}</p>
+            <p className={styles.orderDetailsField}>DESCRIPCIÓN: {loading ? <Skeleton width={180} /> : description}</p>
+            <p className={styles.orderDetailsField}>PRECIO TOTAL: {loading ? <Skeleton width={80} /> : `${totalPrice(products)}€`}</p>
+            <p className={styles.orderDetailsField}>PAGADO: {loading ? <Skeleton width={30} /> : paid ? "sí" : "no"}</p>
 
         </article>
     )
