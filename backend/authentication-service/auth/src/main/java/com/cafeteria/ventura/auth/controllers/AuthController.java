@@ -4,6 +4,7 @@ import com.cafeteria.ventura.auth.config.JwtTokenProvider;
 import com.cafeteria.ventura.auth.dto.*;
 import com.cafeteria.ventura.auth.exceptions.CustomException;
 import com.cafeteria.ventura.auth.models.UserEntity;
+import com.cafeteria.ventura.auth.services.ForgotPasswordService;
 import com.cafeteria.ventura.auth.services.UserEntityService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -35,6 +36,7 @@ public class AuthController {
     private UserEntityService userService;
     private AuthenticationManager authManager;
     private JwtTokenProvider jwtTokenProvider;
+    private ForgotPasswordService forgotPasswordService;
 
     /**
      * Registra a un usuario
@@ -93,39 +95,29 @@ public class AuthController {
     }
 
     /**
-     * Cambiar la contraseña de un usuario (no es necesario que esté logado)
-     * @param passwordDetails
-     * @return
+     * PASO 1
+     * Envía un mail con la url a la web de astro y un queryParam con un jwtToken para restablecer
+     * @param passwordRequest el usuario al cual se le restablece
+     * @return mensaje de se ha enviado un mail
+     * @throws CustomException
      */
-    @PostMapping("/change/password")
-    public ResponseEntity<String> changePassword(@RequestBody ChangePasswordRequest passwordDetails) {
-
-
-
-        return ResponseEntity.ok("si, tu email es ");
-    }
-
-    //TODO: postmapping changeUsername
-    @PostMapping("/change/email")
-    public ResponseEntity<String> changeEmail(@RequestBody ChangeEmailRequest emailRequest) {
-
-        // todo: logica actualizar email
-
-
-        return ResponseEntity.ok("Email restablecido correctamente");
-    }
-
     @PostMapping("/forgot-password")
-    public ResponseEntity<String> forgotPassword(@RequestBody ForgotPasswordRequest passwordRequest) {
+    public ResponseEntity<String> forgotPassword(
+            @RequestBody ForgotPasswordRequest passwordRequest) throws CustomException {
 
-        String email = passwordRequest.email();
+        //busca el usuario en la db
+        UserEntity user = this.userService.findByUsername(passwordRequest.getUsername())
+                .orElseThrow( () -> new CustomException("Este usuario no existe", HttpStatus.NOT_FOUND));
 
-        UUID identifier = UUID.randomUUID();
-        //TODO: service almacenar en db identifier + email con fecha de caducidad hasta 1 día después
+        //genera un token de recuperación
+        String recoveryToken = jwtTokenProvider.generateRecoverPasswordToken(user);
 
-        //TODO: logica mandar mail con URL de web predefinida
+        //manda webhook para el mail
+        forgotPasswordService.sendMailRecoverPassword(user.getEmail(), recoveryToken);
 
-        return ResponseEntity.ok("Te hemos mandado un mail a la dirección " + email + " para que puedas restablecer tu contraseña");
+
+        return ResponseEntity.ok("Te hemos enviado un correo con instrucciones para restablecer tu contraseña." +
+                " Si no lo recibes en unos minutos, revisa tu carpeta de spam o contáctanos.");
     }
 
     /**
