@@ -1,0 +1,58 @@
+/* Variables globales de colores */
+:root {
+  /* HEX */
+  --black: #000000ff;
+  --yellow-green: #aed000ff;
+  --lemon-chiffon: #f5f3bbff;
+  --buff: #dfa06eff;
+  --bistre: #412722ff;
+
+  /* HSL */
+  --black-hsl: hsla(0, 0%, 0%, 1);
+  --yellow-green-hsl: hsla(70, 100%, 41%, 1);
+  --lemon-chiffon-hsl: hsla(58, 74%, 85%, 1);
+  --buff-hsl: hsla(27, 64%, 65%, 1);
+  --bistre-hsl: hsla(10, 31%, 19%, 1);
+
+  /* RGB */
+  --black-rgb: rgba(0, 0, 0, 1);
+  --yellow-green-rgb: rgba(174, 208, 0, 1);
+  --lemon-chiffon-rgb: rgba(245, 243, 187, 1);
+  --buff-rgb: rgba(223, 160, 110, 1);
+  --bistre-rgb: rgba(65, 39, 34, 1);
+
+  /* Gradientes */
+  --gradient-top: linear-gradient(0deg, var(--black), var(--yellow-green), var(--lemon-chiffon), var(--buff), var(--bistre));
+  --gradient-right: linear-gradient(90deg, var(--black), var(--yellow-green), var(--lemon-chiffon), var(--buff), var(--bistre));
+  --gradient-bottom: linear-gradient(180deg, var(--black), var(--yellow-green), var(--lemon-chiffon), var(--buff), var(--bistre));
+  --gradient-left: linear-gradient(270deg, var(--black), var(--yellow-green), var(--lemon-chiffon), var(--buff), var(--bistre));
+  --gradient-top-right: linear-gradient(45deg, var(--black), var(--yellow-green), var(--lemon-chiffon), var(--buff), var(--bistre));
+  --gradient-bottom-right: linear-gradient(135deg, var(--black), var(--yellow-green), var(--lemon-chiffon), var(--buff), var(--bistre));
+  --gradient-top-left: linear-gradient(225deg, var(--black), var(--yellow-green), var(--lemon-chiffon), var(--buff), var(--bistre));
+  --gradient-bottom-left: linear-gradient(315deg, var(--black), var(--yellow-green), var(--lemon-chiffon), var(--buff), var(--bistre));
+  --gradient-radial: radial-gradient(var(--black), var(--yellow-green), var(--lemon-chiffon), var(--buff), var(--bistre));
+}
+
+/* Clases de utilidad para colores */
+.black { color: var(--black); }
+.yellowGreen { color: var(--yellow-green); }
+.lemonChiffon { color: var(--lemon-chiffon); }
+.buff { color: var(--buff); }
+.bistre { color: var(--bistre); }
+
+.bgBlack { background-color: var(--black); }
+.bgYellowGreen { background-color: var(--yellow-green); }
+.bgLemonChiffon { background-color: var(--lemon-chiffon); }
+.bgBuff { background-color: var(--buff); }
+.bgBistre { background-color: var(--bistre); }
+
+/* Clases de utilidad para gradientes */
+.gradientTop { background: var(--gradient-top); }
+.gradientRight { background: var(--gradient-right); }
+.gradientBottom { background: var(--gradient-bottom); }
+.gradientLeft { background: var(--gradient-left); }
+.gradientTopRight { background: var(--gradient-top-right); }
+.gradientBottomRight { background: var(--gradient-bottom-right); }
+.gradientTopLeft { background: var(--gradient-top-left); }
+.gradientBottomLeft { background: var(--gradient-bottom-left); }
+.gradientRadial { background: var(--gradient-radial); } 

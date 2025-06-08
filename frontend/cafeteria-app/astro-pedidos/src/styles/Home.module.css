@@ -1,0 +1,219 @@
+.homeContainer {
+  min-height: 100vh;
+  background: var(--lemon-chiffon);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Quicksand', 'Open Sans', Arial, sans-serif;
+}
+
+.heroSection {
+  width: 100%;
+  max-width: 1200px;
+  margin: 2rem auto;
+  text-align: center;
+  padding: 3rem 2rem;
+  background: var(--gradient-bottom-right);
+  border-radius: 24px;
+  box-shadow: 0 8px 32px rgba(65, 39, 34, 0.15);
+  color: var(--lemon-chiffon);
+}
+
+.heroLogo {
+  display: block;
+  margin: 0 auto 2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(65, 39, 34, 0.2);
+  width: clamp(120px, 25vw, 240px);
+  height: auto;
+  background: var(--lemon-chiffon);
+  padding: 1rem;
+}
+
+.heroTitle {
+  font-size: 3rem;
+  color: var(--lemon-chiffon);
+  margin-bottom: 1rem;
+  font-family: 'Pacifico', cursive;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.heroSubtitle {
+  font-size: 1.4rem;
+  color: var(--buff);
+  margin-bottom: 2.5rem;
+  font-weight: 500;
+}
+
+.heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: center;
+}
+
+.heroButton {
+  background: var(--yellow-green);
+  color: var(--bistre);
+  font-weight: bold;
+  font-size: 1.2rem;
+  padding: 1rem 2.5rem;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(65, 39, 34, 0.15);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.heroButton:hover {
+  background: var(--buff);
+  color: var(--lemon-chiffon);
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 6px 16px rgba(65, 39, 34, 0.2);
+}
+
+.heroButtonSecondary {
+  background: transparent;
+  color: var(--lemon-chiffon);
+  font-weight: bold;
+  font-size: 1.2rem;
+  padding: 1rem 2.5rem;
+  border: 2px solid var(--lemon-chiffon);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(65, 39, 34, 0.1);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.heroButtonSecondary:hover {
+  background: var(--lemon-chiffon);
+  color: var(--bistre);
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 6px 16px rgba(65, 39, 34, 0.2);
+}
+
+.productsSection {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+}
+
+.productsTitle {
+  text-align: center;
+  font-family: 'Pacifico', cursive;
+  font-size: 2.8rem;
+  color: var(--bistre);
+  margin-bottom: 3rem;
+  text-shadow: 1px 1px 2px rgba(65, 39, 34, 0.1);
+}
+
+.productsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  padding: 1rem;
+}
+
+.productCard {
+  background: var(--lemon-chiffon);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(65, 39, 34, 0.1);
+  transition: all 0.3s ease;
+}
+
+.productCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 24px rgba(65, 39, 34, 0.15);
+}
+
+.productImage {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-bottom: 3px solid var(--yellow-green);
+}
+
+.productInfo {
+  padding: 1.5rem;
+}
+
+.productName {
+  font-size: 1.4rem;
+  color: var(--bistre);
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.productPrice {
+  font-size: 1.2rem;
+  color: var(--buff);
+  font-weight: bold;
+}
+
+.addToCartButton {
+  width: 100%;
+  background: var(--yellow-green);
+  color: var(--bistre);
+  border: none;
+  padding: 0.8rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+  border-radius: 8px;
+}
+
+.addToCartButton:hover {
+  background: var(--buff);
+  color: var(--lemon-chiffon);
+}
+
+@media (max-width: 768px) {
+  .heroSection {
+    margin: 1rem;
+    padding: 2rem 1rem;
+  }
+
+  .heroTitle {
+    font-size: 2.2rem;
+  }
+
+  .heroSubtitle {
+    font-size: 1.2rem;
+  }
+
+  .productsTitle {
+    font-size: 2.2rem;
+  }
+
+  .productsGrid {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .heroTitle {
+    font-size: 1.8rem;
+  }
+
+  .heroSubtitle {
+    font-size: 1.1rem;
+  }
+
+  .heroButton,
+  .heroButtonSecondary {
+    width: 100%;
+    font-size: 1.1rem;
+    padding: 0.8rem 2rem;
+  }
+
+  .productsTitle {
+    font-size: 1.8rem;
+  }
+} 
