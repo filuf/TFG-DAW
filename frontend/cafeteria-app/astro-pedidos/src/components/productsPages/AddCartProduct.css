@@ -4,53 +4,93 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 5px;
+    gap: 1rem;
+    margin-bottom: 1rem;
 }
+
+.quantity-container label {
+    color: var(--bistre);
+    font-weight: 600;
+    min-width: 80px;
+}
+
 .product-quantity {
-    box-sizing: border-box;
-    width: 100%;
+    flex: 1;
+    max-width: 200px;
+    padding: 0.5rem;
+    border: 2px solid var(--buff);
+    border-radius: 8px;
+    background: var(--lemon-chiffon);
+    color: var(--bistre);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.product-quantity:hover {
+    border-color: var(--yellow-green);
+}
+
+.product-quantity:focus {
+    outline: none;
+    border-color: var(--yellow-green);
+    box-shadow: 0 0 0 2px rgba(144, 190, 109, 0.2);
 }
 
 /* botón de añadir al carrito*/
 .add-cart-container {
-    box-sizing: border-box;
-    display: flex;
     width: 100%;
-    padding: 20px;
-    justify-content: center;
+    margin-top: 1rem;
 }
+
 .add-cart-button {
     width: 100%;
-    max-width: 200px;
-    border: 0;
-    padding: 10px;
+    max-width: 300px;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 12px;
+    background: var(--yellow-green);
     color: white;
-    background-color: rgb(82, 173, 173);
-    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 600;
     cursor: pointer;
-    border-radius: 10px;
-    transition: all 0.3s;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
+
 .add-cart-button:hover {
-    background-color: rgb(52, 107, 107);
+    background: var(--buff);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(65, 39, 34, 0.15);
+}
+
+.add-cart-button:active {
+    transform: translateY(0);
 }
 
 /* mensaje de error */
 .error-container {
-    margin: 0px;
-    height: auto;
-    max-height: none;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    margin-top: 1rem;
+    padding: 1rem;
+    background: var(--lemon-chiffon);
+    border-radius: 8px;
+    border: 1px solid var(--bistre);
 }
 
 .error-message {
-    color: red;
-    font-size: 14px;
+    color: var(--bistre);
+    font-size: 0.9rem;
     text-align: center;
-    width: 100%;
-    margin: 0px;
+    margin: 0;
+}
+
+/* Estilos para el precio total */
+.total-price {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--buff);
+    margin: 1rem 0;
+    text-align: center;
 }
 
