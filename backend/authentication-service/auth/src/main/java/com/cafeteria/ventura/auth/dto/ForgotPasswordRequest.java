@@ -1,4 +1,11 @@
 package com.cafeteria.ventura.auth.dto;
 
-public record ForgotPasswordRequest(String email) {
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@AllArgsConstructor
+@Getter
+public class ForgotPasswordRequest {
+
+    private String username;
 }
