@@ -107,4 +107,18 @@ public class JwtTokenProvider {
         Claims claims = parser.parseClaimsJws(token).getBody();
         return claims.get("username").toString();
     }
+
+    /**
+     * Devuelve el username de un token de recovery
+     * @param recoveryToken token sobre el que extraer
+     * @return username
+     */
+    public String getUsernameFromRecoveryToken(String recoveryToken) {
+        JwtParser parser = Jwts.parser()
+                .setSigningKey(Keys.hmacShaKeyFor(jwtSecret.getBytes()))
+                .build();
+
+        Claims claims = parser.parseClaimsJws(recoveryToken).getBody();
+        return claims.get("username_recovery").toString();
+    }
 }
