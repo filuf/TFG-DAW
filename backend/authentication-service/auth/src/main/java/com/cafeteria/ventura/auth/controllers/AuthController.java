@@ -55,15 +55,7 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<UserEntity> register(@RequestBody UserRegisterDTO userDTO) throws CustomException {
 
-        // contraseña demasiado corta
-        if (userDTO.password().length() < MINIMUM_PASSWORD_LENGTH) {
-            throw new CustomException("La longitud de la contraseña no puede ser menor a " + MINIMUM_PASSWORD_LENGTH + " caracteres", HttpStatus.BAD_REQUEST);
-        }
-
-        // contraseñas no iguales notEquals nullsafe
-        if (!Objects.equals(userDTO.password(), userDTO.passwordConf())) {
-            throw new CustomException("Las contraseñas no coinciden", HttpStatus.BAD_REQUEST);
-        }
+        this.validatePassword(userDTO.password(), userDTO.passwordConf());
 
         // usuario existente
         if (userService.findByUsername(userDTO.username()).isPresent()) {
@@ -77,6 +69,18 @@ public class AuthController {
 
         UserEntity responseBody = this.userService.save(userDTO);
         return ResponseEntity.created(URI.create("/auth/login")).body(responseBody); // 201
+    }
+
+    private void validatePassword(String password, String passwordConfirm) throws CustomException {
+        // contraseña demasiado corta
+        if (password.length() < MINIMUM_PASSWORD_LENGTH) {
+            throw new CustomException("La longitud de la contraseña no puede ser menor a " + MINIMUM_PASSWORD_LENGTH + " caracteres", HttpStatus.BAD_REQUEST);
+        }
+
+        // contraseñas no iguales notEquals nullsafe
+        if (!Objects.equals(password, passwordConfirm)) {
+            throw new CustomException("Las contraseñas no coinciden", HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping("/login")
@@ -121,30 +125,24 @@ public class AuthController {
     }
 
     /**
-     *
-     * @param resetPassword
-     * @return
+     * PASO 2
+     * Cambia la contraseña usando el usuario que se encuentra en el token JWT y la contraseña proporcionada
+     * @param passwordRequest Toke, contraseña y confirmación
+     * @return mensaje de éxito
+     * @throws CustomException
      */
     @PostMapping("/reset-password")
-    public ResponseEntity<String> resetPassword (@RequestBody ResetPasswordRequest resetPassword) throws CustomException {
+    public ResponseEntity<String> resetPassword(
+            @RequestBody ResetPasswordRequest passwordRequest) throws CustomException {
 
-        String newPassword = resetPassword.newPassword();
-        String newPasswordConf = resetPassword.newPasswordConf();
+        //extrae el nombre de usuario
+        String username = this.jwtTokenProvider.getUsernameFromRecoveryToken(passwordRequest.getJwtRecoveryToken());
 
-        // contraseña demasiado corta
-        if (newPasswordConf.length() < MINIMUM_PASSWORD_LENGTH) {
-            throw new CustomException("La longitud de la contraseña no puede ser menor a " + MINIMUM_PASSWORD_LENGTH + " caracteres", HttpStatus.BAD_REQUEST);
-        }
+        this.validatePassword(passwordRequest.getNewPassword(), passwordRequest.getConfirmNewPassword());
 
-        // contraseñas no iguales notEquals nullsafe
-        if (!Objects.equals(newPassword, newPasswordConf)) {
-            throw new CustomException("Las contraseñas no coinciden", HttpStatus.BAD_REQUEST);
-        }
+        this.userService.changePasswordByUsername(username, passwordRequest.getNewPassword());
 
-        //TODO: validar email + uuid en la db
-
-        //TODO: actualizar contraseña + borrar registro
-
-        return ResponseEntity.ok("La contraseña se ha cambiado con éxito");
+        return ResponseEntity.ok("La contraseña del usuario " + username + " se ha actualizado correctamente.");
     }
+
 }
