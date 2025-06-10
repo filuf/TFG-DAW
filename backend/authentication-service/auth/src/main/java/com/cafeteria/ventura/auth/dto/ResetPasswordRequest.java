@@ -1,6 +1,15 @@
 package com.cafeteria.ventura.auth.dto;
 
-import java.util.UUID;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-public record ResetPasswordRequest(UUID idPassReset, String email, String newPassword, String newPasswordConf) {
+@AllArgsConstructor
+@Getter
+public class ResetPasswordRequest {
+
+    private String jwtRecoveryToken;
+
+    private String newPassword;
+
+    private String confirmNewPassword;
 }
