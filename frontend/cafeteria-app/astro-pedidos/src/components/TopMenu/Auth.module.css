@@ -329,6 +329,12 @@
 }
 
 /* Media queries para ajustes específicos */
+@media (max-width: 800px) {
+  .usernameTextActive {
+    display: none;
+  }
+}
+
 @media (max-width: 700px) {
   .authButtons {
     width: 100%;

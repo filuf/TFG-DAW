@@ -26,6 +26,7 @@ export default function UserLogin({ apiAuthUrl }) {
     // Variable para almacenar los datos del formulario de login y registro.
     const [formData, setFormData] = useState({
         username: '',
+        mail: '',
         password: '',
         confirmPassword: ''
     });
@@ -99,10 +100,11 @@ export default function UserLogin({ apiAuthUrl }) {
             });
 
             console.log('Respuesta del servidor:', res.status);
-            const data = await res.json();
-            console.log('Datos de respuesta:', data);
+
 
             if (res.ok) {
+                const data = await res.json();
+                console.log('Datos de respuesta:', data);
                 setUserLogin(data.username);
                 setShowModal(false);
                 setFormData({ username: '', password: '', confirmPassword: '' });
@@ -115,14 +117,15 @@ export default function UserLogin({ apiAuthUrl }) {
                 window.dispatchEvent(new Event('user-login'));
             } else {
                 switch (res.status) {
-                    case 401:
-                        setMessage({ text: "Credenciales inválidas", type: "error" });
-                        break;
                     case 403:
-                        setMessage({ text: "No tienes permisos para acceder", type: "error" });
+                        setMessage({ text: "Usuario o contraseña incorrectos", type: "error" });
+                        break;
+                    case 404:
+                        setMessage({ text: "Error al conextar con el servidor", type: "error" });
                         break;
                     default:
-                        setMessage({ text: data.message || "Error al iniciar sesión", type: "error" });
+                        setMessage({ text: "Error inesperado, contacte con los administradores", type: "error" });
+                        break;
                 }
             }
         } catch (error) {
@@ -318,7 +321,7 @@ export default function UserLogin({ apiAuthUrl }) {
     if (isLoggedIn) {
         return (
             <div className={styles.usernameContainer} onClick={() => setShowUserMenu(!showUserMenu)}>
-                <span className={styles.usernameText}>{userLogin}</span>
+                <span className={`${styles.usernameText} ${showUserMenu ? styles.usernameTextActive : ''}`}>{userLogin}</span>
                 <img
                     src="/keyboard_arrow_down.svg"
                     alt="Menú"
