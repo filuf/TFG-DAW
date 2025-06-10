@@ -1,3 +1,12 @@
+/**
+ * Componente encargado de mostrar el modal de login y registro, así como el menú de usuario.
+ * @author: Aitor & Agustín
+ * @version: 1.5.0
+ * @description: Este componente se encarga no solo de mostrr los modales de inicio de sesión,
+ * de recuperar contraseña y de registro, sino también de mostrar el menú de usuario y el carrito
+ * en aquellos escenarios donde el usuario ya haya iniciado sesión (esta autenticado).
+ */
+
 import { useEffect, useRef, useState } from "react";
 import styles from './Auth.module.css';
 
@@ -10,7 +19,8 @@ export default function UserLogin({ apiAuthUrl }) {
     * Por defecto, se muestra el formulario de login.
     */
     const [isLogin, setIsLogin] = useState(true);
-    const [errorMessage, setErrorMessage] = useState("");
+    // Estado unificado para manejar mensajes de error y éxito
+    const [message, setMessage] = useState({ text: "", type: "" }); // "error", "success", ""
     // Variable que controla si se muestra o no el menú de usuario.
     const [showUserMenu, setShowUserMenu] = useState(false);
     // Variable para almacenar los datos del formulario de login y registro.
@@ -24,6 +34,18 @@ export default function UserLogin({ apiAuthUrl }) {
     // Variable que controla si el usuario está autenticado o no.
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+    /**
+     * Variable que controla el tipo de modal que se está mostrando, tiene dos variables,
+     * la primera es "modalType" que controla el tipo de modal que se está mostrando, y la
+     * segunda es "showModal" que controla si se muestra o no el modal.
+     */
+    const [modalType, setModalType] = useState('login');
+
+    // Función helper para limpiar mensajes
+    const clearMessage = () => {
+        setMessage({ text: "", type: "" });
+    };
+
     // Efecto para manejar el estado del modal
     useEffect(() => {
         // Guardo en "dialog" el elemento del modal.
@@ -36,7 +58,7 @@ export default function UserLogin({ apiAuthUrl }) {
                 console.log('Abriendo modal...');
                 dialog.showModal();
             }
-        } 
+        }
         // Si el modal no está visible, lo cierro.
         else {
             if (dialog.open) {
@@ -58,8 +80,8 @@ export default function UserLogin({ apiAuthUrl }) {
     // fetch al hacer submit en el formulario de login
     const handleLogin = async (e) => {
         e.preventDefault();
-        // Reseteo el mensaje de error a nada ("") para que no se muestre.
-        setErrorMessage("");
+        // Reseteo el mensaje a nada ("") para que no se muestre.
+        clearMessage();
 
         try {
             // Mensajes de consola para debuggear.
@@ -70,9 +92,9 @@ export default function UserLogin({ apiAuthUrl }) {
                 headers: {
                     "Content-type": "application/json"
                 },
-                body: JSON.stringify({ 
+                body: JSON.stringify({
                     username: formData.username,
-                    password: formData.password 
+                    password: formData.password
                 })
             });
 
@@ -94,33 +116,33 @@ export default function UserLogin({ apiAuthUrl }) {
             } else {
                 switch (res.status) {
                     case 401:
-                        setErrorMessage("Credenciales inválidas");
+                        setMessage({ text: "Credenciales inválidas", type: "error" });
                         break;
                     case 403:
-                        setErrorMessage("No tienes permisos para acceder");
+                        setMessage({ text: "No tienes permisos para acceder", type: "error" });
                         break;
                     default:
-                        setErrorMessage(data.message || "Error al iniciar sesión");
+                        setMessage({ text: data.message || "Error al iniciar sesión", type: "error" });
                 }
             }
         } catch (error) {
             console.error("Error en el login:", error);
-            setErrorMessage("Error de conexión con el servidor");
+            setMessage({ text: "Error de conexión con el servidor", type: "error" });
         }
     }
 
     // fetch al hacer submit en el formulario de registro
     const handleRegister = async (e) => {
         e.preventDefault();
-        setErrorMessage("");
+        clearMessage();
 
         if (formData.password !== formData.confirmPassword) {
-            setErrorMessage("Las contraseñas no coinciden");
+            setMessage({ text: "Las contraseñas no coinciden", type: "error" });
             return;
         }
 
         if (formData.password.length < 12) {
-            setErrorMessage("La contraseña debe tener al menos 12 caracteres");
+            setMessage({ text: "La contraseña debe tener al menos 12 caracteres", type: "error" });
             return;
         }
 
@@ -131,7 +153,7 @@ export default function UserLogin({ apiAuthUrl }) {
                 headers: {
                     "Content-type": "application/json"
                 },
-                body: JSON.stringify({ 
+                body: JSON.stringify({
                     username: formData.username,
                     email: formData.username, // Usamos el username como email
                     password: formData.password,
@@ -147,46 +169,60 @@ export default function UserLogin({ apiAuthUrl }) {
                 setShowModal(false);
                 setIsLogin(true);
                 setFormData({ username: '', password: '', confirmPassword: '' });
-                setErrorMessage("Registro exitoso. Por favor, inicia sesión.");
+                setMessage({ text: "Registro exitoso. Por favor, inicia sesión.", type: "success" });
             } else {
                 switch (res.status) {
                     case 400:
-                        setErrorMessage(data.message || "Datos de registro inválidos");
+                        setMessage({ text: data.message || "Datos de registro inválidos", type: "error" });
                         break;
                     case 409:
-                        setErrorMessage("El email ya está registrado");
+                        setMessage({ text: "El email ya está registrado", type: "error" });
                         break;
                     default:
-                        setErrorMessage(data.message || "Error en el registro");
+                        setMessage({ text: data.message || "Error en el registro", type: "error" });
                 }
             }
         } catch (error) {
             console.error("Error en el registro:", error);
-            setErrorMessage("Error de conexión con el servidor");
+            setMessage({ text: "Error de conexión con el servidor", type: "error" });
         }
     }
 
-    // Modificar los manejadores de click
-    const handleLoginClick = (e) => {
-        e.preventDefault();
+    /**
+     * Función encargada de manejar el clic en el botón de login, si el 
+     * usuario no está autenticado (no ha iniciado sesión), se procede
+     * a mostrar el modal de login.
+     * @param {evento} evento 
+     */
+    const handleLoginClick = (evento) => {
+        // Prevenir el comportamiento por defecto del botón.
+        evento.preventDefault();
+        // Muestro un mensaje en la consola para debuggear.
         console.log('Login button clicked');
+        // Si el usuario no está autenticado (no ha iniciado sesión), se muestra el modal de login.
         if (!userLogin) {
             console.log('Setting modal to login mode');
-            setIsLogin(true);
+            setModalType("login");
             setShowModal(true);
-            setErrorMessage("");
+            clearMessage();
             setFormData({ username: '', password: '', confirmPassword: '' });
         }
     }
 
-    const handleRegisterClick = (e) => {
-        e.preventDefault();
+    /**
+     * Maneja el clic en el botón de registro, si el usuario no está autenticado (no ha iniciado sesión),
+     * se muestra el modal de registro.
+     */
+    const handleRegisterClick = (evento) => {
+        // Prevenir el comportamiento por defecto del botón.
+        evento.preventDefault();
         console.log('Register button clicked');
+        // Si el usuario no está autenticado (no ha iniciado sesión), se muestra el modal de registro.
         if (!userLogin) {
             console.log('Setting modal to register mode');
-            setIsLogin(false);
+            setModalType("register");
             setShowModal(true);
-            setErrorMessage("");
+            clearMessage();
             setFormData({ username: '', password: '', confirmPassword: '' });
         }
     }
@@ -195,7 +231,7 @@ export default function UserLogin({ apiAuthUrl }) {
     const closeModal = () => {
         console.log('closeModal called');
         setShowModal(false);
-        setErrorMessage("");
+        clearMessage();
         setFormData({ username: '', password: '', confirmPassword: '' });
     };
 
@@ -204,6 +240,10 @@ export default function UserLogin({ apiAuthUrl }) {
         setShowSidebar(!showSidebar);
     }
 
+    /**
+     * Cierra la sesión del usuario, elimina el usuario y el token de la sesión y
+     * emite un evento personalizado para que el header actualice el carrito.
+     */
     const handleLogout = () => {
         sessionStorage.removeItem("username");
         sessionStorage.removeItem("token");
@@ -214,6 +254,55 @@ export default function UserLogin({ apiAuthUrl }) {
         window.dispatchEvent(new Event('user-logout'));
     };
 
+    const handleRecoverPassword = async (evento) => {
+        // Prevenir el comportamiento por defecto del botón.
+        evento.preventDefault();
+
+        // Si el usuario no ha introducido su nombre de usuario, se muestra un mensaje de error.
+        if (!formData.username) {
+            setMessage({ text: "Por favor, introduce tu nombre de usuario", type: "error" });
+            return;
+        }
+        // Intento enviar el correo de recuperación de contraseña.
+        try {
+            // Defino el ENDPOINT utilizazado y el tipo de método utilizado.
+            const respuesta = await fetch(`${apiAuthUrl}/auth/forgot-password`, {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json"
+                },
+                body: JSON.stringify({
+                    username: formData.username
+                })
+            });
+
+            // Convierto la respuesta a texto para poder acceder a los datos.
+            const data = await respuesta.text();
+
+            // Si la respuesta es ok, se muestra un mensaje de éxito.
+            if (respuesta.ok) {
+                setMessage({ text: "Se ha enviado un correo de recuperación de contraseña", type: "success" });
+                // Cierro el modal con un setTimeout para que se muestre el mensaje de éxito.
+                setTimeout(() => {
+                    setShowModal(false);
+                }, 3000);
+            } else {
+                // Si la respuesta no es ok, se muestra un mensaje de error.
+                setMessage({ text: data.message || "Error al enviar el correo de recuperación de contraseña", type: "error" });
+            }
+        } catch (error) {
+            // Error para debuggear que me permite ver en la consola si ocurrio un error.
+            console.error("Error al enviar el correo de recuperación de contraseña:", error);
+            // Mensaje de error para el usuario mostrado en el modal.
+            setMessage({ text: "Error de conexión con el servidor", type: "error" });
+        }
+    }
+
+    /**
+     * Maneja el cambio de valor en los campos del formulario de login y registro,
+     * ejemplo: si el usuario escribe en el campo de usuario, se actualiza el
+     * estado del formulario con el nuevo valor.
+     */
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({
@@ -222,13 +311,17 @@ export default function UserLogin({ apiAuthUrl }) {
         }));
     };
 
+    /**
+     * Si el usuario está autenticado (ha iniciado sesión), se muestra el nombre de usuario y un
+     * menú con la opción de cerrar sesión.
+     */
     if (isLoggedIn) {
         return (
             <div className={styles.usernameContainer} onClick={() => setShowUserMenu(!showUserMenu)}>
                 <span className={styles.usernameText}>{userLogin}</span>
-                <img 
-                    src="/keyboard_arrow_down.svg" 
-                    alt="Menú" 
+                <img
+                    src="/keyboard_arrow_down.svg"
+                    alt="Menú"
                     className={styles.arrowDown}
                     style={{ transform: showUserMenu ? 'rotate(180deg)' : 'none' }}
                 />
@@ -243,6 +336,11 @@ export default function UserLogin({ apiAuthUrl }) {
         );
     }
 
+    /**
+     * Todo el código que se encuentra dentro de este return es el que se encarga de mostrar
+     * el modal de login y registro cuando el usuario no está autenticado (no ha iniciado sesión),
+     * ocurre cuando el "if" anterior a este bloque de comentarios es false.
+     */
     return (
         <>
             <div className={styles.authButtons}>
@@ -262,7 +360,7 @@ export default function UserLogin({ apiAuthUrl }) {
                 </button>
             </div>
 
-            <dialog 
+            <dialog
                 ref={modalRef}
                 className={styles.modal}
                 style={{ display: showModal ? 'flex' : 'none' }}
@@ -273,7 +371,7 @@ export default function UserLogin({ apiAuthUrl }) {
             >
                 <div className={styles.modalContainer}>
                     <div className={styles.closeButtonContainer}>
-                        <button 
+                        <button
                             type="button"
                             className={styles.closeButton}
                             onClick={(e) => {
@@ -289,12 +387,26 @@ export default function UserLogin({ apiAuthUrl }) {
                         <img src="/favicon.png" alt="Logo del instituto" className={styles.modalLogo} />
                     </div>
 
-                    <h2 className={styles.modalTitle}>{isLogin ? 'Iniciar Sesión' : 'Registrarse'}</h2>
+                    {/**
+                     * Titulo del modal que varía dependiendo del modalType (tipo de modal elegido).
+                     */}
+                    <h2 className={styles.modalTitle}>
+                        {modalType === 'login' ? 'Iniciar Sesión' :
+                            modalType === 'register' ? 'Registrarse' :
+                                'Recuperar contraseña'}
+                    </h2>
 
-                    <form onSubmit={isLogin ? handleLogin : handleRegister} className={styles.formContainer}>
+                    <form onSubmit={
+                        /**
+                         * Ejecutar la función correspondiente al modalType elegido.	
+                         */
+                        modalType === 'login' ? handleLogin :
+                            modalType === 'register' ? handleRegister :
+                                handleRecoverPassword}
+                        className={styles.formContainer}>
                         <div>
                             <label htmlFor="username" className={styles.formLabel}>
-                                {isLogin ? 'Usuario' : 'Usuario (será tu email)'}
+                                {"Usuario"}
                             </label>
                             <input
                                 type="text"
@@ -304,66 +416,158 @@ export default function UserLogin({ apiAuthUrl }) {
                                 onChange={handleInputChange}
                                 required
                                 className={styles.formInput}
-                                placeholder={isLogin ? "Tu usuario" : "tu@email.com"}
+                                placeholder={"Tu usuario"}
                             />
                         </div>
+                        {/**
+                         * Si el modalType no es "recoverPassword", se muestran los campos de
+                         * contraseña y confirmar contraseña.
+                         */}
+                        {modalType !== 'recover' && (
+                            <>
+                                <div>
+                                    <label htmlFor="password" className={styles.formLabel}>
+                                        Contraseña
+                                    </label>
+                                    <input
+                                        type="password"
+                                        id="password"
+                                        name="password"
+                                        value={formData.password}
+                                        onChange={handleInputChange}
+                                        required
+                                        className={styles.formInput}
+                                        placeholder="••••••••"
+                                        minLength={12}
+                                    />
+                                </div>
+                        {modalType === 'register' && (
+                                <div>
+                                    <label htmlFor="confirmPassword" className={styles.formLabel}>
+                                        Confirmar Contraseña
+                                    </label>
+                                    <input
+                                        type="password"
+                                        id="confirmPassword"
+                                        name="confirmPassword"
+                                        value={formData.confirmPassword}
+                                        onChange={handleInputChange}
+                                        required
+                                        className={styles.formInput}
+                                        placeholder="••••••••"
+                                        minLength={12}
+                                    />
+                                </div>
+                                )}
+                            </>
+                        )}
 
-                        <div>
-                            <label htmlFor="password" className={styles.formLabel}>
-                                Contraseña
-                            </label>
-                            <input
-                                type="password"
-                                id="password"
-                                name="password"
-                                value={formData.password}
-                                onChange={handleInputChange}
-                                required
-                                className={styles.formInput}
-                                placeholder="••••••••"
-                                minLength={12}
-                            />
-                        </div>
+                        {message.text && (
+                            <p className={message.type === "error" ? styles.errorMessage : styles.successMessage}>
+                                {message.text}
+                            </p>
+                        )}
 
-                        {!isLogin && (
-                            <div>
-                                <label htmlFor="confirmPassword" className={styles.formLabel}>
-                                    Confirmar Contraseña
-                                </label>
-                                <input
-                                    type="password"
-                                    id="confirmPassword"
-                                    name="confirmPassword"
-                                    value={formData.confirmPassword}
-                                    onChange={handleInputChange}
-                                    required
-                                    className={styles.formInput}
-                                    placeholder="••••••••"
-                                    minLength={12}
-                                />
+                        <button type="submit" className={styles.submitButton}>
+                            {modalType === 'login' ? 'Iniciar Sesión' :
+                                modalType === 'register' ? 'Registrarse' :
+                                    'Enviar correo de recuperación'}
+                        </button>
+
+                        {/**
+                         * Si el modalType es "login", se muestran los botones de switchAuth para
+                         * cambiar al modal de registro y de recuperación de contraseña.
+                         */}
+                        {modalType === 'login' && (
+                            <>
+                                <div className={styles.switchAuth}>
+                                    ¿No tienes cuenta?{' '}
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setModalType('register');
+                                            clearMessage();
+                                            setFormData({ username: '', password: '', confirmPassword: '' });
+                                        }}
+                                        className={styles.switchAuthButton}
+                                    >
+                                        Regístrate
+                                    </button>
+                                </div>
+                                <div className={styles.switchAuth}>
+                                    ¿Olvidaste tu contraseña?{' '}
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setModalType('recover');
+                                            clearMessage();
+                                            setFormData({ username: '', password: '', confirmPassword: '' });
+                                        }}
+                                        className={styles.switchAuthButton}
+                                    >
+                                        Recuperar contraseña
+                                    </button>
+                                </div>
+                            </>
+                        )}
+
+                        {/**
+                         * Si el modalType es "register", se muestran los botones de switchAuth para
+                         * cambiar al modal de login.
+                         */}
+                        {modalType === 'register' && (
+                            <div className={styles.switchAuth}>
+                                ¿Ya tienes cuenta?{' '}
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setModalType('login');
+                                        clearMessage();
+                                        setFormData({ username: '', password: '', confirmPassword: '' });
+                                    }}
+                                    className={styles.switchAuthButton}
+                                >
+                                    Inicia sesión
+                                </button>
                             </div>
                         )}
 
-                        {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
-
-                        <button type="submit" className={styles.submitButton}>
-                            {isLogin ? 'Iniciar Sesión' : 'Registrarse'}
-                        </button>
-
-                        <div className={styles.switchAuth}>
-                            {isLogin ? '¿No tienes cuenta?' : '¿Ya tienes cuenta?'}{' '}
-                            <button
-                                type="button"
-                                onClick={() => {
-                                    setIsLogin(!isLogin);
-                                    setErrorMessage('');
-                                    setFormData({ username: '', password: '', confirmPassword: '' });
-                                }}
-                                className={styles.switchAuthButton}
-                            >
-                                {isLogin ? 'Regístrate' : 'Inicia sesión'}
-                            </button>
-                        </div>
+                        {/**
+                         * Si el modalType es "recover", se muestran los botones de switchAuth para
+                         * cambiar al modal de login y de registro.
+                         */}
+                        {modalType === 'recover' && (
+                            <>
+                                <div className={styles.switchAuth}>
+                                    ¿Ya tienes cuenta?{' '}
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setModalType('login');
+                                            clearMessage();
+                                            setFormData({ username: '', password: '', confirmPassword: '' });
+                                        }}
+                                        className={styles.switchAuthButton}
+                                    >
+                                        Iniciar sesión
+                                    </button>
+                                </div>
+                                <div className={styles.switchAuth}>
+                                    ¿No tienes cuenta?{' '}
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setModalType('register');
+                                            clearMessage();
+                                            setFormData({ username: '', password: '', confirmPassword: '' });
+                                        }}
+                                        className={styles.switchAuthButton}
+                                    >
+                                        Registrarse
+                                    </button>
+                                </div>
+                            </>
+                        )}
                     </form>
                 </div>
             </dialog>
