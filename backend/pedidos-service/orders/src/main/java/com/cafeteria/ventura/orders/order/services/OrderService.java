@@ -22,10 +22,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,6 +34,9 @@ public class OrderService {
     private OrderRepository orderRepository;
     private UserEntityService userEntityService;
     private NestjsWebhook nestjsWebhook;
+
+    private static final DateTimeFormatter SPANISH_FORMAT =
+            DateTimeFormatter.ofPattern("dd 'de' MMMM 'de' yyyy, HH:mm").withLocale(Locale.forLanguageTag("es-ES"));
 
     /**
      *
@@ -63,6 +65,7 @@ public class OrderService {
                 .state(OrderState.PENDIENTE)
                 .isPaid(isPaid)
                 .description(description)
+                .dateTime(LocalDateTime.now())
                 .build();
         order = orderRepository.save(order);
 
@@ -105,6 +108,7 @@ public class OrderService {
                 .description(order.getDescription())
                 .isPaid(order.isPaid())
                 .products(productDTOs)
+                .dateTime(order.getDateTime().format(SPANISH_FORMAT))
                 .build();
     }
 
