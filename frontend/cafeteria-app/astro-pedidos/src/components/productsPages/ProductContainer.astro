@@ -9,20 +9,10 @@ const apiOrdersUrl = import.meta.env.VITE_API_ORDERS_URL;
     <div class="product-content">
         <section class="image-section">
             <div class="image-container">
-<<<<<<< HEAD
-                <ProductImage 
-                    client:only="react"
-                    src={url_image ?? "/favicon.png"} 
-                    alt={`imagen de ${product_name}`} 
-                    className="product-image"
-                    transitionName={product_name + "-" + id_product}
-                />
-=======
                 <img 
                     src={url_image ?? "/favicon.png"} 
                     alt={"imagen de " + product_name} class="product-image"
                     transition:name={product_name + "-" + id_product}>
->>>>>>> a78d1f58ab307049c9d4956a107f0a2ca6112233
             </div>
         </section>
 
@@ -84,16 +74,12 @@ const apiOrdersUrl = import.meta.env.VITE_API_ORDERS_URL;
         display: flex;
         justify-content: center;
         align-items: center;
-<<<<<<< HEAD
-=======
     }
-
     .product-image {
         width: 100%;
         height: 100%;
         object-fit: contain;
         padding: 8px;
->>>>>>> a78d1f58ab307049c9d4956a107f0a2ca6112233
     }
 
     .details-section {
