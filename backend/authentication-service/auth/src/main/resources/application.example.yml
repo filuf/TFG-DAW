@@ -19,3 +19,7 @@ app:
     jwt:
       secret: # CLAVE SECRETA SUPERIOR A 64 BYTES - NO EXPONER
       expiration: 28800 #8 horas
+  webhook:
+    mail: http://spring-mailer:8082
+  web-servers:
+    astro: http://127.0.0.1:4321

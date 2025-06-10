@@ -18,6 +18,7 @@ const products = await prisma.products.findMany(); //trae todos los productos de
             <article class="product">
                 <a href={"/products/" + product.product_name + "-" + product.id_product}>
                     <div class="image-container">
+<<<<<<< HEAD
                         <ProductImage 
                             client:only="react"
                             src={product.url_image ?? "/astro.png"} 
@@ -25,6 +26,12 @@ const products = await prisma.products.findMany(); //trae todos los productos de
                             className="product-image"
                             transitionName={product.product_name + "-" + product.id_product}
                         />
+=======
+                        <img 
+                            src={product.url_image ?? "/favicon.png"} 
+                            alt={"imagen " + product.product_name} class="product-image"
+                            transition:name={product.product_name + "-" + product.id_product}>
+>>>>>>> a78d1f58ab307049c9d4956a107f0a2ca6112233
                         <AddToCart client:only="react" 
                             productId={product.id_product} 
                             apiOrdersUrl={apiOrdersUrl} />
@@ -123,6 +130,16 @@ const products = await prisma.products.findMany(); //trae todos los productos de
         background: var(--lemon-chiffon);
         max-width: 200px;
         margin: 0 auto 10px auto;
+<<<<<<< HEAD
+=======
+    }
+
+    .product-image {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        padding: 8px;
+>>>>>>> a78d1f58ab307049c9d4956a107f0a2ca6112233
     }
 
     .product-name {
