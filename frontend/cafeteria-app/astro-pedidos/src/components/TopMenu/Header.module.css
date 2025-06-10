@@ -330,4 +330,78 @@ Version: 1.0
 
 .overlay.show {
   opacity: 1;
+}
+
+/* Media queries actualizados */
+@media (max-width: 700px) {
+  .header {
+    padding: 0.7rem 1rem;
+  }
+
+  .nav {
+    display: none;
+  }
+
+  .hamburger {
+    display: block;
+  }
+
+  .authContainer {
+    display: none;
+  }
+
+  .title {
+    display: none;
+  }
+
+  /* Ajustes para el menú móvil en pantallas pequeñas */
+  .mobileNav {
+    width: 100%;
+    max-width: none;
+  }
+
+  .mobileNavLink {
+    padding: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    padding: 0.5rem;
+  }
+
+  .hamburger {
+    width: 36px;
+    height: 36px;
+  }
+
+  .hamburger .bar {
+    width: 20px;
+  }
+
+  .mobileNavHeader {
+    padding: 0.8rem;
+  }
+
+  .mobileNavTitle {
+    font-size: 1.1rem;
+  }
+}
+
+/* Estilos para el scrollbar del menú móvil */
+.mobileNav::-webkit-scrollbar {
+  width: 6px;
+}
+
+.mobileNav::-webkit-scrollbar-track {
+  background: var(--lemon-chiffon);
+}
+
+.mobileNav::-webkit-scrollbar-thumb {
+  background: var(--yellow-green);
+  border-radius: 3px;
+}
+
+.mobileNav::-webkit-scrollbar-thumb:hover {
+  background: var(--buff);
 } 
