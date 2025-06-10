@@ -39,6 +39,7 @@ CREATE TABLE IF NOT EXISTS `db_cafeteria`.`orders` (
   `description` VARCHAR(300) NULL,
   `is_paid` BIT(1) NOT NULL,
   `state` ENUM('PENDIENTE', 'FINALIZADO') NOT NULL,
+  `date_time` DATETIME NOT NULL,
   PRIMARY KEY (`id_order`),
   INDEX `fk_pedidos_usuarios1_idx` (`id_user` ASC) ,
   CONSTRAINT `fk_pedidos_usuarios1`
