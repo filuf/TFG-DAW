@@ -1,0 +1,147 @@
+.orderElementContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    background: var(--lemon-chiffon);
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 16px rgba(65, 39, 34, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-bottom: 1rem;
+}
+
+.orderElementContainer:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(65, 39, 34, 0.15);
+}
+
+.orderDetailsContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--yellow-green);
+}
+
+.orderDate {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.orderDetailsField {
+    color: var(--bistre);
+    font-weight: 600;
+    margin: 0;
+    font-size: 1rem;
+}
+
+.productsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.productContainer {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1rem;
+    background: white;
+    border-radius: 12px;
+    border: 1px solid var(--yellow-green);
+    transition: transform 0.2s ease;
+}
+
+.productContainer:hover {
+    transform: translateX(5px);
+    border-color: var(--buff);
+}
+
+.imageProductContainer {
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid var(--yellow-green);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white;
+}
+
+.imageProduct {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.productDetailsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+}
+
+.productName {
+    color: var(--bistre);
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.productPrice {
+    color: var(--buff);
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.productQuantity {
+    color: var(--bistre);
+    font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    .orderElementContainer {
+        padding: 1rem;
+    }
+
+    .productContainer {
+        padding: 0.8rem;
+        gap: 1rem;
+    }
+
+    .imageProductContainer {
+        width: 60px;
+        height: 60px;
+    }
+
+    .productName {
+        font-size: 1rem;
+    }
+
+    .productPrice {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .orderDetailsContainer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .productContainer {
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: center;
+    }
+
+    .imageProductContainer {
+        margin: 0 auto;
+    }
+
+    .productDetailsContainer {
+        align-items: center;
+    }
+} 

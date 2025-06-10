@@ -2,102 +2,156 @@
 import AddCartProduct from "./AddCartProduct";
 const { id_product, is_unlimited, product_name, product_price, url_image, product_description } = Astro.props;
 const apiOrdersUrl = import.meta.env.VITE_API_ORDERS_URL;
-
-// añadir descripción e imagen
 ---
 
-<main class="top-container">
-    <section class="image-container">
-        <img 
-            src={url_image} alt="imagen producto" class="product-image" 
-            transition:name={product_name + "-" + id_product} />
-    </section>
+<main class="product-page-container">
+    <div class="product-content">
+        <section class="image-section">
+            <div class="image-container">
+                <img 
+                    src={url_image ?? "/favicon.png"} 
+                    alt={"imagen de " + product_name} class="product-image"
+                    transition:name={product_name + "-" + id_product}>
+            </div>
+        </section>
 
-    <section class="product-details-container">
-        <h1 class="product-name">{product_name}</h1>
-        <h2 class="product-description">{product_description}</h2>
-        <p>{product_price.toFixed(2)} €</p>
+        <section class="details-section">
+            <div class="product-info">
+                <h1 class="product-name">{product_name}</h1>
+                <p class="product-description">{product_description}</p>
+                <p class="product-price">{product_price.toFixed(2)} €</p>
 
-        <AddCartProduct 
-            apiOrdersUrl={apiOrdersUrl}
-            idProduct={id_product} 
-            productPrice={product_price} client:only="react"/>
+                <AddCartProduct 
+                    apiOrdersUrl={apiOrdersUrl}
+                    idProduct={id_product} 
+                    productPrice={product_price} 
+                    client:only="react"
+                />
 
-
-        {!is_unlimited && 
-        <div class="product-limited-container">
-            <span class="product-limited-alert">Este producto deberá ser pagado en caja</span>
-        </div>}
-
-    </section>
+                {!is_unlimited && 
+                <div class="product-limited-container">
+                    <span class="product-limited-alert">Este producto deberá ser pagado en caja</span>
+                </div>}
+            </div>
+        </section>
+    </div>
 </main>
 
 <style>
-    .top-container {
-        min-height: 100vh;
+    .product-page-container {
+        min-height: calc(100vh - 200px);
+        padding: 2rem;
+        background: var(--lemon-chiffon);
+    }
 
-        margin: 10px;
-        padding: 10px;
-        border: 1px solid black;
-
+    .product-content {
+        max-width: 1200px;
+        margin: 0 auto;
         display: flex;
-        flex-direction: row;
+        gap: 2rem;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 16px rgba(65, 39, 34, 0.1);
+        padding: 2rem;
+    }
+
+    .image-section {
+        flex: 1;
+        display: flex;
         justify-content: center;
         align-items: flex-start;
     }
-    @media screen and (max-width: 700px) {
-        .top-container {
-            flex-direction: column;
-            justify-content: flex-start;
-            align-items: center;
-        }
-    }
 
     .image-container {
-        border: 1px solid black;
         width: 100%;
-        margin: 10px;
-        padding: 10px;
-        overflow: hidden;
+        max-width: 400px;
         aspect-ratio: 1/1;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 2px solid var(--buff);
+        background: var(--lemon-chiffon);
         display: flex;
         justify-content: center;
         align-items: center;
-        max-height: 300px;
-        max-width: 300px;
     }
+
     .product-image {
         width: 100%;
         height: 100%;
         object-fit: contain;
-        max-height: 300px;
-        max-width: 300px;
+        padding: 8px;
     }
 
-    .product-details-container {
-        border: 1px solid black;
-        border-radius: 10px;
-        margin: 10px;
-        padding: 10px;
-        box-sizing: border-box;
-        width: 100%;
-        max-height: 300px;
-        max-width: 300px;
+    .details-section {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
     }
+
+    .product-info {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        align-items: center;
+        text-align: center;
+    }
+
     .product-name {
+        font-family: 'Pacifico', cursive;
+        font-size: 2.5rem;
+        color: var(--bistre);
+        margin: 0;
         text-transform: capitalize;
     }
+
     .product-description {
-        font-weight: 100;
+        text-align: justify;
+        max-width: 400px;
+    }
+
+    .product-price {
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: var(--buff);
+        margin: 0;
     }
 
     .product-limited-container {
-        display: flex;
-        width: 100%;
-        margin-top: 20px;
-        justify-content: center;
+        margin-top: 1rem;
+        padding: 1rem;
+        background: var(--lemon-chiffon);
+        border-radius: 8px;
+        border: 1px solid var(--yellow-green);
     }
+
     .product-limited-alert {
-        color: gray;
+        color: var(--bistre);
+        font-size: 0.9rem;
+        text-align: center;
+        display: block;
+    }
+
+    @media screen and (max-width: 768px) {
+        .product-content {
+            flex-direction: column;
+            padding: 1rem;
+        }
+
+        .image-container {
+            max-width: 300px;
+        }
+
+        .product-name {
+            font-size: 2rem;
+        }
+
+        .product-description {
+            font-size: 1rem;
+        }
+
+        .product-price {
+            font-size: 1.5rem;
+        }
     }
 </style>

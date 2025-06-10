@@ -1,17 +1,6 @@
 services:
 
-  # proxy inverso nginx
-  nginx:
-    container_name: nginx-proxy
-    build: 
-      context: ./reverse-proxy/
-    ports:
-      - "80:80"
-      - "443:443"
-    networks:
-      - nginx
-
-  # base de datos mysql
+  # 1. Base de datos MySQL (debe arrancar primero)
   database:
     container_name: mysql-database
     build: 
@@ -22,8 +11,9 @@ services:
       - "3306:3306"
     networks:
       - internal
+    # Esencial: todos los servicios dependen de la base de datos
 
-  # backend autenticación JWT Spring Boot
+  # 2. Backend autenticación JWT Spring Boot (depende de la base de datos)
   spring-authentication:
     container_name: spring-authentication
     build: 
@@ -33,29 +23,9 @@ services:
     networks:
       - nginx
       - internal
+    # Importante: debe arrancar tras la base de datos para gestionar la autenticación
 
-  # backend pedidos, productos y carrito Spring Boot
-  spring-order:
-    container_name: spring-order
-    build: 
-      context: ./backend/pedidos-service/
-    ports:
-      - "8081:8081"
-    networks:
-      - nginx
-      - internal
-
-  # backend envío de correos Spring Boot
-  spring-mailer:
-    container_name: spring-mailer
-    build: 
-      context: ./backend/mail-service/
-    ports:
-      - "8082:8082"
-    networks:
-      - internal
-
-  # backend aplicacion cafetería pedidos en tiempo real
+  # 3. Backend aplicación cafetería pedidos en tiempo real (NestJS, independiente)
   nest-websocket:
     container_name: nest-websocket
     build: 
@@ -65,8 +35,44 @@ services:
     networks:
       - internal
       - coffee-shop
+    # Servicio de WebSocket para pedidos en tiempo real en la cafetería
 
-  # frontend web principal
+  # 4. Backend pedidos, productos y carrito Spring Boot (depende de autenticación y base de datos)
+  spring-order:
+    container_name: spring-order
+    build: 
+      context: ./backend/pedidos-service/
+    ports:
+      - "8081:8081"
+    networks:
+      - nginx
+      - internal
+    # Gestiona pedidos, productos y carrito. Arrancar tras autenticación
+
+  # 5. Backend envío de correos Spring Boot (depende de base de datos, puede ir tras pedidos)
+  spring-mailer:
+    container_name: spring-mailer
+    build: 
+      context: ./backend/mail-service/
+    ports:
+      - "8082:8082"
+    networks:
+      - internal
+    # Servicio para envío de correos (confirmaciones, notificaciones)
+
+  # 6. Proxy inverso nginx (centraliza el acceso HTTP/HTTPS)
+  nginx:
+    container_name: nginx-proxy
+    build: 
+      context: ./reverse-proxy/
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - nginx
+    # Redirecciona el tráfico a los servicios backend y frontend
+
+  # 7. Frontend web principal (Astro, visible para usuarios finales)
   web-astro:
     container_name: astro-web
     build: 
@@ -75,8 +81,9 @@ services:
       - "4321:4321"
     networks:
       - nginx
+    # Web pública para clientes (catálogo, pedidos, login, etc.)
 
-  # frontend aplicacion cafetería pedidos en tiempo real
+  # 8. Frontend aplicación cafetería pedidos en tiempo real (React, para personal)
   app-cafeteria:
     container_name: react-web
     build: 
@@ -86,6 +93,7 @@ services:
     networks:
       - nginx
       - coffee-shop
+    # Interfaz interna para el personal de la cafetería
     
 volumes:
   mysql-data:
