@@ -15,6 +15,7 @@ const apiAuthUrl = import.meta.env.VITE_API_AUTH_URL;
     <img src="/favicon.png" alt="Logo cafetería" class={styles.logoImg} />
     <span class={styles.title}>Cafetería Ventura Rodríguez</span>
   <a/>
+
   <!-- Botón hamburguesa -->
   <button class={styles.hamburger} id="hamburgerBtn" aria-label="Abrir menú" aria-controls="mobileNav" aria-expanded="false">
     <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -27,12 +28,14 @@ const apiAuthUrl = import.meta.env.VITE_API_AUTH_URL;
   <div class={styles.authContainer} id="sharedAuthContainer">
     <UserLogin apiAuthUrl={apiAuthUrl} client:only="react" />
   </div>
+
   <!-- Menú normal (escritorio) -->
   <nav class={styles.nav} id="mainNav">
     <a href="/" class={styles.navLink}>Inicio</a>
     <a href="/cart" class={styles.navLink} id="cartLink">Carrito</a>
     <a href="/orders" class={styles.navLink} id="ordersLink">Pedidos</a>
   </nav>
+  
   <!-- Menú móvil (sidebar) -->
   <nav class={styles.mobileNav} id="mobileNav" aria-hidden="true">
     <div class={styles.mobileNavHeader}>

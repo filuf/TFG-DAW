@@ -298,6 +298,13 @@
   font-weight: 600;
 }
 
+.successMessage {
+  color: #4caf50;
+  font-size: clamp(0.8rem, 2vw, 0.9rem);
+  text-align: center;
+  font-weight: 600;
+}
+
 .switchAuth {
   text-align: center;
   margin-top: clamp(0.8rem, 2vw, 1rem);
@@ -322,6 +329,12 @@
 }
 
 /* Media queries para ajustes específicos */
+@media (max-width: 800px) {
+  .usernameTextActive {
+    display: none;
+  }
+}
+
 @media (max-width: 700px) {
   .authButtons {
     width: 100%;
