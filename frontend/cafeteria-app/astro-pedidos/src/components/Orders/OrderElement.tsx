@@ -3,7 +3,7 @@ import type { Order, Product } from "./PageObjectsTypes";
 import "react-loading-skeleton/dist/skeleton.css";
 import styles from "./OrderElement.module.css";
 
-export default function OrderElement({ id, description, paid, products, loading }: Order & { loading?: boolean }) {
+export default function OrderElement({ id, description, paid, products, dateTime, loading }: Order & { loading?: boolean }) {
 
     function totalPrice (products: Product[]): string {
         return products.reduce((total, product) => total + (product.price * product.quantity), 0).toFixed(2);
@@ -24,12 +24,12 @@ export default function OrderElement({ id, description, paid, products, loading 
             <div className={styles.orderDetailsContainer}>
                 <div className={styles.orderDate}>
                     <p className={styles.orderDetailsField}>IDENTIFICADOR: {loading ? <Skeleton width={100} /> : id}</p>
-                    <span>{loading ? <Skeleton width={100} /> : "ejemplo"/* poner fecha */}</span>
+                    <span>{loading ? <Skeleton width={100} /> : dateTime}</span>
                 </div>
             </div>
             <div className={styles.productsContainer}>
                 {productsToRender.map(({ productId, imageUrl, name, price, quantity }) => 
-                    <div key={productId} className={styles.productContainer}>
+                    <a href={`/products/${name}-${productId}`} key={productId} className={styles.productContainer}>
                         <div className={styles.imageProductContainer}>
                             {loading ?
                                 <Skeleton width={50} height={50} style={{borderRadius: "8px"}}/>
@@ -43,7 +43,7 @@ export default function OrderElement({ id, description, paid, products, loading 
                             <span className={styles.productPrice}>{loading ? <Skeleton width={50} /> : `${price.toFixed(2)}€`}</span>
                             <span className={styles.productQuantity}>{loading ? <Skeleton width={60} /> : `${quantity} ${quantity > 1 ? "unidades" : "unidad"}`}</span>
                         </div>
-                    </div>
+                    </a>
                 )}
             </div>
             <p className={styles.orderDetailsField}>DESCRIPCIÓN: {loading ? <Skeleton width={180} /> : description}</p>
