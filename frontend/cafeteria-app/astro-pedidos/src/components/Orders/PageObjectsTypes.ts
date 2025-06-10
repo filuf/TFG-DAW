@@ -11,6 +11,7 @@ export interface Order {
     description: string;
     products: Product[];
     paid: boolean;
+    dateTime: string;
 }
   
 export interface Sort {
