@@ -6,6 +6,7 @@ import com.cafeteria.ventura.auth.exceptions.CustomException;
 import com.cafeteria.ventura.auth.models.UserEntity;
 import com.cafeteria.ventura.auth.services.ForgotPasswordService;
 import com.cafeteria.ventura.auth.services.UserEntityService;
+import com.cafeteria.ventura.auth.services.WelcomeMailService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +38,7 @@ public class AuthController {
     private AuthenticationManager authManager;
     private JwtTokenProvider jwtTokenProvider;
     private ForgotPasswordService forgotPasswordService;
+    private WelcomeMailService welcomeMailService;
 
     /**
      * Registra a un usuario
@@ -68,6 +70,7 @@ public class AuthController {
         }
 
         UserEntity responseBody = this.userService.save(userDTO);
+        this.welcomeMailService.sendWelcomeMail(responseBody.getEmail(), responseBody.getUsername());
         return ResponseEntity.created(URI.create("/auth/login")).body(responseBody); // 201
     }
 
