@@ -8,26 +8,25 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class ForgotPasswordService {
+public class WelcomeMailService {
 
     private final MailWebhook mailWebhook;
 
     @Value("${app.web-servers.astro}")
     private String astroUrl;
 
-    public void sendMailRecoverPassword(String mail, String recoveryToken) {
-
+    public void sendWelcomeMail(String mail, String username) {
         String mailBody =
                 "<html>" +
-                    "<p>Hola, accede a este link para recuperar tu contraseña <a href=\"" + astroUrl + "/recovery" + "?recoveryToken=" + recoveryToken + "\">link</a>.</p>" +
-                    "<p>Si no has solicitado este cambio de contraseña o no eres el propietario, por favor, contacta con el personal de la cafetería.<p>" +
+                        "<p>Bienvenido al servicio de cafetería de tu centro, te has registrado con el nombre de usuario \"" + username + "\".</p>" +
+                        "<p>no olvides tu nombre de usuario ya que lo necesitarás para acceder al servicio.</p>" +
                 "<html>";
 
         MailRequest mailRequest = MailRequest.builder()
-                        .sendToEmail(mail)
-                        .subject("Restablece tu contraseña en cafetería IES Ventura")
-                        .text(mailBody)
-                        .build();
+                .sendToEmail(mail)
+                .subject("Bienvenido a la cafetería")
+                .text(mailBody)
+                .build();
 
         this.mailWebhook.sendMail(mailRequest);
     }
