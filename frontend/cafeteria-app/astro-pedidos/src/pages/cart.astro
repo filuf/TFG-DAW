@@ -1,6 +1,6 @@
 ---
 import CartIsland from "../components/cart/CartIsland";
-import LayoutCart from "../layouts/Layout.astro";
+import LayoutCart from "../layouts/LayoutCart.astro";
 import TopMenu from "../components/topMenu/TopMenu.astro";
 import Footer from '../components/footer/Footer.astro';
 const apiCartUrl = import.meta.env.VITE_API_ORDERS_URL;
@@ -25,6 +25,7 @@ const apiCartUrl = import.meta.env.VITE_API_ORDERS_URL;
   main {
     margin: 30px;
     min-height: 200px;
+    background-color: aliceblue;
   }
 
   h1 {
@@ -40,5 +41,6 @@ const apiCartUrl = import.meta.env.VITE_API_ORDERS_URL;
   }
   .cart-container { 
     background: var(--lemon-chiffon); border-radius: 18px; box-shadow: 0 2px 12px rgba(65, 39, 34, 0.08); padding: 2rem; 
+    border: 2px solid var(--yellow-green);
   }
 </style>

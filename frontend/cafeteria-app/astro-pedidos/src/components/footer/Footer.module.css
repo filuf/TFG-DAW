@@ -8,7 +8,8 @@
   margin-top: 2rem;
   font-family: 'Quicksand', 'Open Sans', Arial, sans-serif;
 
-  border-radius: 20px 20px 0 0; /* en mi opinión queda mejor, quítalo si no te gusta - Aitor*/
+  border-radius: 20px 20px 0 0;
+  border: 2px solid var(--yellow-green);
 }
 .footerContent {
   max-width: 1300px;
