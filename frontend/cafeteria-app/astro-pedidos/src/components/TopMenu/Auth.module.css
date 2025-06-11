@@ -51,6 +51,8 @@
 .usernameContainer {
   display: flex;
   align-items: center;
+  justify-content: center;
+  text-align: center;
   gap: 0.5rem;
   padding: clamp(0.3rem, 1vw, 0.4rem) clamp(0.8rem, 2vw, 1rem);
   border-radius: 7px;
@@ -80,6 +82,12 @@
 
 .usernameContainer:hover .arrowDown {
   transform: rotate(180deg);
+}
+
+.userMenu {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 /* Estilos del modal */
@@ -329,7 +337,7 @@
 }
 
 /* Media queries para ajustes específicos */
-@media (max-width: 800px) {
+@media (max-width: 860px) {
   .usernameTextActive {
     display: none;
   }
@@ -458,10 +466,9 @@
   cursor: pointer;
   transition: background 0.18s, color 0.18s, transform 0.18s;
   box-shadow: 0 1px 6px rgba(65, 39, 34, 0.10);
-  margin-top: 0.3rem;
   width: auto;
   min-width: 0;
-  display: inline-block;
+  display: block;
 }
 
 .logoutButton:hover {

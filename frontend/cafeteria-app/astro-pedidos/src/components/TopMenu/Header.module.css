@@ -141,8 +141,15 @@ Version: 1.0
 }
 
 /*
-  Estilos del header global para pantallas de 700px o menos (responsive).
+  Estilos del header global para pantallas de 800px o menos (responsive).
 */
+
+@media (max-width: 800px) {
+  .nav {
+    gap: 0px;
+  }
+}
+
 @media (max-width: 760px) {
   .header {
     flex-direction: row;
@@ -190,9 +197,7 @@ Version: 1.0
   .hamburger[aria-expanded="true"] .bar3 {
     transform: translateY(-8px) rotate(-45deg);
   }
-  .title {
-    display: none;
-  }
+
 }
 
 #cartLink {

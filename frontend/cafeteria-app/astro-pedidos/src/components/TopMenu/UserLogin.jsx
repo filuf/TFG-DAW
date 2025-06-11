@@ -321,13 +321,13 @@ export default function UserLogin({ apiAuthUrl }) {
     if (isLoggedIn) {
         return (
             <div className={styles.usernameContainer} onClick={() => setShowUserMenu(!showUserMenu)}>
-                <span className={`${styles.usernameText} ${showUserMenu ? styles.usernameTextActive : ''}`}>{userLogin}</span>
                 <img
                     src="/keyboard_arrow_down.svg"
                     alt="Menú"
                     className={styles.arrowDown}
                     style={{ transform: showUserMenu ? 'rotate(180deg)' : 'none' }}
                 />
+                <span className={`${styles.usernameText} ${showUserMenu ? styles.usernameTextActive : ''}`}>{userLogin}</span>
                 {showUserMenu && (
                     <div className={styles.userMenu}>
                         <button onClick={handleLogout} className={styles.logoutButton}>
