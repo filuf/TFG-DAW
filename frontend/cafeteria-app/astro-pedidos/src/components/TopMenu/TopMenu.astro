@@ -43,16 +43,26 @@ const apiAuthUrl = import.meta.env.VITE_API_AUTH_URL;
       <h2 class={styles.mobileNavTitle}>Menú</h2>
     </div>
     <ul class={styles.mobileNavList}>
-      <li><a href="/" class={styles.mobileNavLink}>Inicio</a></li>
+      <li><a href="/" class={styles.mobileNavLink}>
+        <span class={styles.mobileNavIcon}>🏠</span>
+        Inicio
+      </a></li>
       <li id="mobileCartItem" style="display: none;">
         <a href="/cart" class={styles.mobileNavLink}>
-          <img src="/cart.png" alt="Carrito" class={styles.mobileNavIcon} />
+          <span class={styles.mobileNavIcon}>🛒</span>
           Carrito
+        </a>
+      </li>
+      <li id="mobileOrdersItem" style="display: none;">
+        <a href="/orders" class={styles.mobileNavLink}>
+          <span class={styles.mobileNavIcon}>📋</span>
+          Pedidos
         </a>
       </li>
       <li class={styles.mobileNavDivider}></li>
       <li id="mobileAuthItem">
-        <!-- El contenido de autenticación se insertará aquí dinámicamente -->
+        <!-- Componente de autenticación específico para móvil -->
+        <UserLogin apiAuthUrl={apiAuthUrl} client:only="react" />
       </li>
     </ul>
   </nav>
@@ -65,36 +75,28 @@ const apiAuthUrl = import.meta.env.VITE_API_AUTH_URL;
     const cartLink = document.getElementById('cartLink');
     const ordersLink = document.getElementById('ordersLink');
     const mobileCartItem = document.getElementById('mobileCartItem');
+    const mobileOrdersItem = document.getElementById('mobileOrdersItem');
     const isLoggedIn = sessionStorage.getItem('token') !== null;
     
     if (cartLink) cartLink.style.display = isLoggedIn ? 'block' : 'none';
     if (ordersLink) ordersLink.style.display = isLoggedIn ? 'block' : 'none';
     if (mobileCartItem) mobileCartItem.style.display = isLoggedIn ? 'block' : 'none';
+    if (mobileOrdersItem) mobileOrdersItem.style.display = isLoggedIn ? 'block' : 'none';
   }
 
   // Función para mover el componente de autenticación al menú móvil
   function updateMobileAuth() {
-    const authContainer = document.getElementById('sharedAuthContainer');
-    const mobileAuthItem = document.getElementById('mobileAuthItem');
-    const isMobile = window.innerWidth <= 700;
-
-    if (authContainer && mobileAuthItem) {
-      if (isMobile) {
-        // En móvil, mover el componente al menú
-        mobileAuthItem.appendChild(authContainer);
-      } else {
-        // En escritorio, devolver el componente a su posición original
-        const header = document.querySelector('header');
-        const mainNav = document.getElementById('mainNav');
-        if (header && mainNav) {
-          mainNav.appendChild(authContainer);
-        }
-      }
-    }
+    // Ya no necesitamos mover el componente dinámicamente
+    // porque ahora tenemos un componente UserLogin específico para móvil
+    console.log('updateMobileAuth: Componente móvil ya está en su lugar');
   }
 
   // Script del menú móvil
   document.addEventListener('DOMContentLoaded', () => {
+    // Verificar tamaño de pantalla
+    console.log('Tamaño de pantalla:', window.innerWidth, 'x', window.innerHeight);
+    console.log('¿Es móvil?', window.innerWidth <= 700);
+    
     // Obtener elementos del DOM
     const elements = {
       hamburgerBtn: document.getElementById('hamburgerBtn'),
@@ -113,12 +115,27 @@ const apiAuthUrl = import.meta.env.VITE_API_AUTH_URL;
       return;
     }
 
+    // Verificar visibilidad del botón hamburguesa
+    const hamburgerBtnElement = elements.hamburgerBtn;
+    if (hamburgerBtnElement) {
+      console.log('Estado del botón hamburguesa:', {
+        display: window.getComputedStyle(hamburgerBtnElement).display,
+        visibility: window.getComputedStyle(hamburgerBtnElement).visibility,
+        classes: hamburgerBtnElement.className
+      });
+    }
+
     const { hamburgerBtn, mobileNav, closeBtn, overlay } = elements;
 
     function openMobileNav() {
       if (!mobileNav || !hamburgerBtn || !overlay) return;
       
       console.log('Abriendo menú móvil'); // Debug
+      console.log('Estado inicial del menú:', {
+        display: window.getComputedStyle(mobileNav).display,
+        right: window.getComputedStyle(mobileNav).right,
+        classes: mobileNav.className
+      });
       
       // Actualizar atributos ARIA
       mobileNav.setAttribute('aria-hidden', 'false');
@@ -133,6 +150,18 @@ const apiAuthUrl = import.meta.env.VITE_API_AUTH_URL;
       // Añadir clases para la animación
       mobileNav.classList.add('open');
       overlay.classList.add('show');
+      
+      // Forzar visibilidad con estilos inline como respaldo
+      mobileNav.style.display = 'block';
+      mobileNav.style.right = '0';
+      mobileNav.style.visibility = 'visible';
+      mobileNav.style.opacity = '1';
+      
+      console.log('Estado después de abrir:', {
+        display: window.getComputedStyle(mobileNav).display,
+        right: window.getComputedStyle(mobileNav).right,
+        classes: mobileNav.className
+      });
       
       // Actualizar la posición del componente de auth
       updateMobileAuth();
@@ -150,6 +179,12 @@ const apiAuthUrl = import.meta.env.VITE_API_AUTH_URL;
       // Remover clases para la animación
       mobileNav.classList.remove('open');
       overlay.classList.remove('show');
+      
+      // Limpiar estilos inline
+      mobileNav.style.display = '';
+      mobileNav.style.right = '';
+      mobileNav.style.visibility = '';
+      mobileNav.style.opacity = '';
       
       // Ocultar overlay después de la animación
       setTimeout(() => { 

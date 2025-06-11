@@ -337,8 +337,26 @@
 
 @media (max-width: 700px) {
   .authButtons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
     width: 100%;
-    justify-content: flex-end;
+    margin: 0;
+    padding: 0;
+  }
+  .loginButton,
+  .registerButton {
+    width: 90%;
+    max-width: 300px;
+    margin: 0 auto 0.5rem auto;
+    display: block;
+    font-size: 1.1rem;
+    text-align: center;
+    box-sizing: border-box;
+    border-radius: 8px;
+    white-space: normal;
   }
   
   .modal {
