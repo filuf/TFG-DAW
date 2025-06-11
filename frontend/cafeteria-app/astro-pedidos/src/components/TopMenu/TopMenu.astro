@@ -77,27 +77,18 @@ const apiAuthUrl = import.meta.env.VITE_API_AUTH_URL;
     const mobileCartItem = document.getElementById('mobileCartItem');
     const mobileOrdersItem = document.getElementById('mobileOrdersItem');
     const isLoggedIn = sessionStorage.getItem('token') !== null;
-    
+
     if (cartLink) cartLink.style.display = isLoggedIn ? 'block' : 'none';
     if (ordersLink) ordersLink.style.display = isLoggedIn ? 'block' : 'none';
     if (mobileCartItem) mobileCartItem.style.display = isLoggedIn ? 'block' : 'none';
     if (mobileOrdersItem) mobileOrdersItem.style.display = isLoggedIn ? 'block' : 'none';
   }
 
-  // Función para mover el componente de autenticación al menú móvil
   function updateMobileAuth() {
-    // Ya no necesitamos mover el componente dinámicamente
-    // porque ahora tenemos un componente UserLogin específico para móvil
     console.log('updateMobileAuth: Componente móvil ya está en su lugar');
   }
 
-  // Script del menú móvil
-  document.addEventListener('DOMContentLoaded', () => {
-    // Verificar tamaño de pantalla
-    console.log('Tamaño de pantalla:', window.innerWidth, 'x', window.innerHeight);
-    console.log('¿Es móvil?', window.innerWidth <= 700);
-    
-    // Obtener elementos del DOM
+  function initMobileMenu() {
     const elements = {
       hamburgerBtn: document.getElementById('hamburgerBtn'),
       mobileNav: document.getElementById('mobileNav'),
@@ -105,133 +96,75 @@ const apiAuthUrl = import.meta.env.VITE_API_AUTH_URL;
       overlay: document.getElementById('navOverlay')
     };
 
-    // Verificar que todos los elementos existen
-    const missingElements = Object.entries(elements)
-      .filter(([_, element]) => !element)
-      .map(([name]) => name);
+    const { hamburgerBtn, mobileNav, closeBtn, overlay } = elements;
 
-    if (missingElements.length > 0) {
-      console.error('Elementos faltantes para el menú móvil:', missingElements.join(', '));
+    if (!hamburgerBtn || !mobileNav || !closeBtn || !overlay) {
+      console.warn('[initMobileMenu] Elementos no encontrados:', Object.entries(elements)
+        .filter(([_, el]) => !el).map(([key]) => key).join(', '));
       return;
     }
 
-    // Verificar visibilidad del botón hamburguesa
-    const hamburgerBtnElement = elements.hamburgerBtn;
-    if (hamburgerBtnElement) {
-      console.log('Estado del botón hamburguesa:', {
-        display: window.getComputedStyle(hamburgerBtnElement).display,
-        visibility: window.getComputedStyle(hamburgerBtnElement).visibility,
-        classes: hamburgerBtnElement.className
-      });
-    }
-
-    const { hamburgerBtn, mobileNav, closeBtn, overlay } = elements;
-
     function openMobileNav() {
-      if (!mobileNav || !hamburgerBtn || !overlay) return;
-      
-      console.log('Abriendo menú móvil'); // Debug
-      console.log('Estado inicial del menú:', {
-        display: window.getComputedStyle(mobileNav).display,
-        right: window.getComputedStyle(mobileNav).right,
-        classes: mobileNav.className
-      });
-      
-      // Actualizar atributos ARIA
       mobileNav.setAttribute('aria-hidden', 'false');
       hamburgerBtn.setAttribute('aria-expanded', 'true');
-      
-      // Mostrar overlay
       overlay.style.display = 'block';
-      
-      // Forzar un reflow para asegurar que la animación funcione
       void mobileNav.offsetWidth;
-      
-      // Añadir clases para la animación
       mobileNav.classList.add('open');
       overlay.classList.add('show');
-      
-      // Forzar visibilidad con estilos inline como respaldo
       mobileNav.style.display = 'block';
       mobileNav.style.right = '0';
       mobileNav.style.visibility = 'visible';
       mobileNav.style.opacity = '1';
-      
-      console.log('Estado después de abrir:', {
-        display: window.getComputedStyle(mobileNav).display,
-        right: window.getComputedStyle(mobileNav).right,
-        classes: mobileNav.className
-      });
-      
-      // Actualizar la posición del componente de auth
       updateMobileAuth();
     }
 
     function closeMobileNav() {
-      if (!mobileNav || !hamburgerBtn || !overlay) return;
-      
-      console.log('Cerrando menú móvil'); // Debug
-      
-      // Actualizar atributos ARIA
       mobileNav.setAttribute('aria-hidden', 'true');
       hamburgerBtn.setAttribute('aria-expanded', 'false');
-      
-      // Remover clases para la animación
       mobileNav.classList.remove('open');
       overlay.classList.remove('show');
-      
-      // Limpiar estilos inline
       mobileNav.style.display = '';
       mobileNav.style.right = '';
       mobileNav.style.visibility = '';
       mobileNav.style.opacity = '';
-      
-      // Ocultar overlay después de la animación
-      setTimeout(() => { 
-        if (overlay) overlay.style.display = 'none';
-        updateMobileAuth();
-      }, 300);
+      setTimeout(() => { overlay.style.display = 'none'; }, 300);
     }
 
-    // Añadir event listeners con prevención de eventos por defecto
-    hamburgerBtn?.addEventListener('click', (e) => {
+    // Previene múltiples listeners duplicados
+    hamburgerBtn.onclick = (e) => {
       e.preventDefault();
-      console.log('Botón hamburguesa clickeado'); // Debug
       openMobileNav();
-    });
-    
-    closeBtn?.addEventListener('click', (e) => {
-      e.preventDefault();
-      closeMobileNav();
-    });
-    
-    overlay?.addEventListener('click', (e) => {
-      e.preventDefault();
-      closeMobileNav();
-    });
+    };
 
-    // Actualizar al cargar la página
+    closeBtn.onclick = (e) => {
+      e.preventDefault();
+      closeMobileNav();
+    };
+
+    overlay.onclick = (e) => {
+      e.preventDefault();
+      closeMobileNav();
+    };
+  }
+
+  // Inicialización completa
+  function initAppUI() {
     updateCartVisibility();
     updateMobileAuth();
-  });
+    initMobileMenu();
+  }
 
-  // Actualizar al cambiar el tamaño de la ventana
+  // Inicial en carga
+  document.addEventListener('DOMContentLoaded', initAppUI);
+
+  // Reejecutar lógica después de navegación parcial con Astro
+  document.addEventListener('astro:after-swap', initAppUI);
+
+  // Eventos adicionales para mantener el estado sincronizado
   window.addEventListener('resize', updateMobileAuth);
-
-  // Escuchar cambios en el sessionStorage
   window.addEventListener('storage', (e) => {
-    if (e.key === 'token') {
-      updateCartVisibility();
-    }
+    if (e.key === 'token') updateCartVisibility();
   });
-
-  // Escuchar eventos personalizados para login/logout
-  window.addEventListener('user-logout', updateCartVisibility);
   window.addEventListener('user-login', updateCartVisibility);
-
-  // Escuchar evento de navegación de Astro
-  document.addEventListener('astro:after-swap', () => {
-    updateCartVisibility();
-    updateMobileAuth();
-  });
-</script> 
+  window.addEventListener('user-logout', updateCartVisibility);
+</script>

@@ -208,7 +208,6 @@ Version: 1.0
   padding: 0.5rem;
   z-index: 1001;
   position: relative;
-  border: 1px solid var(--yellow-green); /* Debug: borde para ver el botón */
 }
 
 .hamburger .bar {
@@ -254,6 +253,8 @@ Version: 1.0
   border-bottom: 2px solid var(--lemon-chiffon);
   margin-bottom: 1rem;
   position: relative;
+  padding: 0.8rem;
+
 }
 
 .mobileNavTitle {
@@ -418,14 +419,6 @@ Version: 1.0
 @media (max-width: 480px) {
   .hamburger .bar {
     width: 20px;
-  }
-
-  .mobileNavHeader {
-    padding: 0.8rem;
-  }
-
-  .mobileNavTitle {
-    font-size: 1.1rem;
   }
 }
 
