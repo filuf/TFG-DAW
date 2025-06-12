@@ -115,7 +115,12 @@ export default function UserLogin({ apiAuthUrl }) {
                 window.dispatchEvent(new Event('user-login'));
             } else {
                 // Obtener el mensaje de error del servidor (siempre es texto plano)
-                const errorMessage = await res.text() || "Error en el login";
+                let errorMessage;
+                try {
+                    errorMessage = await res.text();
+                } catch {
+                    console.error("Error al obtener el mensaje de error del servidor");
+                }
                 console.log('Mensaje de error del servidor:', errorMessage);
 
                 switch (res.status) {
@@ -126,10 +131,10 @@ export default function UserLogin({ apiAuthUrl }) {
                         setMessage({ text: errorMessage || "No autorizado. Por favor, verifica tus credenciales.", type: "error" });
                         break;
                     case 403:
-                        setMessage({ text: errorMessage || "Usuario o contraseña incorrectos", type: "error" });
+                        setMessage({ text:"Usuario o contraseña incorrectos", type: "error" });
                         break;
                     case 404:
-                        setMessage({ text: errorMessage || "Recurso no encontrado. Por favor, intenta de nuevo.", type: "error" });
+                        setMessage({ text:"No hemos podido conectarnos al servidor. Por favor, intenta de nuevo.", type: "error" });
                         break;
                     case 500:
                         setMessage({ text: errorMessage || "Error interno del servidor. Por favor, intenta más tarde.", type: "error" });
