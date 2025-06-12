@@ -198,7 +198,14 @@ export default function UserLogin({ apiAuthUrl }) {
                         setMessage({ text: "No autorizado. Por favor, verifica tus credenciales.", type: "error" });
                         break;
                     case 409:
-                        setMessage({ text: "El email ya está registrado", type: "error" });
+                        // Verificar el tipo de conflicto basado en el mensaje del servidor
+                        if (data.message && data.message.toLowerCase().includes('username')) {
+                            setMessage({ text: "El nombre de usuario ya está en uso", type: "error" });
+                        } else if (data.message && data.message.toLowerCase().includes('email')) {
+                            setMessage({ text: "El email ya está registrado", type: "error" });
+                        } else {
+                            setMessage({ text: "El usuario o email ya está registrado", type: "error" });
+                        }
                         break;
                     case 500:
                         setMessage({ text: "Error interno del servidor. Por favor, intenta más tarde.", type: "error" });
