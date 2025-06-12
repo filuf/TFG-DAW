@@ -107,7 +107,7 @@ export default function UserLogin({ apiAuthUrl }) {
                 console.log('Datos de respuesta:', data);
                 setUserLogin(data.username);
                 setShowModal(false);
-                setFormData({ username: '', password: '', confirmPassword: '' });
+                setFormData({ username: '', mail: '', password: '', confirmPassword: '' });
                 setIsLoggedIn(true);
 
                 //almacena el usuario y token en sessionStorage
@@ -139,6 +139,13 @@ export default function UserLogin({ apiAuthUrl }) {
         e.preventDefault();
         clearMessage();
 
+        // Validación del email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!formData.mail || !emailRegex.test(formData.mail)) {
+            setMessage({ text: "Por favor, introduce un email válido", type: "error" });
+            return;
+        }
+
         if (formData.password !== formData.confirmPassword) {
             setMessage({ text: "Las contraseñas no coinciden", type: "error" });
             return;
@@ -150,7 +157,7 @@ export default function UserLogin({ apiAuthUrl }) {
         }
 
         try {
-            console.log('Intentando registro con:', { username: formData.username });
+            console.log('Intentando registro con:', { username: formData.username, email: formData.mail });
             const res = await fetch(`${apiAuthUrl}/auth/register`, {
                 method: "POST",
                 headers: {
@@ -158,7 +165,7 @@ export default function UserLogin({ apiAuthUrl }) {
                 },
                 body: JSON.stringify({
                     username: formData.username,
-                    email: formData.username, // Usamos el username como email
+                    email: formData.mail, // Usamos el campo mail específico
                     password: formData.password,
                     passwordConf: formData.confirmPassword
                 })
@@ -171,7 +178,7 @@ export default function UserLogin({ apiAuthUrl }) {
             if (res.ok) {
                 setShowModal(false);
                 setIsLogin(true);
-                setFormData({ username: '', password: '', confirmPassword: '' });
+                setFormData({ username: '', mail: '', password: '', confirmPassword: '' });
                 setMessage({ text: "Registro exitoso. Por favor, inicia sesión.", type: "success" });
             } else {
                 switch (res.status) {
@@ -208,7 +215,7 @@ export default function UserLogin({ apiAuthUrl }) {
             setModalType("login");
             setShowModal(true);
             clearMessage();
-            setFormData({ username: '', password: '', confirmPassword: '' });
+            setFormData({ username: '', mail: '', password: '', confirmPassword: '' });
         }
     }
 
@@ -226,7 +233,7 @@ export default function UserLogin({ apiAuthUrl }) {
             setModalType("register");
             setShowModal(true);
             clearMessage();
-            setFormData({ username: '', password: '', confirmPassword: '' });
+            setFormData({ username: '', mail: '', password: '', confirmPassword: '' });
         }
     }
 
@@ -235,7 +242,7 @@ export default function UserLogin({ apiAuthUrl }) {
         console.log('closeModal called');
         setShowModal(false);
         clearMessage();
-        setFormData({ username: '', password: '', confirmPassword: '' });
+        setFormData({ username: '', mail: '', password: '', confirmPassword: '' });
     };
 
     // alternar el estado del sidebar
@@ -422,6 +429,25 @@ export default function UserLogin({ apiAuthUrl }) {
                                 placeholder={"Tu usuario"}
                             />
                         </div>
+                        
+                        {modalType === 'register' && (
+                            <div>
+                                <label htmlFor="mail" className={styles.formLabel}>
+                                    {"Correo electrónico"}
+                                </label>
+                                <input
+                                    type="email"
+                                    id="mail"
+                                    name="mail"
+                                    value={formData.mail}
+                                    onChange={handleInputChange}
+                                    required
+                                    className={styles.formInput}
+                                    placeholder={"tu@email.com"}
+                                />
+                            </div>
+                        )}
+                        
                         {/**
                          * Si el modalType no es "recoverPassword", se muestran los campos de
                          * contraseña y confirmar contraseña.
@@ -490,7 +516,7 @@ export default function UserLogin({ apiAuthUrl }) {
                                         onClick={() => {
                                             setModalType('register');
                                             clearMessage();
-                                            setFormData({ username: '', password: '', confirmPassword: '' });
+                                            setFormData({ username: '', mail: '', password: '', confirmPassword: '' });
                                         }}
                                         className={styles.switchAuthButton}
                                     >
@@ -504,7 +530,7 @@ export default function UserLogin({ apiAuthUrl }) {
                                         onClick={() => {
                                             setModalType('recover');
                                             clearMessage();
-                                            setFormData({ username: '', password: '', confirmPassword: '' });
+                                            setFormData({ username: '', mail: '', password: '', confirmPassword: '' });
                                         }}
                                         className={styles.switchAuthButton}
                                     >
@@ -526,7 +552,7 @@ export default function UserLogin({ apiAuthUrl }) {
                                     onClick={() => {
                                         setModalType('login');
                                         clearMessage();
-                                        setFormData({ username: '', password: '', confirmPassword: '' });
+                                        setFormData({ username: '', mail: '', password: '', confirmPassword: '' });
                                     }}
                                     className={styles.switchAuthButton}
                                 >
@@ -548,7 +574,7 @@ export default function UserLogin({ apiAuthUrl }) {
                                         onClick={() => {
                                             setModalType('login');
                                             clearMessage();
-                                            setFormData({ username: '', password: '', confirmPassword: '' });
+                                            setFormData({ username: '', mail: '', password: '', confirmPassword: '' });
                                         }}
                                         className={styles.switchAuthButton}
                                     >
@@ -562,7 +588,7 @@ export default function UserLogin({ apiAuthUrl }) {
                                         onClick={() => {
                                             setModalType('register');
                                             clearMessage();
-                                            setFormData({ username: '', password: '', confirmPassword: '' });
+                                            setFormData({ username: '', mail: '', password: '', confirmPassword: '' });
                                         }}
                                         className={styles.switchAuthButton}
                                     >
