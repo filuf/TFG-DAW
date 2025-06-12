@@ -81,7 +81,6 @@ export default function UserLogin({ apiAuthUrl }) {
     // fetch al hacer submit en el formulario de login
     const handleLogin = async (e) => {
         e.preventDefault();
-        // Reseteo el mensaje a nada ("") para que no se muestre.
         clearMessage();
 
         try {
@@ -101,7 +100,6 @@ export default function UserLogin({ apiAuthUrl }) {
 
             console.log('Respuesta del servidor:', res.status);
 
-
             if (res.ok) {
                 const data = await res.json();
                 console.log('Datos de respuesta:', data);
@@ -116,24 +114,28 @@ export default function UserLogin({ apiAuthUrl }) {
                 // Emitir evento personalizado para que el header actualice el carrito
                 window.dispatchEvent(new Event('user-login'));
             } else {
+                // Obtener el mensaje de error del servidor (siempre es texto plano)
+                const errorMessage = await res.text() || "Error en el login";
+                console.log('Mensaje de error del servidor:', errorMessage);
+
                 switch (res.status) {
                     case 400:
-                        setMessage({ text: "Solicitud incorrecta. Por favor, revisa los datos ingresados.", type: "error" });
+                        setMessage({ text: errorMessage || "Solicitud incorrecta. Por favor, revisa los datos ingresados.", type: "error" });
                         break;
                     case 401:
-                        setMessage({ text: "No autorizado. Por favor, verifica tus credenciales.", type: "error" });
+                        setMessage({ text: errorMessage || "No autorizado. Por favor, verifica tus credenciales.", type: "error" });
                         break;
                     case 403:
-                        setMessage({ text: "Usuario o contraseña incorrectos", type: "error" });
+                        setMessage({ text: errorMessage || "Usuario o contraseña incorrectos", type: "error" });
                         break;
                     case 404:
-                        setMessage({ text: "Recurso no encontrado. Por favor, intenta de nuevo.", type: "error" });
+                        setMessage({ text: errorMessage || "Recurso no encontrado. Por favor, intenta de nuevo.", type: "error" });
                         break;
                     case 500:
-                        setMessage({ text: "Error interno del servidor. Por favor, intenta más tarde.", type: "error" });
+                        setMessage({ text: errorMessage || "Error interno del servidor. Por favor, intenta más tarde.", type: "error" });
                         break;
                     default:
-                        setMessage({ text: "Error inesperado, contacte con los administradores", type: "error" });
+                        setMessage({ text: errorMessage || "Error inesperado, contacte con los administradores", type: "error" });
                         break;
                 }
             }
@@ -190,20 +192,9 @@ export default function UserLogin({ apiAuthUrl }) {
                 setFormData({ username: '', mail: '', password: '', confirmPassword: '' });
                 setMessage({ text: "Registro exitoso. Por favor, inicia sesión.", type: "success" });
             } else {
-                // Intentar obtener el mensaje de error del servidor
-                let errorMessage = "Error en el registro";
-                try {
-                    const data = await res.json();
-                    errorMessage = data.message || errorMessage;
-                } catch (parseError) {
-                    // Si no se puede parsear JSON, usar el texto de la respuesta
-                    try {
-                        const textData = await res.text();
-                        errorMessage = textData || errorMessage;
-                    } catch (textError) {
-                        console.error("No se pudo obtener el mensaje de error del servidor");
-                    }
-                }
+                // Obtener el mensaje de error del servidor (siempre es texto plano)
+                const errorMessage = await res.text() || "Error en el registro";
+                console.log('Mensaje de error del servidor:', errorMessage);
 
                 switch (res.status) {
                     case 400:
@@ -214,12 +205,13 @@ export default function UserLogin({ apiAuthUrl }) {
                         break;
                     case 409:
                         // Verificar el tipo de conflicto basado en el mensaje del servidor
-                        if (errorMessage && errorMessage.toLowerCase().includes('username')) {
+                        if (errorMessage && errorMessage.includes('nombre')) {
                             setMessage({ text: "El nombre de usuario ya está en uso", type: "error" });
-                        } else if (errorMessage && errorMessage.toLowerCase().includes('email')) {
+                        } else if (errorMessage && errorMessage.includes('email')) {
                             setMessage({ text: "El email ya está registrado", type: "error" });
                         } else {
-                            setMessage({ text: "El usuario o email ya está registrado", type: "error" });
+                            // Si no podemos determinar el tipo específico, mostrar el mensaje original del servidor
+                            setMessage({ text: errorMessage, type: "error" });
                         }
                         break;
                     case 500:
@@ -323,9 +315,6 @@ export default function UserLogin({ apiAuthUrl }) {
                 })
             });
 
-            // Convierto la respuesta a texto para poder acceder a los datos.
-            const data = await respuesta.text();
-
             // Si la respuesta es ok, se muestra un mensaje de éxito.
             if (respuesta.ok) {
                 setMessage({ text: "Se ha enviado un correo de recuperación de contraseña", type: "success" });
@@ -334,22 +323,26 @@ export default function UserLogin({ apiAuthUrl }) {
                     setShowModal(false);
                 }, 3000);
             } else {
+                // Obtener el mensaje de error del servidor (siempre es texto plano)
+                const errorMessage = await respuesta.text() || "Error al enviar el correo de recuperación de contraseña";
+                console.log('Mensaje de error del servidor:', errorMessage);
+
                 // Si la respuesta no es ok, se muestra un mensaje de error.
                 switch (respuesta.status) {
                     case 400:
-                        setMessage({ text: "Solicitud incorrecta. Por favor, revisa los datos ingresados.", type: "error" });
+                        setMessage({ text: errorMessage || "Solicitud incorrecta. Por favor, revisa los datos ingresados.", type: "error" });
                         break;
                     case 401:
-                        setMessage({ text: "No autorizado. Por favor, verifica tus credenciales.", type: "error" });
+                        setMessage({ text: errorMessage || "No autorizado. Por favor, verifica tus credenciales.", type: "error" });
                         break;
                     case 404:
-                        setMessage({ text: "Recurso no encontrado. Por favor, intenta de nuevo.", type: "error" });
+                        setMessage({ text: errorMessage || "Recurso no encontrado. Por favor, intenta de nuevo.", type: "error" });
                         break;
                     case 500:
-                        setMessage({ text: "Error interno del servidor. Por favor, intenta más tarde.", type: "error" });
+                        setMessage({ text: errorMessage || "Error interno del servidor. Por favor, intenta más tarde.", type: "error" });
                         break;
                     default:
-                        setMessage({ text: data.message || "Error al enviar el correo de recuperación de contraseña", type: "error" });
+                        setMessage({ text: errorMessage || "Error al enviar el correo de recuperación de contraseña", type: "error" });
                 }
             }
         } catch (error) {
