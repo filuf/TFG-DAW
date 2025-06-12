@@ -53,7 +53,10 @@
   transition: color 0.18s;
 }
 .footerLink:hover {
-  color: var(--yellow-green);
+  background: var(--buff);
+  color: var(--lemon-chiffon);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 6px 16px rgba(65, 39, 34, 0.2);
 }
 .footerContact {
   font-size: 0.98rem;

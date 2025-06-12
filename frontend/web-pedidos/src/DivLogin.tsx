@@ -87,7 +87,10 @@ export default function DivLogin({setIsLoged}: {setIsLoged: (isLoged: boolean) =
             });
 
             if (!response.ok) {
-                throw new Error('Credenciales inválidas');
+                // Obtener el mensaje de error del servidor (siempre es texto plano)
+                const errorMessage = await response.text() || "Credenciales inválidas";
+                console.log('Mensaje de error del servidor:', errorMessage);
+                throw new Error(errorMessage);
             }
 
             const data: AuthResponse = await response.json();
@@ -114,7 +117,7 @@ export default function DivLogin({setIsLoged}: {setIsLoged: (isLoged: boolean) =
             setErrors({
                 password: errorMessage === 'Credenciales inválidas' ? 'Usuario o contraseña incorrectos' 
                 : errorMessage === 'No tienes permisos para acceder a esta aplicación' ? 'No tienes permisos para acceder a esta aplicación'
-                : undefined 
+                : errorMessage 
             });
         } finally {
             setIsLoading(false);

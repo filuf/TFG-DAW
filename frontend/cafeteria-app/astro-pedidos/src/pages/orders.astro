@@ -1,12 +1,25 @@
 ---
 import LayoutOrders from "../layouts/LayoutOrders.astro"
-import TopMenu from "../components/topMenu/TopMenu.astro"
-import OrdersContainer from "../components/orders/OrdersContainer.astro"
+import TopMenu from "../components/TopMenu/TopMenu.astro"
+import OrdersContainer from "../components/Orders/OrdersContainer.astro"
 import Footer from '../components/footer/Footer.astro';
 ---
 
 <LayoutOrders>
-    <TopMenu />    
+    <TopMenu />
+    <h1 class="orders-title">Tus pedidos</h1>
     <OrdersContainer />
     <Footer />
 </LayoutOrders>
+
+<style>
+    .orders-title {
+        font-family: "Pacifico", cursive;
+        font-size: 2.2rem;
+        color: var(--bistre);
+        margin-bottom: 1.5rem;
+        letter-spacing: 1px;
+        text-align: center;
+        margin-top: 2rem;
+    }
+</style>

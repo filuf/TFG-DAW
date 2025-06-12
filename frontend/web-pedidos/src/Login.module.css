@@ -101,7 +101,10 @@
 }
 
 .loginButton:hover {
-  background: var(--primary-hover);
+  background: var(--buff);
+  color: var(--lemon-chiffon);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 6px 16px rgba(65, 39, 34, 0.2);
 }
 
 .loginButton:disabled {

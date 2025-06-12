@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import './CartIsland.css';
 
 interface Product {
   idProduct: number;
@@ -50,6 +51,7 @@ export default function CartIsland({ apiCartUrl }: { apiCartUrl: string }) {
   const [paymentErrors, setPaymentErrors] = useState<{[key: string]: string}>({});
   const [currentPaymentStep, setCurrentPaymentStep] = useState("select"); // select, form, processing
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("");
+  const [orderDescription, setOrderDescription] = useState("");
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -262,7 +264,7 @@ export default function CartIsland({ apiCartUrl }: { apiCartUrl: string }) {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ description: "" }),
+        body: JSON.stringify({ description: orderDescription }),
       });
       
       if (res.ok) {
@@ -274,6 +276,8 @@ export default function CartIsland({ apiCartUrl }: { apiCartUrl: string }) {
         setCart(null);
         setShowPaymentModal(false);
         setCurrentPaymentStep("select");
+        setOrderDescription("");
+        setSelectedPaymentMethod("");
       } else if (res.status === 400) {
         setError("No puedes realizar un pedido con el carrito vacío.");
       } else {
@@ -284,6 +288,15 @@ export default function CartIsland({ apiCartUrl }: { apiCartUrl: string }) {
     } finally {
       setCurrentPaymentStep("select");
     }
+  };
+
+  const closePaymentModal = () => {
+    setShowPaymentModal(false);
+    setCurrentPaymentStep("select");
+    setSelectedPaymentMethod("");
+    setOrderDescription("");
+    setPaymentData({ cardNumber: "", cardHolder: "", expiry: "", cvv: "", phoneNumber: "", iban: "", accountHolder: "" });
+    setPaymentErrors({ cardNumber: "", cardHolder: "", expiry: "", cvv: "", phoneNumber: "", iban: "", accountHolder: "" });
   };
 
   if (loading) {
@@ -335,39 +348,15 @@ export default function CartIsland({ apiCartUrl }: { apiCartUrl: string }) {
           
           <div style={{ display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap" }}>
             <button
+              className="cart-button continue-shopping"
               onClick={() => window.location.href = "/"}
-              style={{
-                padding: "0.8rem 1.5rem",
-                borderRadius: "8px",
-                background: "var(--yellow-green)",
-                color: "var(--black)",
-                border: "none",
-                cursor: "pointer",
-                fontSize: "1rem",
-                fontWeight: "bold",
-                display: "flex",
-                alignItems: "center",
-                gap: "0.5rem"
-              }}
             >
               🍽️ Seguir comprando
             </button>
             
             <button
+              className="cart-button view-orders"
               onClick={() => window.location.href = "/orders"}
-              style={{
-                padding: "0.8rem 1.5rem",
-                borderRadius: "8px",
-                background: "var(--bistre)",
-                color: "white",
-                border: "none",
-                cursor: "pointer",
-                fontSize: "1rem",
-                fontWeight: "bold",
-                display: "flex",
-                alignItems: "center",
-                gap: "0.5rem"
-              }}
             >
               📋 Ver pedidos
             </button>
@@ -414,18 +403,18 @@ export default function CartIsland({ apiCartUrl }: { apiCartUrl: string }) {
               {/* Cantidad */}
               <div style={{ display: "flex", alignItems: "center", gap: "0.3rem", flex: 1, minWidth: 90, justifyContent: "center" }}>
                 <button
+                  className="cart-button decrement"
                   onClick={() => handleRemove(idProduct)}
                   disabled={updating || quantity <= 0}
-                  style={{ background: "var(--lemon-chiffon)", border: "1px solid var(--buff)", borderRadius: 6, padding: "0.3rem 0.6rem", cursor: "pointer" }}
                   title="Quitar uno"
                 >
                   -
                 </button>
                 <span style={{ fontWeight: "bold", minWidth: 18, textAlign: "center" }}>{quantity}</span>
                 <button
+                  className="cart-button increment"
                   onClick={() => handleAdd(idProduct)}
                   disabled={updating}
-                  style={{ background: "var(--lemon-chiffon)", border: "1px solid var(--buff)", borderRadius: 6, padding: "0.3rem 0.6rem", cursor: "pointer" }}
                   title="Añadir uno"
                 >
                   +
@@ -438,6 +427,7 @@ export default function CartIsland({ apiCartUrl }: { apiCartUrl: string }) {
               {/* Botón eliminar */}
               <div style={{ flex: 0, minWidth: 60, textAlign: "center" }}>
                 <button
+                  className="cart-button delete"
                   onClick={async () => { setUpdating(true); setError(""); setSuccess("");
                     const token = sessionStorage.getItem("token");
                     try {
@@ -460,7 +450,6 @@ export default function CartIsland({ apiCartUrl }: { apiCartUrl: string }) {
                       setUpdating(false);
                     }
                   }}
-                  style={{ background: "#fff0f0", border: "1px solid #e57373", borderRadius: 6, padding: "0.3rem 0.7rem", color: "#c62828", fontWeight: 700, cursor: "pointer" }}
                   title="Eliminar producto"
                 >
                   <i className="fa-solid fa-trash-can"></i>
@@ -471,21 +460,10 @@ export default function CartIsland({ apiCartUrl }: { apiCartUrl: string }) {
           <div style={{ fontWeight: "bold", fontSize: "1.5rem", marginTop: "1.5rem", color: "var(--bistre)" }}>
             Total: {cart.totalProductPrice.toFixed(2)} €
           </div>
-          <button 
-            onClick={() => setShowPaymentModal(true)} 
-            disabled={updating} 
-            style={{ 
-              margin: "1.5rem auto 0", 
-              padding: "0.8rem 1.5rem", 
-              fontSize: "1.2rem", 
-              borderRadius: "8px", 
-              background: "var(--yellow-green)", 
-              color: "var(--black)", 
-              border: "none", 
-              cursor: "pointer", 
-              boxShadow: "0 1px 6px rgba(65, 39, 34, 0.10)", 
-              display: "block" 
-            }}
+          <button
+            className="cart-button place-order"
+            onClick={() => setShowPaymentModal(true)}
+            disabled={updating}
           >
             Realizar pedido
           </button>
@@ -525,30 +503,113 @@ export default function CartIsland({ apiCartUrl }: { apiCartUrl: string }) {
                   Selecciona método de pago
                 </h3>
                 
-                <div style={{ marginBottom: "2rem" }}>
-                  {paymentMethods.map((method) => (
-                    <button
-                      key={method.id}
-                      onClick={() => handlePaymentMethodSelect(method.id)}
-                      style={{
-                        width: "100%",
-                        padding: "1rem",
-                        marginBottom: "0.5rem",
-                        border: "1px solid #ddd",
-                        borderRadius: "8px",
-                        background: "white",
-                        cursor: "pointer",
-                        fontSize: "1rem",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        gap: "0.5rem"
-                      }}
-                    >
-                      <span style={{ fontSize: "1.5rem" }}>{method.icon}</span>
-                      {method.name}
-                    </button>
-                  ))}
+                {/* Campo de descripción del pedido */}
+                <div style={{ marginBottom: "1.5rem", textAlign: "left" }}>
+                  <label style={{ 
+                    display: "block", 
+                    marginBottom: "0.5rem", 
+                    fontWeight: "bold",
+                    color: "var(--bistre)"
+                  }}>
+                    Descripción del pedido (opcional):
+                  </label>
+                  <textarea
+                    value={orderDescription}
+                    onChange={(e) => setOrderDescription(e.target.value)}
+                    placeholder="Ej: Sin hielo, para llevar, sin gluten..."
+                    style={{
+                      width: "100%",
+                      padding: "0.8rem",
+                      border: "1px solid #ddd",
+                      borderRadius: "4px",
+                      minHeight: "80px",
+                      resize: "none",
+                      fontFamily: "inherit",
+                      fontSize: "0.9rem"
+                    }}
+                    maxLength={500}
+                  />
+                  <small style={{ color: "#666", fontSize: "0.8rem" }}>
+                    {orderDescription.length}/500 caracteres
+                  </small>
+                </div>
+                
+                <div style={{ display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap", marginBottom: "2.5rem" }}>
+                  <button
+                    onClick={() => handlePaymentMethodSelect("efectivo")}
+                    style={{
+                      padding: "1rem 2rem",
+                      border: "2px solid var(--yellow-green)",
+                      borderRadius: "8px",
+                      background: "white",
+                      color: "var(--bistre)",
+                      cursor: "pointer",
+                      fontWeight: "bold",
+                      transition: "all 0.3s ease",
+                      boxShadow: "0 2px 8px rgba(65, 39, 34, 0.07)",
+                    }}
+                    onMouseOver={e => e.currentTarget.style.background = "var(--lemon-chiffon)"}
+                    onMouseOut={e => e.currentTarget.style.background = "white"}
+                  >
+                    💰 Efectivo
+                  </button>
+                  
+                  <button
+                    onClick={() => handlePaymentMethodSelect("tarjeta")}
+                    style={{
+                      padding: "1rem 2rem",
+                      border: "2px solid var(--yellow-green)",
+                      borderRadius: "8px",
+                      background: "white",
+                      color: "var(--bistre)",
+                      cursor: "pointer",
+                      fontWeight: "bold",
+                      transition: "all 0.3s ease",
+                      boxShadow: "0 2px 8px rgba(65, 39, 34, 0.07)",
+                    }}
+                    onMouseOver={e => e.currentTarget.style.background = "var(--lemon-chiffon)"}
+                    onMouseOut={e => e.currentTarget.style.background = "white"}
+                  >
+                    💳 Tarjeta
+                  </button>
+                  
+                  <button
+                    onClick={() => handlePaymentMethodSelect("bizum")}
+                    style={{
+                      padding: "1rem 2rem",
+                      border: "2px solid var(--yellow-green)",
+                      borderRadius: "8px",
+                      background: "white",
+                      color: "var(--bistre)",
+                      cursor: "pointer",
+                      fontWeight: "bold",
+                      transition: "all 0.3s ease",
+                      boxShadow: "0 2px 8px rgba(65, 39, 34, 0.07)",
+                    }}
+                    onMouseOver={e => e.currentTarget.style.background = "var(--lemon-chiffon)"}
+                    onMouseOut={e => e.currentTarget.style.background = "white"}
+                  >
+                    📱 Bizum
+                  </button>
+                  
+                  <button
+                    onClick={() => handlePaymentMethodSelect("transferencia")}
+                    style={{
+                      padding: "1rem 2rem",
+                      border: "2px solid var(--yellow-green)",
+                      borderRadius: "8px",
+                      background: "white",
+                      color: "var(--bistre)",
+                      cursor: "pointer",
+                      fontWeight: "bold",
+                      transition: "all 0.3s ease",
+                      boxShadow: "0 2px 8px rgba(65, 39, 34, 0.07)",
+                    }}
+                    onMouseOver={e => e.currentTarget.style.background = "var(--lemon-chiffon)"}
+                    onMouseOut={e => e.currentTarget.style.background = "white"}
+                  >
+                    🏦 Transferencia
+                  </button>
                 </div>
               </>
             )}
@@ -781,16 +842,22 @@ export default function CartIsland({ apiCartUrl }: { apiCartUrl: string }) {
 
             {currentPaymentStep === "select" && (
               <button
-                onClick={() => setShowPaymentModal(false)}
+                onClick={closePaymentModal}
                 style={{
                   padding: "0.8rem 1.5rem",
                   borderRadius: "8px",
-                  background: "#f5f5f5",
-                  color: "#666",
-                  border: "1px solid #ddd",
+                  background: "#ffeaea",
+                  color: "#b22222",
+                  border: "1.5px solid #ffb3b3",
                   cursor: "pointer",
-                  fontSize: "1rem"
+                  fontSize: "1rem",
+                  fontWeight: "bold",
+                  marginTop: "2.5rem",
+                  boxShadow: "0 2px 8px rgba(178, 34, 34, 0.07)",
+                  transition: "all 0.3s ease"
                 }}
+                onMouseOver={e => { e.currentTarget.style.background = "#ffb3b3"; e.currentTarget.style.color = "#fff"; }}
+                onMouseOut={e => { e.currentTarget.style.background = "#ffeaea"; e.currentTarget.style.color = "#b22222"; }}
               >
                 Cancelar
               </button>
