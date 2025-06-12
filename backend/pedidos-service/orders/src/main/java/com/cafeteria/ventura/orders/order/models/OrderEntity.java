@@ -4,6 +4,7 @@ import com.cafeteria.ventura.orders.security.models.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -35,6 +36,9 @@ public class OrderEntity {
 
     @Column(name = "is_paid")
     private boolean isPaid;
+
+    @Column(name = "date_time")
+    private LocalDateTime dateTime;
 
     //relación con la tabla intermedia para poder usar @EntityGraph
     //uso de cascada en vez de repo intermedio como en carrito debido a que la inserción de productos es atómica

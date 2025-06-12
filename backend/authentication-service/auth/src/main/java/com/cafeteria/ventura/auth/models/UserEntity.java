@@ -1,9 +1,9 @@
 package com.cafeteria.ventura.auth.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -40,6 +40,7 @@ public class UserEntity implements UserDetails {
     @Column(unique = true)
     private String username;
 
+    @JsonIgnore
     private String password;
 
     @Column(unique = true)
