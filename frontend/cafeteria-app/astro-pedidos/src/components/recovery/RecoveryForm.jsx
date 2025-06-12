@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import "./recoveryForm.css";
+import styles from "./recoveryForm.module.css";
 
 export default function RecoveryForm({apiAuthUrl}) { 
 
@@ -65,8 +65,8 @@ export default function RecoveryForm({apiAuthUrl}) {
     }
 
     return (
-        <form className="recovery-form" onSubmit={handleSubmit}>
-            <div className="recovery-container">
+        <form className={styles.recoveryForm} onSubmit={handleSubmit}>
+            <div className={styles.recoveryContainer}>
                 <label htmlFor="password">Contraseña</label>
                 <input
                     ref={passwordValue}
@@ -79,7 +79,7 @@ export default function RecoveryForm({apiAuthUrl}) {
                 />
             </div>
 
-            <div className="recovery-container">
+            <div className={styles.recoveryContainer}>
                 <label htmlFor="confirm-password">Confirmar Contraseña</label>
                 <input
                     ref={confirmPasswordValue}
@@ -91,17 +91,17 @@ export default function RecoveryForm({apiAuthUrl}) {
                     required
                 />
             </div>
-            <div className="recovery-container">
-                <button type="submit" className="recovery-button">
+            <div className={styles.recoveryContainer}>
+                <button type="submit" className={styles.recoveryButton}>
                     ENVIAR
                 </button>
             </div>
 
             {error && 
-                <div className="error-message">{error}</div>
+                <div className={styles.errorMessage}>{error}</div>
             }
             {success && 
-                <div className="success-message">
+                <div className={styles.successMessage}>
                     <p>{success}</p>
                     <p>Serás redirigido a la página principal en 5 segundos.</p>
                     <p>Si no es así, puedes hacer clic <a href="/">aquí</a>.</p>

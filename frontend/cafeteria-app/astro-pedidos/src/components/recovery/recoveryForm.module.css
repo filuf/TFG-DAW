@@ -1,0 +1,175 @@
+/* Estilos del formulario de recuperación */
+.recoveryForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 2rem;
+  background: var(--white);
+  width: 100%;
+  max-width: 400px;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(65, 39, 34, 0.15);
+}
+
+.recoveryContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.recoveryContainer label {
+  color: var(--bistre);
+  font-weight: 600;
+  font-size: 0.95rem;
+  font-family: 'Quicksand', 'Open Sans', Arial, sans-serif;
+}
+
+.recoveryContainer input {
+  padding: 0.8rem 1rem;
+  border: 2px solid var(--lemon-chiffon);
+  border-radius: 12px;
+  font-size: 1rem;
+  font-family: 'Quicksand', 'Open Sans', Arial, sans-serif;
+  background: var(--white);
+  color: var(--bistre);
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(65, 39, 34, 0.05);
+}
+
+.recoveryContainer input:focus {
+  outline: none;
+  border-color: var(--yellow-green);
+  box-shadow: 0 4px 16px rgba(174, 208, 0, 0.2);
+  transform: translateY(-1px);
+}
+
+.recoveryContainer input::placeholder {
+  color: var(--buff);
+  opacity: 0.7;
+}
+
+.recoveryButton {
+  background: var(--yellow-green);
+  color: var(--bistre);
+  font-weight: bold;
+  font-size: 1.1rem;
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(65, 39, 34, 0.15);
+  font-family: 'Quicksand', 'Open Sans', Arial, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 0.5rem;
+}
+
+.recoveryButton:hover {
+  background: var(--buff);
+  color: var(--lemon-chiffon);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 6px 16px rgba(65, 39, 34, 0.2);
+}
+
+.recoveryButton:active {
+  transform: translateY(-1px) scale(1.01);
+}
+
+.errorMessage {
+  background: #fee;
+  color: #c53030;
+  padding: 1rem;
+  border-radius: 12px;
+  border-left: 4px solid #c53030;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-top: 1rem;
+  animation: slideIn 0.3s ease-out;
+}
+
+.successMessage {
+  background: #f0fff4;
+  color: #2f855a;
+  padding: 1.5rem;
+  border-radius: 12px;
+  border-left: 4px solid #38a169;
+  font-size: 0.95rem;
+  font-weight: 500;
+  margin-top: 1rem;
+  text-align: center;
+  animation: slideIn 0.3s ease-out;
+}
+
+.successMessage p {
+  margin: 0.5rem 0;
+}
+
+.successMessage a {
+  color: var(--yellow-green);
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.successMessage a:hover {
+  color: var(--buff);
+  text-decoration: underline;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .recoveryForm {
+    padding: 1.5rem;
+    gap: 1.2rem;
+    margin: 1rem;
+  }
+
+  .recoveryContainer input {
+    padding: 0.7rem 0.9rem;
+    font-size: 0.95rem;
+  }
+
+  .recoveryButton {
+    padding: 0.9rem 1.8rem;
+    font-size: 1rem;
+  }
+
+  .errorMessage,
+  .successMessage {
+    padding: 0.9rem;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .recoveryForm {
+    padding: 1.2rem;
+    gap: 1rem;
+  }
+
+  .recoveryContainer label {
+    font-size: 0.9rem;
+  }
+
+  .recoveryContainer input {
+    padding: 0.6rem 0.8rem;
+    font-size: 0.9rem;
+  }
+
+  .recoveryButton {
+    padding: 0.8rem 1.5rem;
+    font-size: 0.95rem;
+  }
+}
