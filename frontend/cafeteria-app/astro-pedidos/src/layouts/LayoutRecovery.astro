@@ -1,5 +1,7 @@
 ---
 import { ClientRouter } from "astro:transitions";
+import TopMenu from "../components/TopMenu/TopMenu.astro";
+import Footer from "../components/footer/Footer.astro";
 ---
 <!doctype html>
 <html lang="es">
@@ -16,7 +18,9 @@ import { ClientRouter } from "astro:transitions";
 		<ClientRouter /> <!-- Para que funcionen las transiciones de navegación entre páginas -->
 	</head>
 	<body>
+		<TopMenu />
 		<slot />
+		<Footer />
 	</body>
 </html>
 
@@ -28,6 +32,5 @@ import { ClientRouter } from "astro:transitions";
 		padding: 0;
 		width: 100%;
 		height: 100%;
-
 	}
-</style>
+</style> 
