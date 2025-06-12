@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import './CartIsland.css';
 
 interface Product {
   idProduct: number;
@@ -335,39 +336,15 @@ export default function CartIsland({ apiCartUrl }: { apiCartUrl: string }) {
           
           <div style={{ display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap" }}>
             <button
+              className="cart-button continue-shopping"
               onClick={() => window.location.href = "/"}
-              style={{
-                padding: "0.8rem 1.5rem",
-                borderRadius: "8px",
-                background: "var(--yellow-green)",
-                color: "var(--black)",
-                border: "none",
-                cursor: "pointer",
-                fontSize: "1rem",
-                fontWeight: "bold",
-                display: "flex",
-                alignItems: "center",
-                gap: "0.5rem"
-              }}
             >
               🍽️ Seguir comprando
             </button>
             
             <button
+              className="cart-button view-orders"
               onClick={() => window.location.href = "/orders"}
-              style={{
-                padding: "0.8rem 1.5rem",
-                borderRadius: "8px",
-                background: "var(--bistre)",
-                color: "white",
-                border: "none",
-                cursor: "pointer",
-                fontSize: "1rem",
-                fontWeight: "bold",
-                display: "flex",
-                alignItems: "center",
-                gap: "0.5rem"
-              }}
             >
               📋 Ver pedidos
             </button>
@@ -414,18 +391,18 @@ export default function CartIsland({ apiCartUrl }: { apiCartUrl: string }) {
               {/* Cantidad */}
               <div style={{ display: "flex", alignItems: "center", gap: "0.3rem", flex: 1, minWidth: 90, justifyContent: "center" }}>
                 <button
+                  className="cart-button decrement"
                   onClick={() => handleRemove(idProduct)}
                   disabled={updating || quantity <= 0}
-                  style={{ background: "var(--lemon-chiffon)", border: "1px solid var(--buff)", borderRadius: 6, padding: "0.3rem 0.6rem", cursor: "pointer" }}
                   title="Quitar uno"
                 >
                   -
                 </button>
                 <span style={{ fontWeight: "bold", minWidth: 18, textAlign: "center" }}>{quantity}</span>
                 <button
+                  className="cart-button increment"
                   onClick={() => handleAdd(idProduct)}
                   disabled={updating}
-                  style={{ background: "var(--lemon-chiffon)", border: "1px solid var(--buff)", borderRadius: 6, padding: "0.3rem 0.6rem", cursor: "pointer" }}
                   title="Añadir uno"
                 >
                   +
@@ -438,6 +415,7 @@ export default function CartIsland({ apiCartUrl }: { apiCartUrl: string }) {
               {/* Botón eliminar */}
               <div style={{ flex: 0, minWidth: 60, textAlign: "center" }}>
                 <button
+                  className="cart-button delete"
                   onClick={async () => { setUpdating(true); setError(""); setSuccess("");
                     const token = sessionStorage.getItem("token");
                     try {
@@ -460,7 +438,6 @@ export default function CartIsland({ apiCartUrl }: { apiCartUrl: string }) {
                       setUpdating(false);
                     }
                   }}
-                  style={{ background: "#fff0f0", border: "1px solid #e57373", borderRadius: 6, padding: "0.3rem 0.7rem", color: "#c62828", fontWeight: 700, cursor: "pointer" }}
                   title="Eliminar producto"
                 >
                   <i className="fa-solid fa-trash-can"></i>
@@ -471,21 +448,10 @@ export default function CartIsland({ apiCartUrl }: { apiCartUrl: string }) {
           <div style={{ fontWeight: "bold", fontSize: "1.5rem", marginTop: "1.5rem", color: "var(--bistre)" }}>
             Total: {cart.totalProductPrice.toFixed(2)} €
           </div>
-          <button 
-            onClick={() => setShowPaymentModal(true)} 
-            disabled={updating} 
-            style={{ 
-              margin: "1.5rem auto 0", 
-              padding: "0.8rem 1.5rem", 
-              fontSize: "1.2rem", 
-              borderRadius: "8px", 
-              background: "var(--yellow-green)", 
-              color: "var(--black)", 
-              border: "none", 
-              cursor: "pointer", 
-              boxShadow: "0 1px 6px rgba(65, 39, 34, 0.10)", 
-              display: "block" 
-            }}
+          <button
+            className="cart-button place-order"
+            onClick={() => setShowPaymentModal(true)}
+            disabled={updating}
           >
             Realizar pedido
           </button>

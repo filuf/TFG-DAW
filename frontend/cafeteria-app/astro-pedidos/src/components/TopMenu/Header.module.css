@@ -98,9 +98,10 @@ Version: 1.0
   transition: background 0.18s, color 0.18s, border 0.18s;
 }
 .navLink:hover {
-  background: var(--lemon-chiffon);
-  color: var(--black);
-  border: 2px solid var(--buff);
+  background: var(--buff);
+  color: var(--lemon-chiffon);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 6px 16px rgba(65, 39, 34, 0.2);
 }
 
 /*
@@ -125,8 +126,9 @@ Version: 1.0
 */
 .button:hover {
   background: var(--buff);
-  color: var(--bistre);
-  transform: translateY(-2px) scale(1.04);
+  color: var(--lemon-chiffon);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 6px 16px rgba(65, 39, 34, 0.2);
 }
 
 /*
@@ -295,8 +297,10 @@ Version: 1.0
 }
 
 .mobileNavLink:hover {
-  background-color: var(--lemon-chiffon);
-  color: var(--black);
+  background-color: var(--buff);
+  color: var(--lemon-chiffon);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 6px 16px rgba(65, 39, 34, 0.2);
 }
 
 .mobileNavIcon {
@@ -478,14 +482,16 @@ Version: 1.0
 
 .mobileNav .loginButton:hover {
   background: var(--buff);
-  color: var(--bistre);
-  transform: translateY(-2px);
+  color: var(--lemon-chiffon);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 6px 16px rgba(65, 39, 34, 0.2);
 }
 
 .mobileNav .registerButton:hover {
   background: var(--bistre);
   color: var(--white);
-  transform: translateY(-2px);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 6px 16px rgba(65, 39, 34, 0.2);
 }
 
 /* Asegurar que el contenedor de auth sea visible en móvil */
