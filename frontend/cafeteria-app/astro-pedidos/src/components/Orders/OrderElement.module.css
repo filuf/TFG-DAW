@@ -8,6 +8,7 @@
     box-shadow: 0 4px 16px rgba(65, 39, 34, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     margin-bottom: 1rem;
+    border: 2px solid var(--yellow-green);
 }
 
 .orderElementContainer:hover {
@@ -101,6 +102,50 @@
     font-size: 0.9rem;
 }
 
+.pageControlContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1rem;
+    gap: 1rem;
+}
+
+.pageControlButton {
+  background: linear-gradient(145deg, var(--yellow-green), var(--buff));
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(182, 190, 145, 0.3);
+  color: var(--lemon-chiffon);
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 1.3rem;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+  user-select: none;
+}
+
+.pageControlButton:hover {
+  background: linear-gradient(145deg, var(--buff), var(--yellow-green));
+  box-shadow: 0 6px 14px rgba(182, 190, 145, 0.6);
+  transform: scale(1.1);
+}
+
+.pageControlButton:active {
+  transform: scale(0.95);
+  box-shadow: 0 3px 6px rgba(182, 190, 145, 0.4);
+}
+
+.pageControlContainer p {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--bistre);
+}
+
 @media (max-width: 768px) {
     .orderElementContainer {
         padding: 1rem;
@@ -143,6 +188,7 @@
     }
 
     .productDetailsContainer {
+        width: 100%;
         align-items: center;
     }
 } 

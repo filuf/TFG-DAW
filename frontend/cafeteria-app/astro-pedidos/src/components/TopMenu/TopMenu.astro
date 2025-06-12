@@ -43,16 +43,26 @@ const apiAuthUrl = import.meta.env.VITE_API_AUTH_URL;
       <h2 class={styles.mobileNavTitle}>Menú</h2>
     </div>
     <ul class={styles.mobileNavList}>
-      <li><a href="/" class={styles.mobileNavLink}>Inicio</a></li>
+      <li><a href="/" class={styles.mobileNavLink}>
+        <span class={styles.mobileNavIcon}>🏠</span>
+        Inicio
+      </a></li>
       <li id="mobileCartItem" style="display: none;">
         <a href="/cart" class={styles.mobileNavLink}>
-          <img src="/cart.png" alt="Carrito" class={styles.mobileNavIcon} />
+          <span class={styles.mobileNavIcon}>🛒</span>
           Carrito
+        </a>
+      </li>
+      <li id="mobileOrdersItem" style="display: none;">
+        <a href="/orders" class={styles.mobileNavLink}>
+          <span class={styles.mobileNavIcon}>📋</span>
+          Pedidos
         </a>
       </li>
       <li class={styles.mobileNavDivider}></li>
       <li id="mobileAuthItem">
-        <!-- El contenido de autenticación se insertará aquí dinámicamente -->
+        <!-- Componente de autenticación específico para móvil -->
+        <UserLogin apiAuthUrl={apiAuthUrl} client:only="react" />
       </li>
     </ul>
   </nav>
@@ -65,37 +75,20 @@ const apiAuthUrl = import.meta.env.VITE_API_AUTH_URL;
     const cartLink = document.getElementById('cartLink');
     const ordersLink = document.getElementById('ordersLink');
     const mobileCartItem = document.getElementById('mobileCartItem');
+    const mobileOrdersItem = document.getElementById('mobileOrdersItem');
     const isLoggedIn = sessionStorage.getItem('token') !== null;
-    
+
     if (cartLink) cartLink.style.display = isLoggedIn ? 'block' : 'none';
     if (ordersLink) ordersLink.style.display = isLoggedIn ? 'block' : 'none';
     if (mobileCartItem) mobileCartItem.style.display = isLoggedIn ? 'block' : 'none';
+    if (mobileOrdersItem) mobileOrdersItem.style.display = isLoggedIn ? 'block' : 'none';
   }
 
-  // Función para mover el componente de autenticación al menú móvil
   function updateMobileAuth() {
-    const authContainer = document.getElementById('sharedAuthContainer');
-    const mobileAuthItem = document.getElementById('mobileAuthItem');
-    const isMobile = window.innerWidth <= 700;
-
-    if (authContainer && mobileAuthItem) {
-      if (isMobile) {
-        // En móvil, mover el componente al menú
-        mobileAuthItem.appendChild(authContainer);
-      } else {
-        // En escritorio, devolver el componente a su posición original
-        const header = document.querySelector('header');
-        const mainNav = document.getElementById('mainNav');
-        if (header && mainNav) {
-          mainNav.appendChild(authContainer);
-        }
-      }
-    }
+    console.log('updateMobileAuth: Componente móvil ya está en su lugar');
   }
 
-  // Script del menú móvil
-  document.addEventListener('DOMContentLoaded', () => {
-    // Obtener elementos del DOM
+  function initMobileMenu() {
     const elements = {
       hamburgerBtn: document.getElementById('hamburgerBtn'),
       mobileNav: document.getElementById('mobileNav'),
@@ -103,100 +96,75 @@ const apiAuthUrl = import.meta.env.VITE_API_AUTH_URL;
       overlay: document.getElementById('navOverlay')
     };
 
-    // Verificar que todos los elementos existen
-    const missingElements = Object.entries(elements)
-      .filter(([_, element]) => !element)
-      .map(([name]) => name);
+    const { hamburgerBtn, mobileNav, closeBtn, overlay } = elements;
 
-    if (missingElements.length > 0) {
-      console.error('Elementos faltantes para el menú móvil:', missingElements.join(', '));
+    if (!hamburgerBtn || !mobileNav || !closeBtn || !overlay) {
+      console.warn('[initMobileMenu] Elementos no encontrados:', Object.entries(elements)
+        .filter(([_, el]) => !el).map(([key]) => key).join(', '));
       return;
     }
 
-    const { hamburgerBtn, mobileNav, closeBtn, overlay } = elements;
-
     function openMobileNav() {
-      if (!mobileNav || !hamburgerBtn || !overlay) return;
-      
-      console.log('Abriendo menú móvil'); // Debug
-      
-      // Actualizar atributos ARIA
       mobileNav.setAttribute('aria-hidden', 'false');
       hamburgerBtn.setAttribute('aria-expanded', 'true');
-      
-      // Mostrar overlay
       overlay.style.display = 'block';
-      
-      // Forzar un reflow para asegurar que la animación funcione
       void mobileNav.offsetWidth;
-      
-      // Añadir clases para la animación
       mobileNav.classList.add('open');
       overlay.classList.add('show');
-      
-      // Actualizar la posición del componente de auth
+      mobileNav.style.display = 'block';
+      mobileNav.style.right = '0';
+      mobileNav.style.visibility = 'visible';
+      mobileNav.style.opacity = '1';
       updateMobileAuth();
     }
 
     function closeMobileNav() {
-      if (!mobileNav || !hamburgerBtn || !overlay) return;
-      
-      console.log('Cerrando menú móvil'); // Debug
-      
-      // Actualizar atributos ARIA
       mobileNav.setAttribute('aria-hidden', 'true');
       hamburgerBtn.setAttribute('aria-expanded', 'false');
-      
-      // Remover clases para la animación
       mobileNav.classList.remove('open');
       overlay.classList.remove('show');
-      
-      // Ocultar overlay después de la animación
-      setTimeout(() => { 
-        if (overlay) overlay.style.display = 'none';
-        updateMobileAuth();
-      }, 300);
+      mobileNav.style.display = '';
+      mobileNav.style.right = '';
+      mobileNav.style.visibility = '';
+      mobileNav.style.opacity = '';
+      setTimeout(() => { overlay.style.display = 'none'; }, 300);
     }
 
-    // Añadir event listeners con prevención de eventos por defecto
-    hamburgerBtn?.addEventListener('click', (e) => {
+    // Previene múltiples listeners duplicados
+    hamburgerBtn.onclick = (e) => {
       e.preventDefault();
-      console.log('Botón hamburguesa clickeado'); // Debug
       openMobileNav();
-    });
-    
-    closeBtn?.addEventListener('click', (e) => {
-      e.preventDefault();
-      closeMobileNav();
-    });
-    
-    overlay?.addEventListener('click', (e) => {
-      e.preventDefault();
-      closeMobileNav();
-    });
+    };
 
-    // Actualizar al cargar la página
+    closeBtn.onclick = (e) => {
+      e.preventDefault();
+      closeMobileNav();
+    };
+
+    overlay.onclick = (e) => {
+      e.preventDefault();
+      closeMobileNav();
+    };
+  }
+
+  // Inicialización completa
+  function initAppUI() {
     updateCartVisibility();
     updateMobileAuth();
-  });
+    initMobileMenu();
+  }
 
-  // Actualizar al cambiar el tamaño de la ventana
+  // Inicial en carga
+  document.addEventListener('DOMContentLoaded', initAppUI);
+
+  // Reejecutar lógica después de navegación parcial con Astro
+  document.addEventListener('astro:after-swap', initAppUI);
+
+  // Eventos adicionales para mantener el estado sincronizado
   window.addEventListener('resize', updateMobileAuth);
-
-  // Escuchar cambios en el sessionStorage
   window.addEventListener('storage', (e) => {
-    if (e.key === 'token') {
-      updateCartVisibility();
-    }
+    if (e.key === 'token') updateCartVisibility();
   });
-
-  // Escuchar eventos personalizados para login/logout
-  window.addEventListener('user-logout', updateCartVisibility);
   window.addEventListener('user-login', updateCartVisibility);
-
-  // Escuchar evento de navegación de Astro
-  document.addEventListener('astro:after-swap', () => {
-    updateCartVisibility();
-    updateMobileAuth();
-  });
-</script> 
+  window.addEventListener('user-logout', updateCartVisibility);
+</script>

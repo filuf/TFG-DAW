@@ -1,3 +1,4 @@
+import styles from "./OrderElement.module.css";
 
 interface PageMenuProps {
     totalPages: number;
@@ -16,16 +17,16 @@ export default function PageMenu({ totalPages, first, last, currentPage }: PageM
     }
 
     return (
-        <div className="page-control-container">
+        <div className={styles.pageControlContainer}>
             {!first && 
                 <button 
-                    className="page-control-button"
+                    className={styles.pageControlButton}
                     onClick={ () => newPage(currentPage - 1 + "")}>{"<"}
                 </button>}
             <p>Página {currentPage + 1} de {totalPages}</p>
             {!last && 
                 <button 
-                    className="page-control-button"
+                    className={styles.pageControlButton}
                     onClick={ () => newPage(currentPage + 1 + "")}>{">"}
                 </button>}
         </div>

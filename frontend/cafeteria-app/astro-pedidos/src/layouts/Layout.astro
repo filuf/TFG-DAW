@@ -28,6 +28,13 @@ import { ClientRouter } from "astro:transitions";
 		padding: 0;
 		width: 100%;
 		height: 100%;
+	}
 
+	@media (width <= 1000px) {
+		html,
+		body {
+			overflow-x: auto;
+		}
+		
 	}
 </style>
