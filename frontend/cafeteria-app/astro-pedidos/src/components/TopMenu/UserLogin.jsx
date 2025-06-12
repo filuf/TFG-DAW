@@ -181,27 +181,42 @@ export default function UserLogin({ apiAuthUrl }) {
             });
 
             console.log('Respuesta del servidor:', res.status);
-            const data = await res.json();
-            console.log('Datos de respuesta:', data);
 
             if (res.ok) {
+                const data = await res.json();
+                console.log('Datos de respuesta:', data);
                 setShowModal(false);
                 setIsLogin(true);
                 setFormData({ username: '', mail: '', password: '', confirmPassword: '' });
                 setMessage({ text: "Registro exitoso. Por favor, inicia sesión.", type: "success" });
             } else {
+                // Intentar obtener el mensaje de error del servidor
+                let errorMessage = "Error en el registro";
+                try {
+                    const data = await res.json();
+                    errorMessage = data.message || errorMessage;
+                } catch (parseError) {
+                    // Si no se puede parsear JSON, usar el texto de la respuesta
+                    try {
+                        const textData = await res.text();
+                        errorMessage = textData || errorMessage;
+                    } catch (textError) {
+                        console.error("No se pudo obtener el mensaje de error del servidor");
+                    }
+                }
+
                 switch (res.status) {
                     case 400:
-                        setMessage({ text: data.message || "Datos de registro inválidos", type: "error" });
+                        setMessage({ text: errorMessage || "Datos de registro inválidos", type: "error" });
                         break;
                     case 403:
                         setMessage({ text: "No autorizado. Por favor, verifica tus credenciales.", type: "error" });
                         break;
                     case 409:
                         // Verificar el tipo de conflicto basado en el mensaje del servidor
-                        if (data.message && data.message.toLowerCase().includes('username')) {
+                        if (errorMessage && errorMessage.toLowerCase().includes('username')) {
                             setMessage({ text: "El nombre de usuario ya está en uso", type: "error" });
-                        } else if (data.message && data.message.toLowerCase().includes('email')) {
+                        } else if (errorMessage && errorMessage.toLowerCase().includes('email')) {
                             setMessage({ text: "El email ya está registrado", type: "error" });
                         } else {
                             setMessage({ text: "El usuario o email ya está registrado", type: "error" });
@@ -211,7 +226,7 @@ export default function UserLogin({ apiAuthUrl }) {
                         setMessage({ text: "Error interno del servidor. Por favor, intenta más tarde.", type: "error" });
                         break;
                     default:
-                        setMessage({ text: data.message || "Error en el registro", type: "error" });
+                        setMessage({ text: errorMessage || "Error en el registro", type: "error" });
                 }
             }
         } catch (error) {
