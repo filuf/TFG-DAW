@@ -117,11 +117,20 @@ export default function UserLogin({ apiAuthUrl }) {
                 window.dispatchEvent(new Event('user-login'));
             } else {
                 switch (res.status) {
+                    case 400:
+                        setMessage({ text: "Solicitud incorrecta. Por favor, revisa los datos ingresados.", type: "error" });
+                        break;
+                    case 401:
+                        setMessage({ text: "No autorizado. Por favor, verifica tus credenciales.", type: "error" });
+                        break;
                     case 403:
                         setMessage({ text: "Usuario o contraseña incorrectos", type: "error" });
                         break;
                     case 404:
-                        setMessage({ text: "Error al conextar con el servidor", type: "error" });
+                        setMessage({ text: "Recurso no encontrado. Por favor, intenta de nuevo.", type: "error" });
+                        break;
+                    case 500:
+                        setMessage({ text: "Error interno del servidor. Por favor, intenta más tarde.", type: "error" });
                         break;
                     default:
                         setMessage({ text: "Error inesperado, contacte con los administradores", type: "error" });
@@ -185,8 +194,14 @@ export default function UserLogin({ apiAuthUrl }) {
                     case 400:
                         setMessage({ text: data.message || "Datos de registro inválidos", type: "error" });
                         break;
+                    case 403:
+                        setMessage({ text: "No autorizado. Por favor, verifica tus credenciales.", type: "error" });
+                        break;
                     case 409:
                         setMessage({ text: "El email ya está registrado", type: "error" });
+                        break;
+                    case 500:
+                        setMessage({ text: "Error interno del servidor. Por favor, intenta más tarde.", type: "error" });
                         break;
                     default:
                         setMessage({ text: data.message || "Error en el registro", type: "error" });
@@ -298,7 +313,22 @@ export default function UserLogin({ apiAuthUrl }) {
                 }, 3000);
             } else {
                 // Si la respuesta no es ok, se muestra un mensaje de error.
-                setMessage({ text: data.message || "Error al enviar el correo de recuperación de contraseña", type: "error" });
+                switch (respuesta.status) {
+                    case 400:
+                        setMessage({ text: "Solicitud incorrecta. Por favor, revisa los datos ingresados.", type: "error" });
+                        break;
+                    case 401:
+                        setMessage({ text: "No autorizado. Por favor, verifica tus credenciales.", type: "error" });
+                        break;
+                    case 404:
+                        setMessage({ text: "Recurso no encontrado. Por favor, intenta de nuevo.", type: "error" });
+                        break;
+                    case 500:
+                        setMessage({ text: "Error interno del servidor. Por favor, intenta más tarde.", type: "error" });
+                        break;
+                    default:
+                        setMessage({ text: data.message || "Error al enviar el correo de recuperación de contraseña", type: "error" });
+                }
             }
         } catch (error) {
             // Error para debuggear que me permite ver en la consola si ocurrio un error.
