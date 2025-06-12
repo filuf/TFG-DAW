@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 @Service
 @AllArgsConstructor
@@ -70,5 +71,16 @@ public class UserEntityService {
 
         user.setPassword(passwordEncoder.encode(newPassword));
         return this.repository.save(user);
+    }
+
+    /**
+     * Valida si una dirección de mail cumple con una expresión regular extraida de <a href="https://www.baeldung.com/java-email-validation-regex">baeldung</a>
+     *
+     * @param email email a comprobar
+     * @return true si es válido, false si no lo es
+     */
+    public boolean validateEmailDirection(String email) {
+        Pattern pattern = Pattern.compile("^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$");
+        return pattern.matcher(email).matches();
     }
 }

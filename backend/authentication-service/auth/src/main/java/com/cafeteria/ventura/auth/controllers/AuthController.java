@@ -57,15 +57,21 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<UserEntity> register(@RequestBody UserRegisterDTO userDTO) throws CustomException {
 
+        // contraseñas cortas o distintas
         this.validatePassword(userDTO.password(), userDTO.passwordConf());
 
+        // mail inválido
+        if (!this.userService.validateEmailDirection(userDTO.email())) {
+            throw new CustomException("El email no es válido", HttpStatus.BAD_REQUEST);
+        }
+
         // usuario existente
-        if (userService.findByUsername(userDTO.username()).isPresent()) {
+        if (this.userService.findByUsername(userDTO.username()).isPresent()) {
             throw new CustomException("Ya existe un usuario registrado con este nombre", HttpStatus.CONFLICT);
         }
 
         // mail existente
-        if (userService.findByEmail(userDTO.email()).isPresent()) {
+        if (this.userService.findByEmail(userDTO.email()).isPresent()) {
             throw new CustomException("Ya existe un usuario registrado con este email", HttpStatus.CONFLICT);
         }
 
